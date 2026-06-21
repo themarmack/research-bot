@@ -44,29 +44,29 @@ Deep detail (architecture diagram, claude-headless mode, troubleshooting): [`scr
 
 #### Email delivery (optional)
 
-Scheduled digests can auto-email to a configured recipient list; ad-hoc research notes prompt you ("email this to which list?") after the vault write. Uses Gmail SMTP — no OAuth setup.
+Scheduled digests auto-email to everyone on a single distribution list; ad-hoc research notes prompt `[y/n]` before sending. Uses Gmail SMTP — no OAuth setup. The recipient list is a plain Markdown note in your Obsidian vault, so you manage it the same way you manage any other note.
 
 One-time setup:
 
-1. **Enable 2-Factor Auth** on the Google account you'll send from (required for app passwords).
-2. **Generate an app password** at https://myaccount.google.com/apppasswords. Select "Mail" → "Other / research-bot". Google shows a 16-character password once — copy it.
-3. **Add credentials** to `~/.config/research-bot/env` (same file that already holds `ANTHROPIC_API_KEY`):
+1. **Enable 2-Step Verification** on the Google account you'll send from (required for app passwords).
+2. **Generate an app password** at https://myaccount.google.com/apppasswords ("Mail" → "Other / research-bot"). Google shows a 16-character password once — copy it.
+3. **Store the credentials** (writes to `~/.config/research-bot/env`, the same file that already holds `ANTHROPIC_API_KEY`):
+   ```bash
+   # Note the leading space — keeps the command out of shell history on macOS zsh.
+    scripts/set-gmail-credentials.sh "you@gmail.com" "xxxx xxxx xxxx xxxx"
    ```
-   GMAIL_SEND_ADDRESS=you@gmail.com
-   GMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
-   ```
-4. **Create your recipient lists** in the vault:
+4. **Create your distribution list** in the vault:
    ```bash
    mkdir -p ~/Obsidian/Research-Brain/_config
-   cp .claude/skills/email-sender/recipients.example.yml \
-      ~/Obsidian/Research-Brain/_config/email-lists.yml
-   # Edit the lists + digest_routing map to match your audience.
+   cp .claude/skills/email-sender/email-distribution.example.md \
+      ~/Obsidian/Research-Brain/_config/email-distribution.md
+   # Open it in Obsidian. Edit the "## Recipients" bullets. Save.
    ```
-5. **Verify** by asking Claude Code: `"Send the most recent weekly-intelligence-digest to my self list as a test."` — confirms SMTP works end-to-end.
+5. **Verify**: ask Claude Code `"Show me my email distribution list"` to confirm parsing, then `"Email the most recent weekly-intelligence-digest as a test"` for a real SMTP round-trip.
 
-After setup, scheduled digests with a `digest_routing` entry auto-send when you process the queue marker. Research notes (Category 1) always prompt before sending. Misconfig (missing env var, malformed YAML, unknown list name) stop-and-reports with the exact remediation — no silent drops, no half-sends.
+After setup, scheduled digests fire-and-forget to everyone on the list. Research notes always prompt first. Misconfig (missing env var, missing distribution file, empty list, SMTP auth failure) stop-and-reports with the exact remediation — no silent drops, no half-sends.
 
-Lists live in your vault (Obsidian-editable, not in this public repo). Skill: [`email-sender`](./.claude/skills/email-sender/SKILL.md). Prompting examples: [`PROMPTING.md`](./PROMPTING.md) §Email.
+The list lives in your vault (Obsidian-editable, not in this public repo). Pause a recipient by wrapping the bullet in `<!-- ... -->` — no deletion needed. Skill: [`email-sender`](./.claude/skills/email-sender/SKILL.md). Prompting examples: [`PROMPTING.md`](./PROMPTING.md) §Email.
 
 ### 2. Ad-hoc research (Obsidian-first)
 

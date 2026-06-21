@@ -57,10 +57,10 @@ Files whose edits require `schedule-sync.py`:
 
 `schedule-sync.py` and `schedule-status.py` themselves are invoked from Terminal (not launchd) and don't need redeployment.
 
-## Email delivery — validate config before scheduled runs
+## Email delivery — validate the distribution list before scheduled runs
 
-The `email-sender` skill loads `~/Obsidian/Research-Brain/_config/email-lists.yml` on every invocation and validates the schema. There is no edit-time hook — malformed YAML or an unknown list name in `digest_routing` will surface at the **next scheduled digest fire**, which is non-interactive. The vault write still succeeds; the email step surfaces `email_failed=<reason>` in the runner summary.
+The `email-sender` skill loads `~/Obsidian/Research-Brain/_config/email-distribution.md` on every invocation and parses recipients from bullet lines (plain Markdown — Obsidian-native, no YAML). Validation happens at parse time; there is no edit-time hook. A missing file, an empty list (zero bullet lines with an email), or a missing app password surfaces at the **next scheduled digest fire**, which is non-interactive. The vault write still succeeds; the email step surfaces `email_failed=<reason>` in the runner summary.
 
-**When you edit `email-lists.yml` (or any file referenced from it), validate before the next scheduled run.** Ask the user to invoke `"Validate email-lists.yml and show me what would route where"` — `email-sender` will load + validate + report. Fix any errors before the next scheduled fire so a digest doesn't silently fail to email.
+**When you edit `email-distribution.md`, validate before the next scheduled run.** Ask the user to invoke `"Show me my email distribution list"` — `email-sender.show_list` loads + parses + reports without sending. Fix any issues (empty list, malformed addresses) before the next scheduled fire.
 
-Credentials live at `~/.config/research-bot/env` (`GMAIL_SEND_ADDRESS` + `GMAIL_APP_PASSWORD`) — same file as `ANTHROPIC_API_KEY`. Never paste these into prompts or commit them. The `~/.config/` directory is outside the repo and outside any cloud-sync folder.
+Credentials live at `~/.config/research-bot/env` (`GMAIL_SEND_ADDRESS` + `GMAIL_APP_PASSWORD`) — same file as `ANTHROPIC_API_KEY`. Use `scripts/set-gmail-credentials.sh "you@gmail.com" "xxxx xxxx xxxx xxxx"` (with a leading space to keep it out of shell history). Never paste these into prompts or commit them. The `~/.config/` directory is outside the repo and outside any cloud-sync folder.
