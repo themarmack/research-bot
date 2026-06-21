@@ -1,0 +1,50 @@
+# Deliberately bad workflow for actions-workflow-hardener acceptance test.
+# Every issue is intentional. See SKILL.md for expected findings.
+
+name: PR build and deploy
+
+# ATH-004 trigger: pull_request_target is the dangerous one
+on:
+  pull_request_target:
+    branches: [main]
+
+# ATH-001: no top-level permissions: block
+
+jobs:
+  build:
+    # ATH-006: self-hosted runner on a workflow that takes external PRs
+    runs-on: self-hosted
+
+    steps:
+      # ATH-003: version-tag pin instead of SHA (multiple instances)
+      - uses: actions/checkout@v4
+        # ATH-004: explicit checkout of PR head under pull_request_target
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: tj-actions/changed-files@v45
+        id: changes
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure AWS
+        # ATH-005: long-lived AWS creds via secrets, not OIDC
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          # ATH-007: echoing a secret-named variable
+          echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID configured"
+
+      # ATH-008: inline shell substitution from PR title
+      - name: Comment PR title
+        run: |
+          echo "Building for PR: ${{ github.event.pull_request.title }}"

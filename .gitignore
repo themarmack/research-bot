@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Claude Code local session permissions — user-specific, not toolkit content
+.claude/settings.local.json
+
+# Skill runtime state (seen-tracker outputs, last-run markers, etc.)
+.state/
+
+# Local environment files
+.env
+.env.local
+.envrc
+
+# Editor scratch
+.vscode/
+.idea/

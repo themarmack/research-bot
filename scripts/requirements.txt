@@ -1,0 +1,2 @@
+# Python dependencies for scripts in this folder.
+pyyaml>=6.0

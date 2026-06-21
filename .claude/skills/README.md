@@ -1,0 +1,1 @@
+Skill implementations for this toolkit live here, one folder per skill (e.g. `source-fetcher/SKILL.md`). See `../../BUILD-STEPS.md` for the build order. These are **project-scoped** — Claude Code auto-loads them when invoked from this repo. Do not duplicate any of these into the user's global `~/.claude/skills/`.

@@ -1,0 +1,81 @@
+# scripts/scheduled-jobs.yml — declarative config for toolkit scheduled agents.
+#
+# Edit this file → run `python3 scripts/schedule-sync.py` → state is reconciled.
+# Adding a job here creates a launchd .plist; removing one (or commenting it out)
+# unloads + deletes the .plist. The sync script's source of truth is this file plus
+# the set of `~/Library/LaunchAgents/research-bot.*.plist` files (which it manages).
+#
+# Default execution mode: queue
+#   The cron-fire writes a "due today" marker into vault/_inbox/scheduled-jobs/.
+#   You process the marker by invoking the relevant skill via Claude Code, then
+#   delete the marker. Zero API cost. No headless Claude needed.
+#
+# To opt a single job into `claude-headless` mode (auto LLM run at scheduled time):
+#   Add `mode: claude-headless` to that job's entry. Requires ANTHROPIC_API_KEY in
+#   ~/.config/research-bot/env (the wrapper sources that file before invoking claude).
+
+version: 1
+default_mode: queue                                         # queue | claude-headless
+
+# Where logs / queue markers go (state lives in the deploy location automatically:
+# ~/Library/Application Support/research-bot/state/ — TCC-unprotected so launchd works)
+log_dir: ~/Library/Logs/research-bot
+queue_dir: ~/Obsidian/Research-Brain/_inbox/scheduled-jobs
+
+# Whether to install a separate catch-up launch agent that runs at login + hourly
+catch_up_on_login: true
+
+# Job definitions
+# Cadence schema:
+#   { hour, minute }                            → daily (every day)
+#   { hour, minute, weekdays_only: true }       → Mon–Fri only
+#   { day_of_week: monday|.., hour, minute }    → weekly on that day
+#   { day_of_week: ..., every_n_weeks: 2, ...}  → biweekly (wrapper enforces "every other")
+#   { day, hour, minute }                       → monthly on day-of-month
+#   { months: [1,4,7,10], day, hour, minute }   → on specified months only
+
+jobs:
+  - id: voices-watcher
+    skill: voices-watcher
+    cadence: { hour: 7, minute: 30 }
+    timeout_seconds: 1800
+
+  - id: daily-cve-digest
+    skill: daily-cve-digest
+    cadence: { hour: 7, minute: 0, weekdays_only: true }
+    timeout_seconds: 600
+
+  - id: weekly-intelligence-digest
+    skill: weekly-intelligence-digest
+    cadence: { day_of_week: monday, hour: 7, minute: 0 }
+    timeout_seconds: 1800
+
+  - id: weekly-review
+    skill: weekly-review
+    cadence: { day_of_week: sunday, hour: 18, minute: 0 }
+    timeout_seconds: 900
+
+  - id: biweekly-codeql-community-pulse
+    skill: biweekly-codeql-community-pulse
+    cadence: { day_of_week: tuesday, hour: 8, minute: 0, every_n_weeks: 2 }
+    timeout_seconds: 600
+
+  - id: monthly-copilot-changelog
+    skill: monthly-copilot-changelog
+    cadence: { day: 1, hour: 7, minute: 0 }
+    timeout_seconds: 1200
+
+  - id: monthly-regulator-watch
+    skill: monthly-regulator-watch
+    cadence: { day: 1, hour: 8, minute: 0 }
+    timeout_seconds: 1200
+
+  - id: conference-cfp-and-recap-watch
+    skill: conference-cfp-and-recap-watch
+    cadence: { day: 15, hour: 9, minute: 0 }
+    timeout_seconds: 600
+
+  - id: quarterly-ai-coding-landscape
+    skill: quarterly-ai-coding-landscape
+    cadence: { months: [1, 4, 7, 10], day: 1, hour: 9, minute: 0 }
+    timeout_seconds: 1800

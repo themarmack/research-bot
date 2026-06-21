@@ -1,0 +1,131 @@
+# source-registry — curated YAML of high-signal sources for the research-bot toolkit.
+#
+# Each entry tells skills WHERE to look, HOW to fetch it, WHAT credibility tier the source is,
+# and WHICH topics it covers. The registry is the single source of truth — no skill should
+# hard-code a feed URL.
+#
+# To add a source: append an entry with a unique `id`, set `verified: false`, run feed-watcher
+# once to confirm the feed resolves, then flip to `verified: true`.
+#
+# Credibility tiers (see _meta/conventions.md):
+#   1 = primary vendor / official source (changelogs, regulator press, model lab announcements)
+#   2 = quality industry analysis (standards bodies, well-known eng blogs, named analysts)
+#   3 = unverified / untrusted (used by source-fetcher as default when host is unknown)
+
+version: 1
+default_credibility_tier: 3
+
+sources:
+
+  # ---- Tier 1 — vendor / platform primary -----------------------------------
+
+  - id: github-changelog
+    name: GitHub Changelog
+    url: https://github.blog/changelog/feed/
+    type: rss
+    host: github.blog
+    topic_tags: [github, copilot, ghas]
+    credibility_tier: 1
+    cadence_hint: daily
+    paywalled: false
+    verified: true
+    notes: Official product changelog; primary source for Copilot, Actions, GHAS, billing.
+
+  - id: anthropic-news
+    name: Anthropic News
+    url: https://www.anthropic.com/news
+    type: html
+    host: www.anthropic.com
+    topic_tags: [frontier-model, ai-coding-tools]
+    credibility_tier: 1
+    cadence_hint: weekly
+    paywalled: false
+    verified: true
+    notes: |
+      Anthropic news index page. HTML scrape works as of 2026-06-20.
+      No public RSS endpoint found; if Anthropic adds one, switch type to rss.
+
+  - id: openai-news
+    name: OpenAI News
+    url: https://openai.com/news/
+    type: html
+    host: openai.com
+    topic_tags: [frontier-model, ai-coding-tools]
+    credibility_tier: 1
+    cadence_hint: weekly
+    paywalled: false
+    verified: false
+    notes: |
+      OpenAI news index. RSS endpoint unconfirmed — feed-watcher should scrape until verified.
+
+  # ---- Tier 1 — US bank regulators (the compliance-relevant lens) -----------------
+
+  - id: occ-news-releases
+    name: OCC News Releases
+    url: https://www.occ.gov/news-issuances/news-releases/index-news-releases.html
+    type: html
+    host: www.occ.gov
+    topic_tags: [regulator, compliance-framework]
+    credibility_tier: 1
+    cadence_hint: weekly
+    paywalled: false
+    verified: false
+    notes: |
+      Office of the Comptroller of the Currency news releases. OCC publishes RSS at
+      various paths historically; verify on first feed-watcher run and update `url` +
+      `type: rss` if found.
+
+  - id: federalreserve-press
+    name: Federal Reserve Press Releases
+    url: https://www.federalreserve.gov/feeds/press_all.xml
+    type: rss
+    host: www.federalreserve.gov
+    topic_tags: [regulator, ai-governance]
+    credibility_tier: 1
+    cadence_hint: weekly
+    paywalled: false
+    verified: true
+    notes: |
+      Federal Reserve press release feed; covers SR letters, FOMC, enforcement actions,
+      and supervisory news. Mostly NOT software/AI/cyber relevant — weekly-intelligence-digest
+      should filter aggressively. Verified working as of 2026-06-20.
+
+  - id: ffiec-press
+    name: FFIEC Press
+    url: https://www.ffiec.gov/press/
+    type: html
+    host: www.ffiec.gov
+    topic_tags: [regulator, compliance-framework]
+    credibility_tier: 1
+    cadence_hint: monthly
+    paywalled: false
+    verified: false
+    notes: Federal Financial Institutions Examination Council. Scrape until RSS confirmed.
+
+  # ---- Tier 2 — quality industry sources -----------------------------------
+
+  - id: openssf-blog
+    name: OpenSSF Blog
+    url: https://openssf.org/blog/
+    type: html
+    host: openssf.org
+    topic_tags: [supply-chain]
+    credibility_tier: 2
+    cadence_hint: weekly
+    paywalled: false
+    verified: true
+    notes: |
+      Open Source Security Foundation; SLSA, Sigstore, Scorecard updates, supply-chain
+      incident analysis. Verified working as of 2026-06-20.
+
+  - id: nist-cybersecurity
+    name: NIST Cybersecurity Updates
+    url: https://www.nist.gov/news-events/cybersecurity
+    type: html
+    host: www.nist.gov
+    topic_tags: [compliance-framework, ai-governance]
+    credibility_tier: 1
+    cadence_hint: monthly
+    paywalled: false
+    verified: false
+    notes: NIST publications including SSDF (800-218), AI RMF, 800-53 revisions.
