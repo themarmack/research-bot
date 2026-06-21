@@ -17,36 +17,34 @@ Everyone listed below receives:
 
 ## How to edit
 
-Add a bullet per recipient. The skill extracts any email-shaped string from
-bullet lines, so all of these formats work:
+Add a bullet per recipient **under the `## Recipients` heading below**. The skill only parses bullets in that one section — bullets in this "How to edit" section (or anywhere else in the file) are ignored. All of these bullet formats work:
 
-- `you@gmail.com`
-- `you@gmail.com — Self (optional note after the em-dash is ignored)`
-- `Alice <alice@example.com>`
-- `alice@example.com, bob@example.com` (both extracted from one bullet)
+```
+- you@gmail.com
+- you@gmail.com — Self (optional note after the em-dash is ignored)
+- Alice <alice@example.com>
+- alice@example.com, bob@example.com   (both extracted from one bullet)
+```
 
-To **pause** an entry without deleting, wrap the bullet in an HTML comment:
+To **pause** an entry without deleting it, wrap the bullet in an HTML comment inside the `## Recipients` section:
 
 ```
 <!-- - paused.person@example.com — out on PTO until July -->
 ```
 
-Prose mentions of an email **outside** a bullet are ignored — you can write
-whatever notes you want above or below the list.
+You can write whatever prose, notes, or additional sections you want above or below `## Recipients` — only that section's bullets become recipients.
 
 ## Recipients
 
 - you@gmail.com — Self (always include this — useful for verification + your own copy)
-- vp.eng@example.com — VP Eng
-- ciso@example.com — CISO
+
+<!-- Add more bullets below as you grow your distribution.
+     - vp.eng@example.com — VP Eng
+     - ciso@example.com — CISO
+-->
 
 ## Notes
 
-This file is loaded fresh on every email-sender invocation. There is no
-edit-time hook — invalid YAML in frontmatter or zero parsed recipients will
-surface at the next scheduled-digest fire as `email_failed=<reason>`. The
-digest itself still lands in the vault; only the send fails.
+This file is loaded fresh on every email-sender invocation. There is no edit-time hook — a missing `## Recipients` heading or an empty section will surface at the next scheduled-digest fire as `email_failed=<reason>`. The digest itself still lands in the vault; only the send fails.
 
-To validate ahead of the next run, ask Claude Code: `"show me my email
-distribution list"` — `email-sender.show_list` loads + parses + prints the
-current recipients without sending anything.
+To validate ahead of the next run, ask Claude Code: `"show me my email distribution list"` — `email-sender.show_list` loads + parses + prints the current recipients without sending anything.

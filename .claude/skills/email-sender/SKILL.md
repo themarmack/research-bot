@@ -86,32 +86,40 @@ User-facing diagnostic. Loads, parses, and prints the distribution-list contents
 
 ## Parsing
 
-The distribution-list file is Markdown. The parser:
+The distribution-list file is Markdown. The parser scopes recipient extraction to a single named section so that documentation, format examples, and prose around the list never leak into the send:
 
-1. Strips YAML frontmatter (the `---\n...\n---\n` block at the top, if present).
-2. Strips HTML comments (`<!-- ... -->`) — anything inside is ignored, so commenting out a bullet pauses the recipient.
-3. Scans line by line. A line contributes a recipient if:
-   - It starts with `-` (a Markdown bullet) AND contains an email-shaped substring, OR
+1. Strip YAML frontmatter (the `---\n...\n---\n` block at the top, if present).
+2. Strip HTML comments (`<!-- ... -->`) — anything inside is ignored, so commenting out a bullet pauses the recipient.
+3. Find the `## Recipients` heading (H2, exact title, case-insensitive). Begin recipient-parsing **only** at the line after this heading.
+4. Stop recipient-parsing at the next `## ` heading (any title) or at end-of-file. Subsections inside `## Recipients` using `###` headings remain in-scope (groupings inside the list are fine).
+5. Inside the active region, a line contributes a recipient if:
+   - It starts with `-` or `*` (a Markdown bullet) AND contains an email-shaped substring, OR
    - The entire line, after stripping whitespace, IS an email-shaped substring (no leading bullet required).
-4. Email regex: `\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b`.
-5. Multiple emails on one bullet line are all extracted (so `- alice@example.com, bob@example.com` works).
-6. Case-insensitive deduplication on the parsed list.
+6. Lines starting with ` ``` ` (fenced code block boundary) are skipped, and the parser ignores everything between the open and close fence — code-block content is never a recipient.
+7. Email regex: `\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b`.
+8. Multiple emails on one bullet line are all extracted (`- alice@example.com, bob@example.com` works).
+9. Case-insensitive deduplication on the parsed list.
 
-Prose mentions of an email (text not on a bullet and not standing alone on a line) are ignored — only structurally list-shaped lines count. This means you can write whatever you want above the recipient list without leaking addresses into the send.
+Sections OTHER than `## Recipients` — including `## How to edit`, `## Notes`, the document intro, etc. — are scanned for emails for diagnostics only; addresses found there are reported by `show_list` as "ignored (outside ## Recipients)" but never sent to. This lets the template carry inline format examples (`- you@gmail.com`) without making them live entries.
 
-Validation: if 0 recipients are parsed, **stop and report** — the file exists but is empty of structurally-list-shaped emails. The user is told to add at least one bullet.
+Validation:
+
+- File missing → stop-and-report (case #1 below).
+- `## Recipients` heading missing → stop-and-report: `"email-distribution.md is missing the '## Recipients' heading. The skill only extracts addresses from bullets under that heading."`
+- Heading present but no parsed recipients → stop-and-report: `"'## Recipients' section is empty. Add at least one '- you@example.com' line under that heading."`
 
 ## Stop and report — enumerated cases
 
 Each surfaces a structured error to the caller (and to the runner summary line for scheduled jobs):
 
 1. **Distribution list missing** → `"email-distribution.md not found at ~/Obsidian/Research-Brain/_config/email-distribution.md. Copy .claude/skills/email-sender/email-distribution.example.md to that path and edit."`
-2. **List parses to zero recipients** → `"email-distribution.md contains no email addresses on bullet lines. Add at least one '- you@example.com' line."`
-3. **`GMAIL_APP_PASSWORD` missing** → `"GMAIL_APP_PASSWORD not set in ~/.config/research-bot/env. Run 'scripts/set-gmail-credentials.sh \"you@gmail.com\" \"xxxx xxxx xxxx xxxx\"' to set."`
-4. **`GMAIL_SEND_ADDRESS` missing** → similar.
-5. **SMTP auth failure** → `"Gmail SMTP auth failed for <send-address>. App password may be expired or revoked — regenerate at https://myaccount.google.com/apppasswords."`
-6. **SMTP send failure (network, server-level bounce)** → `"Send failed: <smtplib error>. Per-recipient results: [sent=N, skipped=M]."`
-7. **Invalid email format on a recipient** → skip that recipient, continue with the rest, surface in the return `skipped` list (NOT a stop-and-report — degraded delivery proceeds).
+2. **`## Recipients` heading missing** → `"email-distribution.md exists but has no '## Recipients' heading. The skill only extracts addresses from bullets under that exact heading (case-insensitive). Add a '## Recipients' section and list recipients as bullets under it."`
+3. **`## Recipients` section is empty** → `"'## Recipients' section parsed to zero recipients. Add at least one '- you@example.com' bullet under that heading."`
+4. **`GMAIL_APP_PASSWORD` missing** → `"GMAIL_APP_PASSWORD not set in ~/.config/research-bot/env. Run 'scripts/set-gmail-credentials.sh \"you@gmail.com\" \"xxxx xxxx xxxx xxxx\"' to set."`
+5. **`GMAIL_SEND_ADDRESS` missing** → similar.
+6. **SMTP auth failure** → `"Gmail SMTP auth failed for <send-address>. App password may be expired or revoked — regenerate at https://myaccount.google.com/apppasswords."`
+7. **SMTP send failure (network, server-level bounce)** → `"Send failed: <smtplib error>. Per-recipient results: [sent=N, skipped=M]."`
+8. **Invalid email format on a recipient** → skip that recipient, continue with the rest, surface in the return `skipped` list (NOT a stop-and-report — degraded delivery proceeds).
 
 The vault note remains written even if email fails. Email is a delivery channel, not a write-blocker.
 
