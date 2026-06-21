@@ -42,6 +42,32 @@ That generates one `~/Library/LaunchAgents/research-bot.{job}.plist` per job (pl
 
 Deep detail (architecture diagram, claude-headless mode, troubleshooting): [`scripts/README.md`](./scripts/README.md).
 
+#### Email delivery (optional)
+
+Scheduled digests can auto-email to a configured recipient list; ad-hoc research notes prompt you ("email this to which list?") after the vault write. Uses Gmail SMTP — no OAuth setup.
+
+One-time setup:
+
+1. **Enable 2-Factor Auth** on the Google account you'll send from (required for app passwords).
+2. **Generate an app password** at https://myaccount.google.com/apppasswords. Select "Mail" → "Other / research-bot". Google shows a 16-character password once — copy it.
+3. **Add credentials** to `~/.config/research-bot/env` (same file that already holds `ANTHROPIC_API_KEY`):
+   ```
+   GMAIL_SEND_ADDRESS=you@gmail.com
+   GMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
+   ```
+4. **Create your recipient lists** in the vault:
+   ```bash
+   mkdir -p ~/Obsidian/Research-Brain/_config
+   cp .claude/skills/email-sender/recipients.example.yml \
+      ~/Obsidian/Research-Brain/_config/email-lists.yml
+   # Edit the lists + digest_routing map to match your audience.
+   ```
+5. **Verify** by asking Claude Code: `"Send the most recent weekly-intelligence-digest to my self list as a test."` — confirms SMTP works end-to-end.
+
+After setup, scheduled digests with a `digest_routing` entry auto-send when you process the queue marker. Research notes (Category 1) always prompt before sending. Misconfig (missing env var, malformed YAML, unknown list name) stop-and-reports with the exact remediation — no silent drops, no half-sends.
+
+Lists live in your vault (Obsidian-editable, not in this public repo). Skill: [`email-sender`](./.claude/skills/email-sender/SKILL.md). Prompting examples: [`PROMPTING.md`](./PROMPTING.md) §Email.
+
 ### 2. Ad-hoc research (Obsidian-first)
 
 When you ask a question on demand, the skill **checks the Obsidian vault first** for prior research on the topic, then expands to the web only for confirmed gaps. New findings are added to the vault so the next ad-hoc question on the same topic builds on prior work instead of starting from scratch.

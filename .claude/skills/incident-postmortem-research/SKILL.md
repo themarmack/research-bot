@@ -44,6 +44,7 @@ Each incident gets analyzed on 5 dimensions:
 - `supply-chain-security-watch` — broader landscape context.
 - `threat-model-helper` — when an incident pattern should be added to the threat catalog.
 - `secure-design-reviewer` — when an incident reveals a control category gap.
+- [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
 
 ## Acceptance test (for step 31 done-criteria)
 

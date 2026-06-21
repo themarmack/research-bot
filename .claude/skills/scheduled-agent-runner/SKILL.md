@@ -34,10 +34,14 @@ Every scheduled-agent run follows this exact sequence:
 8.  write_digest()            ← digest-writer → vault-writer.write_digest
 9.  curate_findings()         ← stage promotable claims to _inbox/ → memory-curator
 10. mark_surfaced()           ← seen-tracker.mark_surfaced for every item written
-11. emit_summary()            ← one-line runner-log entry
+11. maybe_email()             ← email-sender.auto_send_if_routed(path, "digest",
+                                agent_name) — no-ops if no digest_routing entry
+12. emit_summary()            ← one-line runner-log entry (includes email status)
 ```
 
 Steps 5–6 are optional per agent. A pure "what shipped this week" digest (changelog aggregator) may not need claim-level verification — the source IS the authority. A regulator-watch digest with novel interpretations does need it.
+
+Step 11 (`maybe_email`) is always invoked but is a no-op unless the agent has a `digest_routing` entry in `~/Obsidian/Research-Brain/_config/email-lists.yml`. Email failure does NOT roll back the vault write — the note is durable; email is a delivery channel that surfaced its result to step 12's summary line.
 
 ## Per-agent config
 
@@ -71,8 +75,14 @@ The runner injects these into the lifecycle steps. The agent's own SKILL.md inst
 A single summary line emitted to stdout (or captured by the caller):
 
 ```
-[2026-06-20T07:01:23Z] weekly-intelligence-digest: polled=8 sources, new_items=14, verified=5, written=vault/digests/weekly/2026-06-20-weekly-intelligence-digest.md, failures=2 (anthropic-news html-scrape, openai-news html-scrape)
+[2026-06-20T07:01:23Z] weekly-intelligence-digest: polled=8 sources, new_items=14, verified=5, written=vault/digests/weekly/2026-06-20-weekly-intelligence-digest.md, emailed=leadership(2/2), failures=2 (anthropic-news html-scrape, openai-news html-scrape)
 ```
+
+The `emailed=` segment reports the routing destination + per-recipient delivery (`sent/total`). Possible values:
+- `emailed=leadership(2/2)` — auto-routed; all recipients delivered.
+- `emailed=leadership(1/2)` — partial delivery; the skipped recipient appears in the failures section.
+- `emailed=none` — no `digest_routing` entry for this agent; vault write succeeded, no send attempted.
+- `email_failed=<reason>` — config or SMTP error from `email-sender`. The vault write still succeeded; only the send failed.
 
 Plus the digest file in the vault and any `_inbox/<agent_name>/` stages for `memory-curator` to process on its next sweep.
 
@@ -84,8 +94,9 @@ Per the stop-and-report guardrail, ANY of these surface to the summary line and 
 - A claim that came back inconclusive from `verify-claim`
 - A `vault-writer` schema-validation rejection
 - A `memory-curator` drop with substantive content
+- An `email-sender` failure (misconfig, SMTP, partial recipient delivery) — surfaces as `emailed=<list>(sent/total)` or `email_failed=<reason>`; the digest itself remains written.
 
-A failed run **still emits a partial summary** — the digest file is written even if 2 of 8 sources failed. Sources section makes the gaps visible.
+A failed run **still emits a partial summary** — the digest file is written even if 2 of 8 sources failed, or even if email delivery failed entirely. Sources section makes the gaps visible.
 
 ## Composes with
 
@@ -96,6 +107,7 @@ Every Phase-1 skill plus the curator:
 - `seen-tracker` (dedup)
 - `digest-writer` (formatter)
 - `memory-curator` (post-digest cleanup)
+- [`email-sender`](../email-sender/SKILL.md) (step 11 — auto-send via `digest_routing`)
 
 This is also the single seam where the OB1-borrowed `weekly-review` skill plugs in — it follows the same lifecycle but with a different `source_filter` (the vault itself) and a different digest template (Week at a Glance / Themes / Open Loops / Connections / Gaps / Focus).
 
@@ -112,7 +124,7 @@ curate_findings: false
 ```
 
 Run end-to-end. Confirm:
-- Sequence steps 1, 2, 3, 4, 7, 8, 10, 11 execute (skips 5, 6, 9 per config).
+- Sequence steps 1, 2, 3, 4, 7, 8, 10, 11, 12 execute (skips 5, 6, 9 per config; step 11 `maybe_email` no-ops without a `digest_routing` entry).
 - A digest file lands at `vault/digests/daily/YYYY-MM-DD-noop-test-agent.md`, even if empty body (just TL;DR-style empty + Sources section).
 - `.state/noop-test-agent/seen.jsonl` is created and populated.
 - Summary line is emitted.

@@ -42,6 +42,7 @@ Standard Phase-1 foundation. Cross-feeds:
 - `stakeholder-update-writer` — exec-tier "what are peers doing"
 - `decision-memo-writer` (planned) — when peer activity informs a bank decision
 - `vendor-security-eval` — when a peer's vendor adoption is the signal worth investigating
+- [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
 
 ## Acceptance test (for step 30 done-criteria)
 

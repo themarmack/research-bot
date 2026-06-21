@@ -63,6 +63,8 @@ The framing isn't an add-on for this skill — it's the whole point. Every findi
 
 Same Phase-1 foundation as other Category 1 researchers.
 
+- [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
+
 ## Acceptance test (for step 12 done-criteria)
 
 One live end-to-end research run produces a note at `vault/research/regulator/YYYY-MM-DD-{slug}.md` with tier-1 source citations and explicit org-control-catalog mapping.

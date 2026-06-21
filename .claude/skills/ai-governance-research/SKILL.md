@@ -54,6 +54,8 @@ The org's AI governance work is also constrained by the financial-services regul
 
 Same Phase-1 foundation as other Category 1 researchers. Naturally pairs with `financial-regulator-watch` — most decisions need both lenses.
 
+- [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
+
 ## Acceptance test (for step 12 done-criteria)
 
 One live end-to-end research run produces a note at `vault/research/ai-governance/YYYY-MM-DD-{slug}.md` with tier-1 source citations and explicit "applies to internal Copilot deployment? → yes/no/partial + which controls" mapping.

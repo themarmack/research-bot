@@ -1,0 +1,57 @@
+# email-lists.yml — recipient lists for email-sender
+#
+# COPY THIS FILE to ~/Obsidian/Research-Brain/_config/email-lists.yml and edit.
+# The active config lives in your vault (Obsidian-editable, not in the public repo).
+#
+# Lists are named and reusable. `digest_routing` maps each scheduled skill to a
+# default list — scheduled digests auto-send to that list after they write to
+# the vault. Research notes always prompt the user (never auto-send).
+#
+# Schema (validated on every load — malformed → stop-and-report):
+#   version       (int, required, must equal 1)
+#   lists         (map<name, list-spec>, required, non-empty)
+#     <name>:
+#       description (str, required)
+#       recipients  (list of {email, name, role?}, required, non-empty)
+#   digest_routing (map<agent-id, list-name>, optional)
+#                  Unknown agent-ids are ignored; unknown list-names → stop-and-report.
+
+version: 1
+
+lists:
+  self:
+    description: Just you — useful as a default for personal digests + as a smoke-test target.
+    recipients:
+      - { email: you@gmail.com, name: Self, role: owner }
+
+  leadership:
+    description: Exec audience (VP+) — concise, high-signal digests only.
+    recipients:
+      - { email: vp.eng@example.com, name: VP Eng, role: vp }
+      - { email: ciso@example.com,   name: CISO,    role: ciso }
+
+  team:
+    description: Direct team — operational digests, security findings, weekly updates.
+    recipients:
+      - { email: teammate1@example.com, name: Teammate One, role: eng }
+      - { email: teammate2@example.com, name: Teammate Two, role: eng }
+
+# Scheduled-digest routing.
+# When a Category 2 scheduled agent finishes writing its digest, the runner calls
+# email-sender.auto_send_if_routed(path, "digest", <agent-id>). If the agent-id
+# appears here, the digest is sent to the named list. Otherwise no auto-send
+# (the digest still lands in the vault — you can manually send later).
+#
+# Omit any entry to disable auto-send for that digest. Comment-out for clarity.
+digest_routing:
+  weekly-intelligence-digest: leadership
+  daily-cve-digest:           self
+  weekly-review:              self
+  biweekly-codeql-community-pulse: self
+  monthly-copilot-changelog:  leadership
+  monthly-regulator-watch:    leadership
+  conference-cfp-and-recap-watch: self
+  quarterly-ai-coding-landscape:  leadership
+
+# Research notes (Category 1, ad-hoc) ignore this map entirely.
+# email-sender.prompt_then_send always asks you which list (or skip).

@@ -56,3 +56,11 @@ Files whose edits require `schedule-sync.py`:
 - `_catch_up_helper.py`
 
 `schedule-sync.py` and `schedule-status.py` themselves are invoked from Terminal (not launchd) and don't need redeployment.
+
+## Email delivery — validate config before scheduled runs
+
+The `email-sender` skill loads `~/Obsidian/Research-Brain/_config/email-lists.yml` on every invocation and validates the schema. There is no edit-time hook — malformed YAML or an unknown list name in `digest_routing` will surface at the **next scheduled digest fire**, which is non-interactive. The vault write still succeeds; the email step surfaces `email_failed=<reason>` in the runner summary.
+
+**When you edit `email-lists.yml` (or any file referenced from it), validate before the next scheduled run.** Ask the user to invoke `"Validate email-lists.yml and show me what would route where"` — `email-sender` will load + validate + report. Fix any errors before the next scheduled fire so a digest doesn't silently fail to email.
+
+Credentials live at `~/.config/research-bot/env` (`GMAIL_SEND_ADDRESS` + `GMAIL_APP_PASSWORD`) — same file as `ANTHROPIC_API_KEY`. Never paste these into prompts or commit them. The `~/.config/` directory is outside the repo and outside any cloud-sync folder.

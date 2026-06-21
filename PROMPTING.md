@@ -15,6 +15,7 @@ Open Claude Code inside the repo directory before running any of these, so the p
 5. [Capture — quick capture, conference talk, voices roster](#5-capture)
 6. [Writing artifacts — decision memo, ADR, stakeholder update, objection response](#6-writing-artifacts)
 7. [Research — anything not Copilot- or GitHub-specific](#7-research--anything-else)
+8. [Email — send digests + research notes via Gmail](#8-email)
 
 Output locations at the bottom: [Where things land](#where-things-land).
 
@@ -267,6 +268,43 @@ Routes to `sdlc-best-practice`.
 
 ---
 
+## 8. Email
+
+Send digests + research notes via Gmail SMTP. Requires one-time setup (see README §"Email delivery (optional)"): an app password in `~/.config/research-bot/env` and a `~/Obsidian/Research-Brain/_config/email-lists.yml` configured from the [template](./.claude/skills/email-sender/recipients.example.yml).
+
+### Ask-and-send after a research note writes
+
+> **Prompt**: `Research SR 11-7 implications for the Copilot coding agent and email me the result.`
+
+The Category 1 researcher (`copilot-deep-dive` in this case) writes the note to `vault/research/copilot/`, then `email-sender.prompt_then_send` asks you which list to deliver to ("leadership / team / self / skip"). You pick; the email goes; the vault note remains. If you just asked for research without "email me," Claude still offers — research notes always ask after the write.
+
+### Force-send an existing digest
+
+> **Prompt**: `Email the most recent weekly-intelligence-digest to leadership.`
+
+Routes directly to `email-sender.send_to_list`. The path is resolved from `vault/digests/weekly/{latest}-weekly-intelligence-digest.md`. Useful when (a) auto-send was disabled in `digest_routing`, (b) you want a re-send, or (c) you're sending to a different list than the routed default.
+
+### List the configured lists + routing map
+
+> **Prompt**: `What email lists do I have and which digests auto-send where?`
+
+Loads `email-lists.yml`, validates it, and prints the lists + their recipients + the `digest_routing` map. Useful before adding a new digest or changing audiences. If the config is missing or malformed, surfaces the exact stop-and-report message with remediation.
+
+### Troubleshoot a misconfig
+
+> **Prompt**: `My scheduled digest didn't email this morning — what broke?`
+
+Reads the relevant per-job log under `~/Library/Logs/research-bot/` for the failure line (`email_failed=<reason>`), then translates the error into the likely fix: regenerate the app password, fix YAML syntax, add missing recipient, etc. Common cases:
+
+- `email_failed=config missing` → `~/Obsidian/Research-Brain/_config/email-lists.yml` not present.
+- `email_failed=GMAIL_APP_PASSWORD not set` → env file missing the var.
+- `email_failed=SMTP auth failed` → app password expired or revoked; regenerate at https://myaccount.google.com/apppasswords.
+- `email_failed=unknown list 'X'` → typo in `digest_routing`.
+
+The digest itself still lands in the vault even when email fails — email is a delivery channel, not a write-blocker.
+
+---
+
 ## Where things land
 
 | Artifact | Path | Skill that writes it |
@@ -280,6 +318,8 @@ Routes to `sdlc-best-practice`.
 | Person note | `vault/people/{handle}.md` | `voices-roster-curator`, quick capture |
 | Quick-capture entry | `vault/_inbox/quick-capture/{ts}-{slug}.md` | `quick-capture` (sweep promotes later) |
 | Tier-1 harness memory | `~/.claude/projects/<this-project>/memory/*.md` | Claude Code harness (auto) |
+| Email recipient lists | `~/Obsidian/Research-Brain/_config/email-lists.yml` | hand-curated (template in `.claude/skills/email-sender/`) |
+| Gmail credentials | `~/.config/research-bot/env` (`GMAIL_SEND_ADDRESS`, `GMAIL_APP_PASSWORD`) | hand-curated; sourced by scheduled-job wrapper and email-sender |
 
 ---
 

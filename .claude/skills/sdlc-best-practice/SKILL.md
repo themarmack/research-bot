@@ -38,6 +38,8 @@ For each finding answer:
 
 Standard Phase-1 foundation. Naturally pairs with `incident-postmortem-research` (when the question is incident-triggered).
 
+- [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
+
 ## Acceptance test (for step 31 done-criteria)
 
 The Payments KB review trilogy + 11 prior research notes serve as exemplars of what this skill produces. Live exercise deferred to the next on-demand SDLC question.

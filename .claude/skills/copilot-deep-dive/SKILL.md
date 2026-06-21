@@ -68,6 +68,7 @@ Research note at `vault/research/copilot/YYYY-MM-DD-{slug}.md`. If the question 
 - `vault-writer.write_research` (output)
 - `_inbox/copilot-deep-dive/` + `memory-curator` (fact promotion)
 - `copilot-faq-answerer` (consumer of promoted facts via `override_facts_predicate`)
+- [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
 
 ## Acceptance test (for step 11 done-criteria)
 

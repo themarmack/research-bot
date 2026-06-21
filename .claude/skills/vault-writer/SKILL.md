@@ -122,6 +122,12 @@ Per the writing standard: every schema-validation failure, every authoritative-s
 - [`vault-querier`](../vault-querier/SKILL.md) — idempotency check (does the path exist?) + wikilink suggestion.
 - [`prompt-injection-guard`](../prompt-injection-guard/SKILL.md) — caller must apply on any web-sourced body before passing to vault-writer.
 
+### Post-write composers
+
+vault-writer itself is strictly a writer — it does not invoke other skills after a successful write. Delivery and notification belong to the caller. The canonical post-write composer:
+
+- [`email-sender`](../email-sender/SKILL.md) — after `write_digest()` or `write_research()` succeeds, the caller invokes email-sender to optionally deliver the note via Gmail SMTP. `scheduled-agent-runner` step 11 calls `email-sender.auto_send_if_routed`; Category 1 researchers call `email-sender.prompt_then_send`. vault-writer remains uncoupled from email-sender — they compose at the caller, not internally.
+
 ## Acceptance test (for step 4 done-criteria)
 
 A live round-trip exercise is deferred to step 7 (first scheduled-agent run). The spec is acceptance-complete when:

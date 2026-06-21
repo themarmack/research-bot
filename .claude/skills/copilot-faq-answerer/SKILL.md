@@ -73,6 +73,7 @@ Add new entries as new questions appear. The skill should propose an addition (d
 - `vault-querier` — Obsidian-first check for newer facts.
 - `vault-writer.write_fact` — when a deep-dive research result should become a canonical fact.
 - `copilot-deep-dive` (step 11) — fallback for novel questions.
+- [`email-sender`](../email-sender/SKILL.md) — when the stakeholder-facing answer is committed to vault/facts/copilot/ or the user asks to forward an answer, invoke `prompt_then_send(path)` for optional Gmail distribution.
 
 ## Acceptance test (for step 10 done-criteria)
 
