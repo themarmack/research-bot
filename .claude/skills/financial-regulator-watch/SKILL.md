@@ -63,6 +63,7 @@ The framing isn't an add-on for this skill — it's the whole point. Every findi
 
 Same Phase-1 foundation as other Category 1 researchers.
 
+- [`executive-summary-writer`](../executive-summary-writer/SKILL.md) — **only when the user explicitly asks for an exec summary** (never auto-invoked after vault write). Takes the just-written research note's path and produces a 1-page summary tuned to a named audience (CISO, VP Eng, etc.).
 - [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
 
 ## Acceptance test (for step 12 done-criteria)

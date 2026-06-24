@@ -38,6 +38,7 @@ For each finding answer:
 
 Standard Phase-1 foundation. Naturally pairs with `incident-postmortem-research` (when the question is incident-triggered).
 
+- [`executive-summary-writer`](../executive-summary-writer/SKILL.md) — **only when the user explicitly asks for an exec summary** (never auto-invoked after vault write). Takes the just-written research note's path and produces a 1-page summary tuned to a named audience (CISO, VP Eng, etc.).
 - [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
 
 ## Acceptance test (for step 31 done-criteria)

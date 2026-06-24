@@ -68,6 +68,7 @@ Research note at `vault/research/copilot/YYYY-MM-DD-{slug}.md`. If the question 
 - `vault-writer.write_research` (output)
 - `_inbox/copilot-deep-dive/` + `memory-curator` (fact promotion)
 - `copilot-faq-answerer` (consumer of promoted facts via `override_facts_predicate`)
+- [`executive-summary-writer`](../executive-summary-writer/SKILL.md) — **only when the user explicitly asks for an exec summary** (never auto-invoked after vault write). Takes the just-written research note's path and produces a 1-page summary tuned to a named audience (CISO, VP Eng, etc.).
 - [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
 
 ## Acceptance test (for step 11 done-criteria)

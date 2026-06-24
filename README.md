@@ -78,6 +78,23 @@ Lives in **Category 1 — Research (on-demand)** of [`skills-plan.md`](./skills-
 
 You don't memorize skill names — just describe what you want. See [`PROMPTING.md`](./PROMPTING.md) for example prompts that get you to the right skill in one sentence.
 
+#### Executive summaries (optional)
+
+`executive-summary-writer` turns a research note into a 1-page exec summary, personalized per audience. Length, voice, format, and emphasis are tuned by reading `~/Obsidian/Research-Brain/_config/exec-preferences.md` — a Markdown doc where each H2 (`## CISO`, `## VP Engineering`, etc.) defines one audience. A required `## Default` section is the fallback for unspecified audiences and the field-by-field backstop for named ones.
+
+The summary follows an 8-section spine: BLUF, Why This Matters Now, Key Findings, Implications, Recommended Action, Risks, Next Decision Point, Sources. Three sections are mandatory; the other five can be toggled per audience. Output lands at `vault/insights/YYYY-MM-DD-exec-summary-{audience}-{slug}.md` and prompts to email afterward via `email-sender`.
+
+One-time setup:
+
+```bash
+mkdir -p ~/Obsidian/Research-Brain/_config
+cp .claude/skills/executive-summary-writer/exec-preferences.example.md \
+   ~/Obsidian/Research-Brain/_config/exec-preferences.md
+# Open it in Obsidian. Edit the ## Default section + any named audiences (## CISO, etc.). Save.
+```
+
+After setup, try `"summarize the latest Copilot research for the CISO"` — the skill loads prefs, generates a CISO-tuned 1-pager, writes to `insights/`, and asks if you want to email it. Validate the prefs file any time with `"list my executive audiences"` ([`PROMPTING.md`](./PROMPTING.md) §9). Skill: [`executive-summary-writer`](./.claude/skills/executive-summary-writer/SKILL.md).
+
 ---
 
 ## Architecture (one paragraph)

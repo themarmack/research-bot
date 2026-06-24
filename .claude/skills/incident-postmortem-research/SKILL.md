@@ -44,6 +44,7 @@ Each incident gets analyzed on 5 dimensions:
 - `supply-chain-security-watch` — broader landscape context.
 - `threat-model-helper` — when an incident pattern should be added to the threat catalog.
 - `secure-design-reviewer` — when an incident reveals a control category gap.
+- [`executive-summary-writer`](../executive-summary-writer/SKILL.md) — **only when the user explicitly asks for an exec summary** (never auto-invoked after vault write). Takes the just-written research note's path and produces a 1-page summary tuned to a named audience (CISO, VP Eng, etc.).
 - [`email-sender`](../email-sender/SKILL.md) — after `vault-writer.write_research()` succeeds, invoke `prompt_then_send(path)` to ask the user whether to distribute the note via Gmail.
 
 ## Acceptance test (for step 31 done-criteria)

@@ -16,6 +16,7 @@ Open Claude Code inside the repo directory before running any of these, so the p
 6. [Writing artifacts — decision memo, ADR, stakeholder update, objection response](#6-writing-artifacts)
 7. [Research — anything not Copilot- or GitHub-specific](#7-research--anything-else)
 8. [Email — send digests + research notes via Gmail](#8-email)
+9. [Executive summaries — turn a research note into a 1-page exec brief](#9-executive-summaries)
 
 Output locations at the bottom: [Where things land](#where-things-land).
 
@@ -307,6 +308,59 @@ The digest itself still lands in the vault even when email fails — email is a 
 
 ---
 
+## 9. Executive summaries
+
+Turn a research note into a 1-page exec-facing summary tuned to a named audience. Audiences (length, voice, format, emphasis) are defined in `~/Obsidian/Research-Brain/_config/exec-preferences.md` — a Markdown doc where each H2 (`## Default`, `## CISO`, etc.) is one audience. See README §"Executive summaries (optional)" for setup.
+
+### Summarize for the default audience
+
+> **Prompt**: `Give me an exec summary of the latest Copilot agentic-features research.`
+
+Routes to `executive-summary-writer.summarize_for(path, audience="default")`. Loads the source research note, applies the `## Default` section's prefs (~200 words, declarative voice, all 8 sections), writes to `vault/insights/YYYY-MM-DD-exec-summary-default-{slug}.md`, then asks `[y/n]` to email via the existing distribution list.
+
+### Summarize for a named audience
+
+> **Prompt**: `Summarize that research for the CISO.`
+
+Same path, audience override → `summarize_for(path, audience="ciso")`. CISO's prefs ({length: 150, voice: risk-forward, special_interests: [SR 11-7, FFIEC, NYDFS 500], …}) shape a shorter, control-specific version. Output file path includes `-exec-summary-ciso-`.
+
+If you want multiple audience versions of the same research, just ask: `"Give me CISO + VP Eng + Default versions of that note"` — Claude calls `summarize_for` once per audience and you get three files in `insights/`.
+
+### List defined audiences (validate the prefs file)
+
+> **Prompt**: `List my executive audiences.`
+
+Calls `executive-summary-writer.list_audiences`. Loads, parses, prints each H2 with its length / voice / emphasize / which optional sections are toggled. No mail, no file writes. Use this after editing `exec-preferences.md` to confirm the parse before relying on it.
+
+### Troubleshoot a missing-audience error
+
+> **Prompt**: `Summarize this research for the CFO.`
+
+If `## CFO` isn't defined in `exec-preferences.md`, stop-and-report case #4 surfaces:
+
+```
+Audience 'cfo' not in exec-preferences.md. Available: [default, ciso, vp-eng].
+```
+
+Add a `## CFO` H2 to the file (set length/voice/etc.) and retry. Or fall back: `"Summarize that for the default audience instead."`
+
+The 8-section spine:
+
+| # | Section | Mandatory? |
+|---|---------|------------|
+| 1 | Bottom Line Up Front | ✅ |
+| 2 | Why This Matters Now | optional |
+| 3 | Key Findings | ✅ |
+| 4 | Implications for Us | optional |
+| 5 | Recommended Action | ✅ |
+| 6 | Risks & What We're Watching | optional |
+| 7 | Next Decision Point | optional |
+| 8 | Sources | ✅ |
+
+Per-audience prefs toggle the 5 optional sections via `sections: +next-decision-point, -risks` syntax. The 3 mandatory sections cannot be turned off (they're the discipline keeping the summary a 1-pager).
+
+---
+
 ## Where things land
 
 | Artifact | Path | Skill that writes it |
@@ -322,6 +376,8 @@ The digest itself still lands in the vault even when email fails — email is a 
 | Tier-1 harness memory | `~/.claude/projects/<this-project>/memory/*.md` | Claude Code harness (auto) |
 | Email distribution list | `~/Obsidian/Research-Brain/_config/email-distribution.md` | hand-curated Markdown (template in `.claude/skills/email-sender/`) |
 | Gmail credentials | `~/.config/research-bot/env` (`GMAIL_SEND_ADDRESS`, `GMAIL_APP_PASSWORD`) | set via `scripts/set-gmail-credentials.sh`; sourced by scheduled-job wrapper and email-sender |
+| Executive summary | `vault/insights/YYYY-MM-DD-exec-summary-{audience}-{slug}.md` | `executive-summary-writer.summarize_for` |
+| Exec audience preferences | `~/Obsidian/Research-Brain/_config/exec-preferences.md` | hand-curated Markdown (template in `.claude/skills/executive-summary-writer/`) |
 
 ---
 
