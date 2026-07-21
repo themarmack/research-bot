@@ -12,6 +12,14 @@ When using `skill-creator` to scaffold a new skill, **explicitly tell it the tar
 
 The current phase is ideation; [`skills-plan.md`](./skills-plan.md) is the approved backlog. When the user says *"implement step N"* or *"run step N"*, read [`BUILD-STEPS.md`](./BUILD-STEPS.md) to find that step's skills, deps, and acceptance criteria — and execute it. Don't start implementing a skill outside that file's numbered sequence without explicit user direction.
 
+## Skill evaluation with `evolve` — the `skills/` symlink is a bridge
+
+The repo is wired for [`evolve`](https://oss.bitwisemedia.uk/evolve/) (a CLI that evaluates coding-agent skills). Config lives in `.evolve.yaml`; eval suites in `evals/<skill>/` (see [`evals/README.md`](./evals/README.md)).
+
+- **`skills/` at the repo root is a symlink to `.claude/skills/`** — evolve hardcodes the skills path to `<root>/skills`, while Claude Code discovers skills from `.claude/skills/`. The canonical, only copy of every skill remains `.claude/skills/<name>/`. **Never move the skill dirs to `skills/`, never create a second real `skills/` tree, and never edit a skill "under `skills/`" as if it were separate** — it's the same files.
+- **Tier discipline (regulated-env):** `evolve run checks` (Tier 0) is static, free, credential-free — safe for CI. `run triggers` / `run evals` (Tiers 1–2) drive real agent CLIs in full-auto (tokens, per-vendor credentials, non-deterministic) — run these **manually or on a schedule and commit `results.*`; do not run agents in CI.** Gate CI on committed evidence (`evolve report --check`), never by running agents on shared runners against org credentials.
+- **Known backlog:** ~52 skill descriptions lack an explicit "Use when/after/before" trigger phrase (`checks.description_pattern`). These are advisory warnings (checks still exits 0), tracked as a burndown — sharpening them improves trigger accuracy.
+
 ## Memory tiers — don't duplicate
 
 - **Tier 1**: harness auto-memory at `~/.claude/projects/<this-project>/memory/`. Identity, preferences, feedback only.

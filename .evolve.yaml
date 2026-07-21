@@ -1,0 +1,24 @@
+# evolve configuration — evaluates this repo's Claude skills.
+# Full reference: https://oss.bitwisemedia.uk/evolve/config/
+#
+# NOTE: `skills/` at the repo root is a SYMLINK to `.claude/skills/` (evolve
+# hardcodes the skills path to `<root>/skills`, and Claude Code discovers
+# project skills from `.claude/skills/`). The symlink bridges the two so the
+# skills live in exactly one place. Do not move or duplicate the skill dirs.
+
+# Single-plugin repo: the repository root is the plugin.
+layout: "single"
+
+checks:
+  # We ship only the Claude plugin manifest, not the codex one.
+  plugin_manifests: ["claude"]
+
+  # Keep the trigger-phrase check ON — it is real signal, not noise: a
+  # description without a "Use when/after/before" clause tends to trigger
+  # less reliably. Outstanding failures are a deliberate burndown backlog.
+  description_pattern: "Use (when|after|before)"
+
+report:
+  thresholds:
+    triggers_min_pass_rate: 0.5
+    evals_min_pass_rate: 0.66
