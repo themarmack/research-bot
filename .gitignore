@@ -6,6 +6,8 @@ __pycache__/
 *.pyc
 *.pyo
 *.egg-info/
+.venv/
+.pytest_cache/
 
 # Claude Code local session permissions — user-specific, not toolkit content
 .claude/settings.local.json

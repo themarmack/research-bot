@@ -1,0 +1,79 @@
+{
+  "schema": 5,
+  "plugin": "research-bot",
+  "skill": "copilot-faq-answerer",
+  "models": {
+    "anthropic/claude-sonnet-4-6": {
+      "triggers": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6",
+        "display": "Claude Sonnet 4.6",
+        "harness": "claude",
+        "tool_version": "0.5.1",
+        "ran_at": "2026-07-21T22:48:38Z",
+        "executed": true,
+        "content_hash": "2ae64e811919d30e52aaa7e5ed7079b233f4c9f5d8e37c95c565dcda136c0de6",
+        "runs_per_query": 3,
+        "timeout_seconds": 120,
+        "pricing": {
+          "input_per_mtok": 3,
+          "output_per_mtok": 15
+        },
+        "results": [
+          {
+            "query": "Does GitHub Copilot train on our private code?",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.5,
+            "spec_hash": "1de37e0f11d185c3d25d732a0b3cb1ef92a9861bdfe1b3802ad2660ef02f8f7f"
+          },
+          {
+            "query": "What IP indemnity does GitHub give us for Copilot suggestions?",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.6,
+            "spec_hash": "1c9a72be6f6fc36cb39e41481bd34bdbb24daa7daa86873f7a8862fa106d927a"
+          },
+          {
+            "query": "Can the Copilot public code filter be turned off for a team?",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.2,
+            "spec_hash": "a75b8cc221fd50f8b6f1864e0a122cb8b3f0b81a653dcd5f3de9ee02d31e725d"
+          },
+          {
+            "query": "Write a Python function that parses a CSV file into dicts",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 6.5,
+            "spec_hash": "4ece0bba6891b93265f8da613dc2197d48f9939eb7dee091275e2dac7217a599"
+          },
+          {
+            "query": "Compare Copilot vs Cursor on pricing and admin controls",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 106.2,
+            "spec_hash": "ff34bf2d34af96de0524b98dcd1c6216c362bba74232b51473e22809b9c69deb"
+          }
+        ],
+        "summary": {
+          "passed": 5,
+          "failed": 0,
+          "total": 5,
+          "pass_rate": 1,
+          "avg_run_seconds": 25.2
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+name: CI
+
+# Deterministic gates only — NO AI agents, NO API key, NO secrets.
+# Layers 0+1 (pytest) + evolve Tier-0 checks + a gate on COMMITTED eval
+# evidence. Trigger/eval agent runs happen locally/scheduled, never here.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  deterministic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        # Note: the root `skills` symlink -> `.claude/skills` is preserved and
+        # resolves on Linux; evolve reads skills through it.
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python deps
+        run: pip install -r scripts/requirements.txt -r requirements-dev.txt
+
+      - name: Layers 0+1 — deterministic unit + structural tests
+        run: python -m pytest
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+
+      - name: Install evolve (pinned)
+        run: go install github.com/bitwise-media-group/evolve/cmd/evolve@v0.5.1
+
+      - name: Tier 0 — static skill/plugin checks
+        run: evolve run checks
+
+      - name: Gate committed eval evidence (no agents)
+        run: evolve report --check
