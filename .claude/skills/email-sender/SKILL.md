@@ -1,6 +1,6 @@
 ---
 name: email-sender
-description: Send a freshly-written vault note (digest or research) via Gmail SMTP to the single distribution list defined in `~/Obsidian/Research-Brain/_config/email-distribution.md`. Scheduled digests auto-send to everyone on the list; research notes prompt the user `[y/n]` before sending. Loads recipients from a plain-Markdown bullet list — Obsidian-native, no YAML, no per-digest routing. Stop-and-reports on missing config, empty list, missing `GMAIL_APP_PASSWORD`, or SMTP failure. Reads Gmail credentials from `~/.config/research-bot/env` (`GMAIL_SEND_ADDRESS` + `GMAIL_APP_PASSWORD`). Use immediately after `vault-writer.write_digest` or `vault-writer.write_research` succeeds.
+description: Send a freshly-written vault note (digest or research) via Gmail SMTP to the single distribution list defined in `~/Obsidian/Research-Brain/_config/email-distribution.md`. The email body is rendered Markdown-to-styled-HTML with the raw `.md` note attached; delivery is deterministic (a committed `render_and_send.py`, no AI call). Scheduled digests auto-send to everyone on the list; research notes prompt the user `[y/n]` before sending. Loads recipients from a plain-Markdown bullet list — Obsidian-native, no YAML, no per-digest routing. Stop-and-reports on missing config, empty list, missing `GMAIL_APP_PASSWORD`, or SMTP failure. Reads Gmail credentials from `~/.config/research-bot/env` (`GMAIL_SEND_ADDRESS` + `GMAIL_APP_PASSWORD`). Use immediately after `vault-writer.write_digest` or `vault-writer.write_research` succeeds.
 ---
 
 # email-sender
@@ -40,24 +40,29 @@ If either is missing, the skill stops and reports — never silently drops.
 
 The primary action. Steps:
 
-1. Resolve `note_path` to an absolute path; read the file (Markdown with optional YAML frontmatter).
+1. Resolve `note_path` to an absolute path; confirm the file exists.
 2. Load and parse `~/Obsidian/Research-Brain/_config/email-distribution.md` (see [Parsing](#parsing)).
-3. Read `GMAIL_SEND_ADDRESS` and `GMAIL_APP_PASSWORD` from the environment. Missing → stop-and-report referencing the setup helper.
-4. Build the message:
-   - **Subject**: `subject_override` if given, else derive from the note (see [Subject derivation](#subject-derivation)).
-   - **Body**: full Markdown of the note (frontmatter stripped), plus a footer linking back to the vault path.
-   - **From**: `GMAIL_SEND_ADDRESS`. **To**: `GMAIL_SEND_ADDRESS` (self). **Bcc**: every parsed recipient — addresses are NOT disclosed to other recipients.
-5. Open `smtplib.SMTP_SSL("smtp.gmail.com", 465)`, `login(GMAIL_SEND_ADDRESS, GMAIL_APP_PASSWORD)`, `send_message(...)`, close.
-6. Per-recipient validation: skip addresses that don't match `^[^\s@]+@[^\s@]+\.[^\s@]+$`. A single bad entry doesn't lose the rest.
+3. Confirm `~/.config/research-bot/env` carries `GMAIL_SEND_ADDRESS` and `GMAIL_APP_PASSWORD` (the script re-reads them, but check here so a missing credential surfaces as a clean stop-and-report referencing the setup helper).
+4. Derive the **Subject**: `subject_override` if given, else derive from the note (see [Subject derivation](#subject-derivation)).
+5. Per-recipient validation: drop any address that doesn't match `^[^\s@]+@[^\s@]+\.[^\s@]+$` (record it for the `skipped` list). A single bad entry doesn't lose the rest.
+6. Invoke **`render_and_send.py`** (in this skill folder), piping a JSON payload on stdin:
+   ```json
+   {"note_path": "<abs path>", "subject": "<derived subject>",
+    "bcc": ["<validated recipient>", "…"],
+    "vault_footer_path": "digests/weekly/2026-…md"}
+   ```
+   The script builds the message and sends it: **From**/**To** = `GMAIL_SEND_ADDRESS` (self), **Bcc** = the validated recipients (addresses are NOT disclosed to each other — `send_message` strips the Bcc header before transmit). It renders the note's Markdown (frontmatter stripped) to styled HTML, attaches the raw `.md`, and emits a JSON result on stdout (or an `error`/`error_type` object + non-zero exit on failure — map `error_type` to the matching stop-and-report case below). See [Message body shape](#message-body-shape-v2--html--markdown-attachment).
 
 Return:
 
 ```python
 {
-    "sent_to":  ["addr1@example.com", "addr2@example.com"],
-    "skipped":  [{"email": "bad@@invalid", "reason": "invalid format"}],
+    "sent_to":  ["addr1@example.com", "addr2@example.com"],  # from the script's result
+    "skipped":  [{"email": "bad@@invalid", "reason": "invalid format"}],  # from step 5
     "subject":  "[Weekly Intelligence Digest] 2026-06-22 — ...",
-    "from":     "you@gmail.com"
+    "from":     "you@gmail.com",
+    "html":     true,                # false → markdown lib absent, plain-text-only fallback
+    "attached": "2026-06-22-weekly-intelligence-digest.md"
 }
 ```
 
@@ -123,17 +128,30 @@ Each surfaces a structured error to the caller (and to the runner summary line f
 
 The vault note remains written even if email fails. Email is a delivery channel, not a write-blocker.
 
-## Message body shape (v1 — plain text Markdown)
+## Message body shape (v2 — HTML + Markdown attachment)
+
+Built deterministically by `render_and_send.py` — no AI call in the send path, so scheduled `launchd` runs produce identical, testable output every time. The message is `multipart/mixed`:
 
 ```
-{full markdown of the note, frontmatter stripped}
-
----
-Landed in your vault at: digests/weekly/2026-06-22-weekly-intelligence-digest.md
-Sent via research-bot email-sender. Distribution list lives in your vault at _config/email-distribution.md.
+multipart/mixed
+├─ multipart/alternative
+│   ├─ text/plain   {note markdown, frontmatter stripped} + footer   ← today's behavior
+│   └─ text/html    styled render of the same markdown + footer      ← what mail clients show
+└─ attachment       {note}.md  — the RAW vault file, frontmatter INCLUDED
 ```
 
-Gmail's web UI renders Markdown ASCII passably. The vault path in the footer points the reader back to the canonical copy. HTML rendering, attachments, and inline images are explicitly out of scope for v1.
+- **HTML body**: the note's Markdown (frontmatter stripped) rendered via Python-Markdown (`extra`, `sane_lists`, `tables`, `fenced_code`, `toc`) and wrapped in a self-contained template — an embedded `<style>` block, no external CSS/fonts/remote assets. Styling is restrained: system font stack, ~640px container, bordered/striped tables, monospace code blocks, muted footer. Renders cleanly in Gmail and Apple Mail (the self-send target).
+- **Plain-text part**: the raw Markdown + footer, unchanged from v1 — the fallback for clients that don't render HTML.
+- **Attachment**: the note file **verbatim, including YAML frontmatter** — a true copy of the canonical vault file, so the Markdown source is always preserved.
+- **Footer** (both parts):
+
+  ```
+  ---
+  Landed in your vault at: {vault_footer_path}
+  Sent via research-bot email-sender. Distribution list lives in your vault at _config/email-distribution.md.
+  ```
+
+**Graceful fallback**: if the `markdown` package isn't importable in the runtime `python3`, the script omits the HTML part and sends **plain-text-only** (v1 behavior) with the `.md` attachment still included, and returns `"html": false`. A missing dependency never blocks delivery — important for unattended scheduled runs. Install it via `python3 -m pip install -r scripts/requirements.txt`.
 
 ## Subject derivation
 
@@ -153,10 +171,12 @@ Truncation at 60 chars + `…` keeps the subject readable. Note frontmatter `tit
 
 ## Acceptance test (single SMTP round-trip)
 
+0. Install the renderer dependency: `python3 -m pip install -r scripts/requirements.txt` (gives the runtime `python3` the `markdown` package).
 1. Create a minimal `email-distribution.md` in the vault with one bullet pointing to the user's own email.
-2. Pick any existing digest in `~/Obsidian/Research-Brain/digests/`.
+2. Pick any existing digest in `~/Obsidian/Research-Brain/digests/` (ideally one with a table and a code block, to exercise the renderer).
 3. Invoke: `email-sender.send_note("<that path>")`.
-4. Confirm: email lands in inbox within ~10 seconds; subject follows the template; body contains the digest Markdown; footer references the vault path.
-5. Misconfig drill: remove `GMAIL_APP_PASSWORD` from env; re-invoke; confirm stop-and-report #3 surfaces exactly as documented.
-6. Bad-recipient drill: add `bad@@invalid` to the list; send; confirm the valid recipient gets mail and `skipped` lists the bad entry.
-7. Pause drill: wrap a bullet with `<!-- ... -->`; re-parse; confirm that address is excluded.
+4. Confirm: email lands in inbox within ~10 seconds; subject follows the template; the body **renders as styled HTML** (headings, tables, code all formatted — not raw `#`/`|` ASCII); footer references the vault path; and a **`.md` attachment** is present whose bytes equal the vault note (frontmatter included). Result JSON reports `"html": true` and `"attached": "<note>.md"`.
+5. Fallback drill: run `render_and_send.py` under a `python3` without `markdown` installed (or temporarily force the `ImportError` path); confirm the mail still sends **plain-text-only** with the `.md` attached and the result reports `"html": false` — no crash.
+6. Misconfig drill: remove `GMAIL_APP_PASSWORD` from env; re-invoke; confirm the `missing_app_password` stop-and-report (case #4) surfaces exactly as documented.
+7. Bad-recipient drill: add `bad@@invalid` to the list; send; confirm the valid recipient gets mail and `skipped` lists the bad entry.
+8. Pause drill: wrap a bullet with `<!-- ... -->`; re-parse; confirm that address is excluded.
