@@ -20,6 +20,15 @@ The repo is wired for [`evolve`](https://oss.bitwisemedia.uk/evolve/) (a CLI tha
 - **Tier discipline (regulated-env):** `evolve run checks` (Tier 0) is static, free, credential-free — safe for CI. `run triggers` / `run evals` (Tiers 1–2) drive real agent CLIs in full-auto (tokens, per-vendor credentials, non-deterministic) — run these **manually or on a schedule and commit `results.*`; do not run agents in CI.** Gate CI on committed evidence (`evolve report --check`), never by running agents on shared runners against org credentials.
 - **Known backlog:** ~52 skill descriptions lack an explicit "Use when/after/before" trigger phrase (`checks.description_pattern`). These are advisory warnings (checks still exits 0), tracked as a burndown — sharpening them improves trigger accuracy.
 
+## Testing — deterministic-first, three layers
+
+Full detail in [`TESTING.md`](./TESTING.md). The rule: **push everything you can into the free deterministic layers; keep the AI layer thin and run it sparingly.**
+
+- **Run it:** `make test` (Layers 0+1 — pytest, free, no AI), `make lint` (evolve Tier 0), `make gate` (`evolve report --check` on committed results), `make check` (all three = the CI gate), `make evals` (LOCAL only — drives the `claude` CLI). Deterministic tests live in `tests/` and import the hyphenated scripts by path via `tests/_util.py:load_module`.
+- **No API key needed for evals** — evolve rides the logged-in `claude` CLI (subscription), including the LLM judge. A key only adds pre-run cost *estimates*.
+- **CI (`.github/workflows/ci.yml`) runs Layers 0+1 + `evolve report --check` only** — zero agent tokens, no secrets. Never run `run triggers`/`run evals` in CI.
+- **When you extract a prose algorithm into a script** (as `render_and_send.py` and `email_recipients.py` did), add unit tests in `tests/` in the same change, and point the SKILL.md at the module so the logic lives in one tested place.
+
 ## Memory tiers — don't duplicate
 
 - **Tier 1**: harness auto-memory at `~/.claude/projects/<this-project>/memory/`. Identity, preferences, feedback only.

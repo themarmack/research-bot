@@ -9,6 +9,16 @@
 # Single-plugin repo: the repository root is the plugin.
 layout: "single"
 
+# Frugal-but-honest defaults. One model, the claude harness only, capped turns,
+# no baseline lift benchmark. We gate on Sonnet 4.6 (also the LLM-judge model):
+# Haiku produced false-negative trigger results on some skills, so it's too weak
+# a trigger oracle to gate on. Go cheaper for local smoke via `--model`; reserve
+# a larger matrix / baseline: true for periodic full sweeps, not routine runs.
+models: ["anthropic/claude-sonnet-4-6"]
+harnesses: ["claude"]
+max_turns: 8
+baseline: false
+
 checks:
   # We ship only the Claude plugin manifest, not the codex one.
   plugin_manifests: ["claude"]

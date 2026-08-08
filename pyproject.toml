@@ -1,0 +1,5 @@
+# Minimal project config — this repo is a skills catalog, not a package.
+# Present only to configure pytest for the deterministic test layer.
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
