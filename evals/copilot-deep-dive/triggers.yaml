@@ -1,0 +1,16 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: copilot-deep-dive
+
+# copilot-deep-dive = in-depth Copilot RESEARCH. Must NOT fire for a quick canonical
+# FAQ answer (copilot-faq-answerer) or a multi-tool comparison (ai-coding-tools-compare).
+triggers:
+  - query: "Do a deep dive on Copilot's agentic features for regulated repos"
+    should_trigger: true
+  - query: "Research Copilot's IP indemnity terms in depth"
+    should_trigger: true
+  - query: "Investigate how Copilot content exclusion actually works"
+    should_trigger: true
+  - query: "Does Copilot train on our code?"
+    should_trigger: false
+  - query: "Compare Copilot vs Cursor for us"
+    should_trigger: false

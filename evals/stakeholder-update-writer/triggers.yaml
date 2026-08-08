@@ -1,0 +1,17 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: stakeholder-update-writer
+
+# stakeholder-update-writer = tiered exec/lead/IC update from progress notes. Must NOT
+# fire for a single-note executive summary (executive-summary-writer) or a decision
+# memo (decision-memo-writer).
+triggers:
+  - query: "Write a stakeholder update from my progress notes"
+    should_trigger: true
+  - query: "Draft a tiered update for exec, eng leads, and ICs"
+    should_trigger: true
+  - query: "Turn these progress notes into a stakeholder update"
+    should_trigger: true
+  - query: "Write an executive summary of this research note"
+    should_trigger: false
+  - query: "Draft a decision memo for leadership"
+    should_trigger: false

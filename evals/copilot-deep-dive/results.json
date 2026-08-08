@@ -1,0 +1,136 @@
+{
+  "schema": 5,
+  "plugin": "research-bot",
+  "skill": "copilot-deep-dive",
+  "models": {
+    "anthropic/claude-sonnet-4-6": {
+      "triggers": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6",
+        "display": "Claude Sonnet 4.6",
+        "harness": "claude",
+        "tool_version": "0.5.1",
+        "ran_at": "2026-08-08T16:08:00Z",
+        "executed": true,
+        "content_hash": "5269eba395db3ecbefc26504b8e0b3c72e10d00965f3fabd7a08e82092c582d1",
+        "runs_per_query": 3,
+        "timeout_seconds": 120,
+        "pricing": {
+          "input_per_mtok": 3,
+          "output_per_mtok": 15
+        },
+        "results": [
+          {
+            "query": "Do a deep dive on Copilot's agentic features for regulated repos",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.4,
+            "spec_hash": "0b7e4d887da634743a7e6e6212678ed8a29fc66da78795ed879c7593e44f9079"
+          },
+          {
+            "query": "Research Copilot's IP indemnity terms in depth",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 5.8,
+            "spec_hash": "00fdbb1117c0a583cc04cd7930a7a0ca8b82b05f1e5c87eba8820d9f1ecd7b61"
+          },
+          {
+            "query": "Investigate how Copilot content exclusion actually works",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 7.8,
+            "spec_hash": "81dddd7f9f4dc86228cc446ccc729145bd7f0d3bd30e40921a39990916bc755e"
+          },
+          {
+            "query": "Does Copilot train on our code?",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 12.1,
+            "spec_hash": "9cbaabf1ef631bb1bf8e3a29627f647139ea8601ff2fa296238ffd34abe9ea30"
+          },
+          {
+            "query": "Compare Copilot vs Cursor for us",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 83.3,
+            "spec_hash": "b3539e80f2ad553488606626b38463519f1fb41c6ec31d9fcf5d1914136929c5"
+          }
+        ],
+        "summary": {
+          "passed": 5,
+          "failed": 0,
+          "total": 5,
+          "pass_rate": 1,
+          "avg_run_seconds": 22.7
+        },
+        "previous": {
+          "ran_at": "2026-08-08T16:03:30Z",
+          "summary": {
+            "passed": 4,
+            "failed": 1,
+            "total": 5,
+            "pass_rate": 0.8,
+            "avg_run_seconds": 19.4
+          },
+          "results": [
+            {
+              "query": "Do a deep dive on Copilot's agentic features for regulated repos",
+              "should_trigger": true,
+              "hits": 3,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 5.9,
+              "spec_hash": "0b7e4d887da634743a7e6e6212678ed8a29fc66da78795ed879c7593e44f9079"
+            },
+            {
+              "query": "Research Copilot's IP indemnity terms in depth",
+              "should_trigger": true,
+              "hits": 3,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 5.1,
+              "spec_hash": "00fdbb1117c0a583cc04cd7930a7a0ca8b82b05f1e5c87eba8820d9f1ecd7b61"
+            },
+            {
+              "query": "Investigate how Copilot content exclusion actually works",
+              "should_trigger": true,
+              "hits": 3,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 5.9,
+              "spec_hash": "81dddd7f9f4dc86228cc446ccc729145bd7f0d3bd30e40921a39990916bc755e"
+            },
+            {
+              "query": "Does Copilot train on our code?",
+              "should_trigger": false,
+              "hits": 0,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 13.1,
+              "spec_hash": "9cbaabf1ef631bb1bf8e3a29627f647139ea8601ff2fa296238ffd34abe9ea30"
+            },
+            {
+              "query": "Compare Copilot vs Cursor for us",
+              "should_trigger": false,
+              "hits": 2,
+              "runs": 3,
+              "passed": false,
+              "avg_run_seconds": 67.2,
+              "spec_hash": "b3539e80f2ad553488606626b38463519f1fb41c6ec31d9fcf5d1914136929c5"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

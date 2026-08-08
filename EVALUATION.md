@@ -27,7 +27,7 @@ Only the configured `models` appear below; these are excluded from this report:
 
 | Provider | Model | Passed | Pass rate | Δ rate | Avg run | Input tokens | Est. input cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | 14/14 | 100% | +20% | 13.3s | — | — |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | 38/39 | 97% | +17% | 13.5s | — | — |
 
 ## adr-writer
 
@@ -56,6 +56,74 @@ Only the configured `models` appear below; these are excluded from this report:
 | Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 9.8s | — | — |
+
+## ai-coding-tools-compare
+
+### Triggers
+
+#### Compare Copilot vs Cursor vs Windsurf for us (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 4.9s | — | — |
+
+#### Should we switch from Copilot to Cursor? (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 12.1s | — | — |
+
+#### Side-by-side of AI coding assistants against our rubric (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 5.1s | — | — |
+
+#### Do a deep dive on Copilot's enterprise features (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 8.5s | — | — |
+
+#### Does Copilot offer IP indemnity? (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 11.3s | — | — |
+
+## copilot-deep-dive
+
+### Triggers
+
+#### Do a deep dive on Copilot's agentic features for regulated repos (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +0% | 4.4s | — | — |
+
+#### Research Copilot's IP indemnity terms in depth (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +0% | 5.8s | — | — |
+
+#### Investigate how Copilot content exclusion actually works (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +0% | 7.8s | — | — |
+
+#### Does Copilot train on our code? (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 12.1s | — | — |
+
+#### Compare Copilot vs Cursor for us (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +67% | 83.3s | — | — |
 
 ## copilot-faq-answerer
 
@@ -91,6 +159,40 @@ Only the configured `models` appear below; these are excluded from this report:
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 106.2s | — | — |
 
+## daily-cve-digest
+
+### Triggers
+
+#### Run today's CVE digest (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 4.9s | — | — |
+
+#### What new CVEs hit our stack in the last day? (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 4.4s | — | — |
+
+#### Give me the daily vulnerability digest (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 4.5s | — | — |
+
+#### Compare Copilot vs Cursor for our team (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 84.7s | — | — |
+
+#### Review this repo's Dependabot config (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 11.7s | — | — |
+
 ## email-sender
 
 ### Triggers
@@ -124,3 +226,71 @@ Only the configured `models` appear below; these are excluded from this report:
 | Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 4.2s | — | — |
+
+## ghas-config-reviewer
+
+### Triggers
+
+#### Audit this repo's GHAS configuration against our baseline (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +0% | 4.2s | — | — |
+
+#### Is secret scanning and push protection enabled on the org? (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | FAIL | 1/3 | +33% | 11.3s | — | — |
+
+#### Review our GitHub Advanced Security posture (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +0% | 4.0s | — | — |
+
+#### Research the secret scanning push protection feature (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 10.6s | — | — |
+
+#### Audit our org's SAML and base-permission settings (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 9.8s | — | — |
+
+## weekly-intelligence-digest
+
+### Triggers
+
+#### Run the weekly intelligence digest (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 4.9s | — | — |
+
+#### What changed across GitHub, Copilot, and the regulators this week? (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 5.6s | — | — |
+
+#### Give me this week's intel roundup (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 5.2s | — | — |
+
+#### Give me today's CVE digest (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 9.3s | — | — |
+
+#### Draft an ADR for adopting Cursor (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 11.0s | — | — |

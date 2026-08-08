@@ -1,6 +1,6 @@
 ---
 name: weekly-intelligence-digest
-description: The flagship weekly scheduled agent. Polls high-signal sources across GitHub/Copilot/Anthropic/OpenAI/regulators/supply-chain, surfaces what changed in the past 7 days, and produces a single ranked markdown digest at vault/digests/weekly/YYYY-MM-DD-weekly-intelligence-digest.md framed with the regulated-org lens. Composes the full Phase-1 foundation via scheduled-agent-runner. Run weekly on Monday morning (or invoke ad-hoc).
+description: The flagship weekly scheduled agent. Polls high-signal sources across GitHub/Copilot/Anthropic/OpenAI/regulators/supply-chain, surfaces what changed in the past 7 days, and produces a single ranked markdown digest at vault/digests/weekly/YYYY-MM-DD-weekly-intelligence-digest.md framed with the regulated-org lens. Composes the full Phase-1 foundation via scheduled-agent-runner. Run weekly on Monday morning (or invoke ad-hoc). Use when the user asks to run the weekly digest or weekly intelligence roundup, or to see what changed across GitHub, Copilot, AI vendors, regulators, and supply-chain in the past week — distinct from the single-day CVE roundup (daily-cve-digest).
 ---
 
 # weekly-intelligence-digest

@@ -34,4 +34,15 @@ Tier 0 runs free and offline; Tiers 1–2 drive the `claude` CLI (uses your subs
 - `copilot-faq-answerer/` — Tier 1, **5/5** on Sonnet 4.6.
 - `email-sender/` — Tier 1, **5/5** on Sonnet 4.6 (fixed via issue #2). The original description buried the `show_list` capability behind sending prose, so "show me my distribution list" scored 0.00; surfacing show/validate as a first-class use in the description restored it. `results.json` committed and gated.
 
+### Issue #1 burndown — batch 1 (high-traffic skills)
+
+Each got a sharpened `Use when …` description confirmed against a discriminative suite (3 positives + 2 negatives that route to a sibling skill):
+
+- `daily-cve-digest/` — **5/5**.
+- `weekly-intelligence-digest/` — **5/5**.
+- `ai-coding-tools-compare/` — **5/5**.
+- `copilot-deep-dive/` — **5/5** (research-intent vs `copilot-faq-answerer`; dropped a "comparison routes to …" clause that made it over-fire on comparison prompts).
+- `ghas-config-reviewer/` — **4/5** (0.8). The one miss — "is secret scanning enabled on the **org**?" — is a genuine overlap with `github-org-audit-runner`, which also audits org secret-scanning defaults; disambiguating fully needs an authored suite on *that* skill too. Passes the gate; documented rather than gamed.
+- `stakeholder-update-writer/` — suite authored, but the skill **under-triggers** on its own core prompts (2/5) and three description rewrites didn't move it — a writer-task "the agent just drafts it inline" failure, not a wording gap. `results.json` **not** committed (kept out of the gate); tracked as a follow-up. Description still improved.
+
 Writing a good suite: include **negatives that should route to a sibling skill** (e.g. an RFC request must not trigger `adr-writer`) — they test that a description isn't over-broad.
