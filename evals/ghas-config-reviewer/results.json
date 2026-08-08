@@ -1,0 +1,136 @@
+{
+  "schema": 5,
+  "plugin": "research-bot",
+  "skill": "ghas-config-reviewer",
+  "models": {
+    "anthropic/claude-sonnet-4-6": {
+      "triggers": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6",
+        "display": "Claude Sonnet 4.6",
+        "harness": "claude",
+        "tool_version": "0.5.1",
+        "ran_at": "2026-08-08T16:03:48Z",
+        "executed": true,
+        "content_hash": "f34ebee97ec85f7707606c31e432397a82beacff99a82b8b0c851f38717228fa",
+        "runs_per_query": 3,
+        "timeout_seconds": 120,
+        "pricing": {
+          "input_per_mtok": 3,
+          "output_per_mtok": 15
+        },
+        "results": [
+          {
+            "query": "Audit this repo's GHAS configuration against our baseline",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.2,
+            "spec_hash": "44f3002f397d0dc0c83fb3e10423000e78f36b5038ccebc90bf4e74140e2c909"
+          },
+          {
+            "query": "Is secret scanning and push protection enabled on the org?",
+            "should_trigger": true,
+            "hits": 1,
+            "runs": 3,
+            "passed": false,
+            "avg_run_seconds": 11.3,
+            "spec_hash": "d88308c25e22c77b4dfc7e7b33c45e2c40ab0e6d35a93048b0a08236ac793b18"
+          },
+          {
+            "query": "Review our GitHub Advanced Security posture",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4,
+            "spec_hash": "8d25c28ea5c8eec3ea073650ae3bdabc4de7d4326782feff57eb87aae605156b"
+          },
+          {
+            "query": "Research the secret scanning push protection feature",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 10.6,
+            "spec_hash": "ed9abac1008b3b13c5abf12b9c4c6bd14847b7ffcc76b85a007edd6e031b29de"
+          },
+          {
+            "query": "Audit our org's SAML and base-permission settings",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 9.8,
+            "spec_hash": "4bdc2f1a2ab11a328dd29485f4c76bcf2eda41580f12af80545489f78bb31266"
+          }
+        ],
+        "summary": {
+          "passed": 4,
+          "failed": 1,
+          "total": 5,
+          "pass_rate": 0.8,
+          "avg_run_seconds": 8
+        },
+        "previous": {
+          "ran_at": "2026-08-08T15:59:26Z",
+          "summary": {
+            "passed": 4,
+            "failed": 1,
+            "total": 5,
+            "pass_rate": 0.8,
+            "avg_run_seconds": 9.5
+          },
+          "results": [
+            {
+              "query": "Audit this repo's GHAS configuration against our baseline",
+              "should_trigger": true,
+              "hits": 3,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 5,
+              "spec_hash": "44f3002f397d0dc0c83fb3e10423000e78f36b5038ccebc90bf4e74140e2c909"
+            },
+            {
+              "query": "Is secret scanning and push protection enabled on the org?",
+              "should_trigger": true,
+              "hits": 0,
+              "runs": 3,
+              "passed": false,
+              "avg_run_seconds": 13.7,
+              "spec_hash": "d88308c25e22c77b4dfc7e7b33c45e2c40ab0e6d35a93048b0a08236ac793b18"
+            },
+            {
+              "query": "Review our GitHub Advanced Security posture",
+              "should_trigger": true,
+              "hits": 3,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 6.3,
+              "spec_hash": "8d25c28ea5c8eec3ea073650ae3bdabc4de7d4326782feff57eb87aae605156b"
+            },
+            {
+              "query": "Research the secret scanning push protection feature",
+              "should_trigger": false,
+              "hits": 0,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 9.3,
+              "spec_hash": "ed9abac1008b3b13c5abf12b9c4c6bd14847b7ffcc76b85a007edd6e031b29de"
+            },
+            {
+              "query": "Audit our org's SAML and base-permission settings",
+              "should_trigger": false,
+              "hits": 0,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 13,
+              "spec_hash": "4bdc2f1a2ab11a328dd29485f4c76bcf2eda41580f12af80545489f78bb31266"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

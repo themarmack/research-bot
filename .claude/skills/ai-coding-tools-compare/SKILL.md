@@ -1,6 +1,6 @@
 ---
 name: ai-coding-tools-compare
-description: Produce a side-by-side comparison of AI coding tools — GitHub Copilot vs Cursor vs Windsurf vs Cody vs Tabnine vs JetBrains AI vs Amazon Q Developer vs emerging entrants — against the org's enterprise rubric. Rubric axes — auth (SSO/SAML/SCIM), data flow (residency, content exclusion, training-data policy), IP indemnity, on-prem / single-tenant options, admin telemetry, FedRAMP/SOC2/ISO certifications, model routing transparency, audit log access. Use during periodic re-evaluation (currently scheduled annual, more often if regulator activity surfaces), vendor selection for a specific use case, or before responding to "should we switch to X?" questions from leadership.
+description: Produce a side-by-side comparison of AI coding tools — GitHub Copilot vs Cursor vs Windsurf vs Cody vs Tabnine vs JetBrains AI vs Amazon Q Developer vs emerging entrants — against the org's enterprise rubric. Rubric axes — auth (SSO/SAML/SCIM), data flow (residency, content exclusion, training-data policy), IP indemnity, on-prem / single-tenant options, admin telemetry, FedRAMP/SOC2/ISO certifications, model routing transparency, audit log access. Use when the user asks to compare AI coding tools (Copilot vs Cursor vs Windsurf vs Cody vs others) against the org's enterprise rubric, or asks "should we switch to X?" — during periodic re-evaluation, vendor selection for a specific use case, or before responding to leadership. For an in-depth single-tool study (not a comparison) use copilot-deep-dive.
 ---
 
 # ai-coding-tools-compare

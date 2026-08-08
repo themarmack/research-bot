@@ -1,0 +1,16 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: ai-coding-tools-compare
+
+# ai-coding-tools-compare = side-by-side of MULTIPLE tools vs the rubric. Must NOT fire
+# for an in-depth single-tool study (copilot-deep-dive) or a canonical FAQ answer.
+triggers:
+  - query: "Compare Copilot vs Cursor vs Windsurf for us"
+    should_trigger: true
+  - query: "Should we switch from Copilot to Cursor?"
+    should_trigger: true
+  - query: "Side-by-side of AI coding assistants against our rubric"
+    should_trigger: true
+  - query: "Do a deep dive on Copilot's enterprise features"
+    should_trigger: false
+  - query: "Does Copilot offer IP indemnity?"
+    should_trigger: false

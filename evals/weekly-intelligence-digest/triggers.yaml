@@ -1,0 +1,16 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: weekly-intelligence-digest
+
+# weekly-intelligence-digest = the 7-day cross-source intel roundup. Must NOT fire
+# for the single-day CVE digest (its closest sibling) or for an ADR request.
+triggers:
+  - query: "Run the weekly intelligence digest"
+    should_trigger: true
+  - query: "What changed across GitHub, Copilot, and the regulators this week?"
+    should_trigger: true
+  - query: "Give me this week's intel roundup"
+    should_trigger: true
+  - query: "Give me today's CVE digest"
+    should_trigger: false
+  - query: "Draft an ADR for adopting Cursor"
+    should_trigger: false

@@ -1,0 +1,79 @@
+{
+  "schema": 5,
+  "plugin": "research-bot",
+  "skill": "weekly-intelligence-digest",
+  "models": {
+    "anthropic/claude-sonnet-4-6": {
+      "triggers": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6",
+        "display": "Claude Sonnet 4.6",
+        "harness": "claude",
+        "tool_version": "0.5.1",
+        "ran_at": "2026-08-08T16:00:06Z",
+        "executed": true,
+        "content_hash": "acea77c8eee7869a63602b963f4110129720f7e7b4f93ac54c78b2dec83155cd",
+        "runs_per_query": 3,
+        "timeout_seconds": 120,
+        "pricing": {
+          "input_per_mtok": 3,
+          "output_per_mtok": 15
+        },
+        "results": [
+          {
+            "query": "Run the weekly intelligence digest",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.9,
+            "spec_hash": "031356c1fdb0a268cab07a398f2ed46ba2d25b46028f017b5f1dcf36079a5f60"
+          },
+          {
+            "query": "What changed across GitHub, Copilot, and the regulators this week?",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 5.6,
+            "spec_hash": "92fcb2ab3eeaef08047fc1000a7f60e458a8c704bf1db17ec7f60d920165cf52"
+          },
+          {
+            "query": "Give me this week's intel roundup",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 5.2,
+            "spec_hash": "38457e0b760301639d2a552107461be61d9bea0c4fa71d971fc1ea10390f4ef5"
+          },
+          {
+            "query": "Give me today's CVE digest",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 9.3,
+            "spec_hash": "6ad906686023ff708a59bb31d02e6d19d1e755f938bc65524dcbf809cddc76ea"
+          },
+          {
+            "query": "Draft an ADR for adopting Cursor",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 11,
+            "spec_hash": "60db0f084a314e0d6d6a220d9468a587d098522687c1e6cd48f5f6ee0df362d4"
+          }
+        ],
+        "summary": {
+          "passed": 5,
+          "failed": 0,
+          "total": 5,
+          "pass_rate": 1,
+          "avg_run_seconds": 7.2
+        }
+      }
+    }
+  }
+}

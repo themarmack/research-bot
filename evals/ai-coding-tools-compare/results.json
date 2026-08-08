@@ -1,0 +1,79 @@
+{
+  "schema": 5,
+  "plugin": "research-bot",
+  "skill": "ai-coding-tools-compare",
+  "models": {
+    "anthropic/claude-sonnet-4-6": {
+      "triggers": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6",
+        "display": "Claude Sonnet 4.6",
+        "harness": "claude",
+        "tool_version": "0.5.1",
+        "ran_at": "2026-08-08T15:54:47Z",
+        "executed": true,
+        "content_hash": "414a57b45e3c245079615c8009db6f577abc716c2010514d73d165c8908496e0",
+        "runs_per_query": 3,
+        "timeout_seconds": 120,
+        "pricing": {
+          "input_per_mtok": 3,
+          "output_per_mtok": 15
+        },
+        "results": [
+          {
+            "query": "Compare Copilot vs Cursor vs Windsurf for us",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.9,
+            "spec_hash": "90b3c0527f39ee95dbe8b65bf76a03d52a58e24a3f13491f854aac89c29eb939"
+          },
+          {
+            "query": "Should we switch from Copilot to Cursor?",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 12.1,
+            "spec_hash": "7396892858fd3f2930e6579aa1c138fedb5e1d462384672b436d08ef80757e18"
+          },
+          {
+            "query": "Side-by-side of AI coding assistants against our rubric",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 5.1,
+            "spec_hash": "0fe45edb35ba9d1dee09fa0ece6f2edcb91399579684f1b28afc8ed6f821cf6a"
+          },
+          {
+            "query": "Do a deep dive on Copilot's enterprise features",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 8.5,
+            "spec_hash": "0fdff76913c4560be72b9b09b07b91c9bd4061a8704408bb50da5eba64b569f4"
+          },
+          {
+            "query": "Does Copilot offer IP indemnity?",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 11.3,
+            "spec_hash": "40f68776db6c9f8c30115891f3bd9d1684ba0fce2a502cc0993b35de2ddd5867"
+          }
+        ],
+        "summary": {
+          "passed": 5,
+          "failed": 0,
+          "total": 5,
+          "pass_rate": 1,
+          "avg_run_seconds": 8.4
+        }
+      }
+    }
+  }
+}

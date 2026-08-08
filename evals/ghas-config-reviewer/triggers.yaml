@@ -1,0 +1,17 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: ghas-config-reviewer
+
+# ghas-config-reviewer = audit a repo/org's GHAS *configuration*. Must NOT fire for
+# researching a single GHAS feature (ghas-feature-research) or auditing org admin
+# settings like SAML/base-permissions (github-org-audit-runner).
+triggers:
+  - query: "Audit this repo's GHAS configuration against our baseline"
+    should_trigger: true
+  - query: "Is secret scanning and push protection enabled on the org?"
+    should_trigger: true
+  - query: "Review our GitHub Advanced Security posture"
+    should_trigger: true
+  - query: "Research the secret scanning push protection feature"
+    should_trigger: false
+  - query: "Audit our org's SAML and base-permission settings"
+    should_trigger: false
