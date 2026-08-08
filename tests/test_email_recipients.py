@@ -2,6 +2,10 @@
 
 The parser decides WHO receives email, so its behavior is load-bearing.
 """
+from pathlib import Path
+
+import pytest
+
 from _util import SKILLS, load_module
 
 er = load_module(SKILLS / "email-sender" / "email_recipients.py", "email_recipients")
@@ -121,14 +125,15 @@ def test_validate_accepts_normal_and_rejects_malformed():
     assert not er.validate("has space@example.com")
 
 
-def test_matches_real_distribution_list(tmp_path):
-    """Sanity: the committed live list parses to two real recipients."""
-    from pathlib import Path
+def test_live_distribution_list_parses():
+    """Sanity: if a live list exists, it parses to at least one valid recipient.
+
+    Asserts structure, never identities — the live list is personal data and
+    must not be mirrored into this repo.
+    """
     live = Path.home() / "Obsidian/Research-Brain/_config/email-distribution.md"
     if not live.exists():
-        import pytest
         pytest.skip("live distribution list not present")
     out = parse(live.read_text(encoding="utf-8"))
-    assert "redacted@example.com" in out["recipients"]
-    assert "redacted2@example.com" in out["recipients"]
+    assert out["recipients"], "live distribution list parsed to zero recipients"
     assert all(er.validate(a) for a in out["recipients"])
