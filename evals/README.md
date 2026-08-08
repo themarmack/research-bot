@@ -32,6 +32,6 @@ Tier 0 runs free and offline; Tiers 1–2 drive the `claude` CLI (uses your subs
 
 - `adr-writer/` — Tier 1, **4/4** on Sonnet 4.6.
 - `copilot-faq-answerer/` — Tier 1, **5/5** on Sonnet 4.6.
-- `email-sender/` — Tier 1 suite present, but the skill **fails to trigger** on its own core prompts (0.40) — see issue #2. Its failing `results.json` is intentionally **not** committed so the gate isn't blocked; commit passing evidence once triggering is fixed.
+- `email-sender/` — Tier 1, **5/5** on Sonnet 4.6 (fixed via issue #2). The original description buried the `show_list` capability behind sending prose, so "show me my distribution list" scored 0.00; surfacing show/validate as a first-class use in the description restored it. `results.json` committed and gated.
 
 Writing a good suite: include **negatives that should route to a sibling skill** (e.g. an RFC request must not trigger `adr-writer`) — they test that a description isn't over-broad.
