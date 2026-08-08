@@ -1,0 +1,17 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: email-sender
+
+# email-sender distributes a freshly-written VAULT NOTE (digest/research) to the
+# configured list. It must NOT fire for composing an ad-hoc personal email or a
+# generic SMTP question.
+triggers:
+  - query: "Email the latest weekly intelligence digest to my distribution list"
+    should_trigger: true
+  - query: "Send this research note to my email list"
+    should_trigger: true
+  - query: "Show me my email distribution list"
+    should_trigger: true
+  - query: "Write me an email to my manager explaining the project is delayed"
+    should_trigger: false
+  - query: "What port does Gmail SMTP use for TLS?"
+    should_trigger: false

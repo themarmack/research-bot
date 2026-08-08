@@ -1,0 +1,15 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: adr-writer
+
+# Drafts an Architecture Decision Record for a decision already made. Should NOT
+# fire for a definitional question, nor for an RFC request (that's rfc-writer) —
+# the sibling-routing negatives test description specificity.
+triggers:
+  - query: "Write an ADR for our decision to standardize on PostgreSQL for new services"
+    should_trigger: true
+  - query: "Draft an architecture decision record capturing why we adopted OpenTelemetry"
+    should_trigger: true
+  - query: "What is an ADR and when should I write one?"
+    should_trigger: false
+  - query: "Write an RFC proposing we adopt a service mesh, open for team comment"
+    should_trigger: false

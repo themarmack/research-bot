@@ -1,0 +1,70 @@
+{
+  "schema": 5,
+  "plugin": "research-bot",
+  "skill": "adr-writer",
+  "models": {
+    "anthropic/claude-sonnet-4-6": {
+      "triggers": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6",
+        "display": "Claude Sonnet 4.6",
+        "harness": "claude",
+        "tool_version": "0.5.1",
+        "ran_at": "2026-07-21T22:46:34Z",
+        "executed": true,
+        "content_hash": "eae5a2fb3b60789c812bc4d287fa84be1760e10ed1c2f3a328ee5f812d5cc701",
+        "runs_per_query": 3,
+        "timeout_seconds": 120,
+        "pricing": {
+          "input_per_mtok": 3,
+          "output_per_mtok": 15
+        },
+        "results": [
+          {
+            "query": "Write an ADR for our decision to standardize on PostgreSQL for new services",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 3.4,
+            "spec_hash": "786b47edf6984382cac84c7a5115e98dbb8f578fdfaaaac15b3032cff7e7566e"
+          },
+          {
+            "query": "Draft an architecture decision record capturing why we adopted OpenTelemetry",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 3.8,
+            "spec_hash": "c71fb251da18e1812794abe41c2eec5b7be9214c4b6675ca9279a866434cf180"
+          },
+          {
+            "query": "What is an ADR and when should I write one?",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 10.5,
+            "spec_hash": "83ca6590f9a35b145ae1f97dfe342f467d19149a79eaff9065a808154098df71"
+          },
+          {
+            "query": "Write an RFC proposing we adopt a service mesh, open for team comment",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 9.8,
+            "spec_hash": "d7e6f69852e6eb14c3b9c01f3e94aaf25f27260e4e1b07ccc59865c962d5edd2"
+          }
+        ],
+        "summary": {
+          "passed": 4,
+          "failed": 0,
+          "total": 4,
+          "pass_rate": 1,
+          "avg_run_seconds": 6.9
+        }
+      }
+    }
+  }
+}

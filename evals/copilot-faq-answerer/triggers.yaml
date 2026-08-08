@@ -1,0 +1,17 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: copilot-faq-answerer
+
+# Answers recurring GitHub Copilot policy/controls questions. Should NOT fire for
+# generic coding help, nor for a tool-vs-tool comparison (that's
+# ai-coding-tools-compare) — those negatives test that it isn't over-broad.
+triggers:
+  - query: "Does GitHub Copilot train on our private code?"
+    should_trigger: true
+  - query: "What IP indemnity does GitHub give us for Copilot suggestions?"
+    should_trigger: true
+  - query: "Can the Copilot public code filter be turned off for a team?"
+    should_trigger: true
+  - query: "Write a Python function that parses a CSV file into dicts"
+    should_trigger: false
+  - query: "Compare Copilot vs Cursor on pricing and admin controls"
+    should_trigger: false
