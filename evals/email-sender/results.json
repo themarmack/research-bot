@@ -1,0 +1,136 @@
+{
+  "schema": 5,
+  "plugin": "research-bot",
+  "skill": "email-sender",
+  "models": {
+    "anthropic/claude-sonnet-4-6": {
+      "triggers": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6",
+        "display": "Claude Sonnet 4.6",
+        "harness": "claude",
+        "tool_version": "0.5.1",
+        "ran_at": "2026-08-08T15:38:58Z",
+        "executed": true,
+        "content_hash": "b70f1e2a8a2c68338c06c53962dd273a5cfd55623102eb54984bfc371344ed5d",
+        "runs_per_query": 3,
+        "timeout_seconds": 120,
+        "pricing": {
+          "input_per_mtok": 3,
+          "output_per_mtok": 15
+        },
+        "results": [
+          {
+            "query": "Email the latest weekly intelligence digest to my distribution list",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 5.5,
+            "spec_hash": "42efb54ee70c965e51f6049693be975d8bdc5010025ce35619b8071685385e6f"
+          },
+          {
+            "query": "Send this research note to my email list",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 7.4,
+            "spec_hash": "53ead26887c8b3bee7cdf1e890c964995edac994e794b3bd659fa034bc96cf46"
+          },
+          {
+            "query": "Show me my email distribution list",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.5,
+            "spec_hash": "357db40391b07a57b460104cfed5f8709e012fcb35a67b9edb24043714b2ddfd"
+          },
+          {
+            "query": "Write me an email to my manager explaining the project is delayed",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 10.2,
+            "spec_hash": "95645f439916bffb418f38a7c38878dd6d607076997b370628a1aec0d8debc7e"
+          },
+          {
+            "query": "What port does Gmail SMTP use for TLS?",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 4.2,
+            "spec_hash": "2090cae4a40f21a7b38d3ca64512566099de1325d95a931a962415a1809d9db8"
+          }
+        ],
+        "summary": {
+          "passed": 5,
+          "failed": 0,
+          "total": 5,
+          "pass_rate": 1,
+          "avg_run_seconds": 6.4
+        },
+        "previous": {
+          "ran_at": "2026-08-08T15:37:54Z",
+          "summary": {
+            "passed": 4,
+            "failed": 1,
+            "total": 5,
+            "pass_rate": 0.8,
+            "avg_run_seconds": 9
+          },
+          "results": [
+            {
+              "query": "Email the latest weekly intelligence digest to my distribution list",
+              "should_trigger": true,
+              "hits": 3,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 5,
+              "spec_hash": "42efb54ee70c965e51f6049693be975d8bdc5010025ce35619b8071685385e6f"
+            },
+            {
+              "query": "Send this research note to my email list",
+              "should_trigger": true,
+              "hits": 2,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 8.8,
+              "spec_hash": "53ead26887c8b3bee7cdf1e890c964995edac994e794b3bd659fa034bc96cf46"
+            },
+            {
+              "query": "Show me my email distribution list",
+              "should_trigger": true,
+              "hits": 0,
+              "runs": 3,
+              "passed": false,
+              "avg_run_seconds": 13.4,
+              "spec_hash": "357db40391b07a57b460104cfed5f8709e012fcb35a67b9edb24043714b2ddfd"
+            },
+            {
+              "query": "Write me an email to my manager explaining the project is delayed",
+              "should_trigger": false,
+              "hits": 0,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 12.3,
+              "spec_hash": "95645f439916bffb418f38a7c38878dd6d607076997b370628a1aec0d8debc7e"
+            },
+            {
+              "query": "What port does Gmail SMTP use for TLS?",
+              "should_trigger": false,
+              "hits": 0,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 5.3,
+              "spec_hash": "2090cae4a40f21a7b38d3ca64512566099de1325d95a931a962415a1809d9db8"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

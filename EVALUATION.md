@@ -27,7 +27,7 @@ Only the configured `models` appear below; these are excluded from this report:
 
 | Provider | Model | Passed | Pass rate | Δ rate | Avg run | Input tokens | Est. input cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | 9/9 | 100% | — | 17.1s | — | — |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | 14/14 | 100% | +20% | 13.3s | — | — |
 
 ## adr-writer
 
@@ -90,3 +90,37 @@ Only the configured `models` appear below; these are excluded from this report:
 | Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | — | 106.2s | — | — |
+
+## email-sender
+
+### Triggers
+
+#### Email the latest weekly intelligence digest to my distribution list (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +0% | 5.5s | — | — |
+
+#### Send this research note to my email list (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +33% | 7.4s | — | — |
+
+#### Show me my email distribution list (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +100% | 4.5s | — | — |
+
+#### Write me an email to my manager explaining the project is delayed (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 10.2s | — | — |
+
+#### What port does Gmail SMTP use for TLS? (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 4.2s | — | — |
