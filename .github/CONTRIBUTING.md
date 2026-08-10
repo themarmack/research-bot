@@ -116,8 +116,10 @@ standalone files, not an importable package.
 
 - **Real email addresses.** Use `example.com` (RFC 2606). Enforced by
   `tests/test_no_pii.py`.
-- **Absolute home paths** (`/Users/you/...`) or Claude Code project slugs
-  (`-Users-you-...`). Use `Path.home()` or `$HOME`. Also enforced.
+- **Absolute home paths** (`/Users/<you>/...`) or Claude Code project slugs
+  (`-Users-<you>-...`). Use `Path.home()` or `$HOME`. Also enforced.
+  *(Angle-bracket placeholders like these are explicitly allowed — that is
+  what the `(?!<)` lookahead in the guard is for.)*
 - **Credentials.** They belong in `~/.config/research-bot/env`, outside the
   repo. See [`SECURITY.md`](./SECURITY.md).
 - **Employer names, internal docs, or proprietary code.** This toolkit is built

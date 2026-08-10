@@ -8,15 +8,30 @@ on:
   push:
     branches: [main]
 
+# GITHUB_TOKEN would otherwise inherit the repo/org default, which can be
+# write-all. This workflow only reads the repo. Escalate per-job if a future
+# job genuinely needs to write — never here at the top level. (ATH-001/002)
+permissions:
+  contents: read
+
+# Supersede in-flight runs for the same ref; a stale run gates nothing.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deterministic:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      # Actions are pinned to full commit SHAs — a version tag is mutable and
+      # can be repointed at attacker-controlled code. Dependabot tracks these
+      # via the trailing version comment. (ATH-003)
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         # Note: the root `skills` symlink -> `.claude/skills` is preserved and
         # resolves on Linux; evolve reads skills through it.
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.11"
 
@@ -26,10 +41,13 @@ jobs:
       - name: Layers 0+1 — deterministic unit + structural tests
         run: python -m pytest
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
           go-version: "1.23"
 
+      # Version-pinned. `go install` verifies the module against the public
+      # checksum database (sum.golang.org) by default, so this pin is already
+      # tamper-evident without a manual SHA.
       - name: Install evolve (pinned)
         run: go install github.com/bitwise-media-group/evolve/cmd/evolve@v0.5.1
 
