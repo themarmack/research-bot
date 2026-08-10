@@ -1,0 +1,38 @@
+# Code owners for research-bot.
+#
+# This only auto-requests review on pull requests from OTHER people — GitHub
+# never asks a PR's author to review their own PR, so as a solo-maintainer repo
+# the second function of this file matters more: marking which paths are
+# curated and must not be casually rewritten (see CLAUDE.md).
+#
+# Enforcement requires branch protection on `main` with
+# "Require review from Code Owners" enabled.
+
+# Default owner for everything not matched below.
+*                       @themarmack
+
+# --- Curated artifacts -------------------------------------------------------
+# CLAUDE.md forbids auto-rewriting or reordering these. Append-only by default.
+/voices.csv             @themarmack
+/skills-plan.md         @themarmack
+/BUILD-STEPS.md         @themarmack
+
+# --- Agent operating rules and evaluation config -----------------------------
+# CLAUDE.md is the instruction set every agent in this repo obeys; .evolve.yaml
+# and evals/ define what "passing" means.
+/CLAUDE.md              @themarmack
+/.evolve.yaml           @themarmack
+/evals/                 @themarmack
+
+# --- Vault template ----------------------------------------------------------
+# Schema or tag-vocabulary changes need a decisions/ note first (CLAUDE.md).
+/vault-template/        @themarmack
+
+# --- Scheduling system -------------------------------------------------------
+# Edits to scheduled-jobs.yml, run-scheduled-job.sh, catch-up-missed-runs.sh,
+# or _catch_up_helper.py must be followed by `python3 scripts/schedule-sync.py`
+# in the same change.
+/scripts/               @themarmack
+
+# --- CI, supply chain, and repo governance -----------------------------------
+/.github/               @themarmack

@@ -1,0 +1,102 @@
+name: Bug report
+description: A skill misbehaved, a script failed, or a scheduled job did not fire.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Most skill bugs are *triggering* bugs — the right skill did not fire, or
+        the wrong one did. The exact prompt you typed is the single most useful
+        field below, so please fill it in verbatim.
+
+  - type: input
+    id: skill
+    attributes:
+      label: Skill or script
+      description: >-
+        Which skill or script misbehaved? Directory name is ideal
+        (e.g. `email-sender`, `scripts/schedule-sync.py`). Write "unknown /
+        no skill fired" if nothing triggered.
+      placeholder: email-sender
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: The prompt you typed
+      description: Verbatim, please — paraphrasing hides triggering bugs.
+      placeholder: 'Show me my email distribution list'
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+      description: >-
+        Include the error text or the agent's response. Redact any real email
+        addresses, credentials, or employer names before pasting.
+    validations:
+      required: true
+
+  - type: textarea
+    id: check
+    attributes:
+      label: "`make check` output"
+      description: Run `make check` and paste the tail. Leave blank if it is not relevant.
+      render: shell
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      description: >-
+        The scheduling layer is macOS-only (launchd). The skills themselves are
+        platform-neutral.
+      options:
+        - macOS
+        - Linux
+        - Windows (WSL)
+        - Windows (native)
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: OS version
+      placeholder: macOS 15.5
+
+  - type: dropdown
+    id: vault
+    attributes:
+      label: Is an Obsidian vault present at ~/Obsidian/Research-Brain/?
+      description: >-
+        Most Category 1 and 2 skills fail loudly without it. Run
+        `python3 scripts/bootstrap-vault.py` if you have not.
+      options:
+        - "Yes — scaffolded and populated"
+        - "Yes — scaffolded, but empty"
+        - "No"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before submitting
+      options:
+        - label: I have redacted real email addresses, credentials, and employer names from everything pasted above.
+          required: true
+        - label: This is not a security vulnerability (those go to SECURITY.md).
+          required: true
