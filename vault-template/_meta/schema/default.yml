@@ -1,0 +1,35 @@
+# Default frontmatter — every note has at minimum these fields.
+# Folder-specific schemas extend this.
+required:
+  - title
+  - created
+  - updated
+  - tags
+  - source_skill
+  - confidence
+fields:
+  title:
+    type: string
+    note: short, human-readable
+  created:
+    type: date  # YYYY-MM-DD
+    note: never changes after first write
+  updated:
+    type: date  # YYYY-MM-DD
+    note: bump on every save
+  tags:
+    type: array
+    items: string
+    note: use only entries from _meta/tags.md
+  source_skill:
+    type: string
+    note: which skill wrote it, or "human"
+  confidence:
+    type: integer
+    enum: [1, 2, 3]
+    note: 1 tentative, 2 likely, 3 verified
+  links:
+    type: array
+    items: string
+    note: forward [[wikilinks]] referenced from body, as plain strings
+    required: false

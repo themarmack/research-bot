@@ -1,0 +1,9 @@
+# insights/{slug}.md — syntheses, essays, learnings.
+extends: default
+required: []
+fields:
+  synthesis_of:
+    type: array
+    items: string
+    required: false
+    note: [[wikilinks]] to source facts/research/events synthesized

@@ -1,0 +1,28 @@
+# facts/{entity}/{predicate}.md — one durable typed fact per file.
+extends: default
+required:
+  - entity
+  - predicate
+  - value
+  - source_url
+fields:
+  entity:
+    type: string
+    note: e.g. copilot, ffiec, noamshazeer; lowercase-kebab
+  predicate:
+    type: string
+    note: e.g. data-handling, audit-log-format, follows-on-x
+  value:
+    type: string
+    note: the fact itself; concise
+  source_url:
+    type: string
+    note: primary source; add additional in body
+  verified_on:
+    type: date
+    required: false
+  source_tier:
+    type: integer
+    enum: [1, 2, 3]
+    required: false
+    note: from source-registry; 1 highest credibility

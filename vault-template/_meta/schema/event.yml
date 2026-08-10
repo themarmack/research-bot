@@ -1,0 +1,17 @@
+# events/YYYY-MM-DD/{slug}.md — episodic, append-only.
+extends: default
+required:
+  - event_date
+  - event_type
+fields:
+  event_date:
+    type: date
+    note: when the event happened (may differ from `created`)
+  event_type:
+    type: string
+    enum: [meeting, incident, release, decision, announcement, conversation, other]
+  participants:
+    type: array
+    items: string
+    required: false
+    note: [[wikilinks]] to people/ notes if known

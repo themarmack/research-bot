@@ -1,0 +1,25 @@
+# people/{handle}.md — one note per person.
+extends: default
+required:
+  - handle
+  - name
+fields:
+  handle:
+    type: string
+    note: primary identifier, e.g. johncutlefish
+  name:
+    type: string
+  role:
+    type: string
+    required: false
+  surfaces:
+    type: object
+    required: false
+    fields:
+      substack: { type: string, required: false }
+      twitter: { type: string, required: false }
+      youtube: { type: string, required: false }
+      linkedin: { type: string, required: false }
+      blog: { type: string, required: false }
+      podcast: { type: string, required: false }
+      website: { type: string, required: false }
