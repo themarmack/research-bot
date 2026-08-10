@@ -1,0 +1,26 @@
+# decisions/YYYY-MM-DD-{slug}.md — ADRs, dated, with status.
+extends: default
+required:
+  - status
+  - decided_on
+fields:
+  status:
+    type: string
+    enum: [proposed, accepted, superseded, rejected]
+  decided_on:
+    type: date
+  deciders:
+    type: array
+    items: string
+    required: false
+  supersedes:
+    type: string
+    required: false
+    note: [[wikilink]] to the prior decision
+  superseded_by:
+    type: string
+    required: false
+  options_considered:
+    type: array
+    items: string
+    required: false

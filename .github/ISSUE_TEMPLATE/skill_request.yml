@@ -1,0 +1,100 @@
+name: Skill request
+description: Propose a new skill for the catalog.
+labels: ["skill-request"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Read [`skills-plan.md`](https://github.com/themarmack/research-bot/blob/main/skills-plan.md)
+        first — the skill may already be in the catalog but unbuilt. Strong
+        proposals name the recurring question the skill answers, not the
+        feature it has.
+
+  - type: input
+    id: name
+    attributes:
+      label: Proposed skill name
+      description: kebab-case, matching the directory it would live in.
+      placeholder: sbom-diff-reviewer
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What recurring question does it answer?
+      description: >-
+        One sentence, in the user's voice. If you cannot phrase it as a
+        question someone actually asks, the skill probably is not one.
+      placeholder: "What changed between this release's SBOM and the last one?"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Per `skills-plan.md`.
+      options:
+        - "0 — Foundational Base Skills"
+        - "1 — Research (on-demand)"
+        - "2 — Scheduled / Recurring Agents"
+        - "3 — GitHub Admin & Copilot Ops"
+        - "4 — SDLC & Application Security"
+        - "5 — Communication & Influence"
+        - "6 — Personal Knowledge Management"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: lens
+    attributes:
+      label: Which design lens does it fit?
+      description: >-
+        The five OB1 workflow patterns (see README). Most strong candidates fit
+        at least one. Multiple is fine — pick the strongest.
+      options:
+        - "Save This — preserve AI-generated insights"
+        - "Before I Forget — capture perishable context"
+        - "Cross-Pollinate — search across tools"
+        - "Build the Thread — accumulate insight over time"
+        - "People Context — remember what matters about people"
+        - "None of these"
+    validations:
+      required: true
+
+  - type: input
+    id: trigger
+    attributes:
+      label: Draft trigger phrase
+      description: >-
+        The `description:` frontmatter must contain an explicit "Use when",
+        "Use after", or "Use before" clause — it is how the agent decides to
+        invoke the skill, and it is enforced by `.evolve.yaml`.
+      placeholder: "Use when the user asks what changed between two SBOMs..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: composition
+    attributes:
+      label: What existing skills would it compose with?
+      description: >-
+        Category 0 foundations especially — `vault-querier`, `vault-writer`,
+        `source-fetcher`, `verify-claim`, `digest-writer`,
+        `prompt-injection-guard`. Reuse beats reinvention.
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Where would its output land in the vault?
+      description: >-
+        e.g. `research/{topic}/YYYY-MM-DD-{slug}.md`,
+        `digests/weekly/...`, `insights/...`. Say "none — read-only" if it
+        does not write.
+
+  - type: input
+    id: cadence
+    attributes:
+      label: If Category 2, what cadence?
+      placeholder: "weekly, Monday 07:00"

@@ -1,8 +1,30 @@
 # Research-Bot Toolkit
 
-A personal Claude skill toolkit for **SDLC modernization at a regulated US organization** — balancing developer innovation against elevated security and compliance demands, with GitHub Copilot / CodeQL / Dependabot operational duties on top.
+[![CI](https://github.com/themarmack/research-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/themarmack/research-bot/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-This repo is **the toolkit** — both the catalog and the skill implementations. Skills live in `./.claude/skills/` inside this repo (project-scoped, versioned with the catalog), not in the user's global `~/.claude/skills/`. Long-term knowledge lives in an Obsidian vault at `~/Obsidian/Research-Brain/`.
+A Claude skill toolkit for **SDLC modernization at a regulated US organization** — balancing developer innovation against elevated security and compliance demands, with GitHub Copilot / CodeQL / Dependabot operational duties on top.
+
+This repo is **the toolkit** — both the catalog and the skill implementations. Skills live in `./.claude/skills/` inside this repo (project-scoped, versioned with the catalog), not in your global `~/.claude/skills/`. Long-term knowledge lives in an Obsidian vault at `~/Obsidian/Research-Brain/`, scaffolded by [`scripts/bootstrap-vault.py`](./scripts/bootstrap-vault.py).
+
+## Who this is for
+
+Built for one person's job, but not private. If you do platform, DevEx, or AppSec work somewhere compliance-heavy — where "can we turn this on?" is a governance question before it's a technical one — the shape here should transfer.
+
+What's generic: the skills, the vault conventions, the Obsidian-first research contract, the scheduling system. What you're meant to replace: [`voices.csv`](./voices.csv) (my commentariat roster), `_config/` (my distribution list and exec audiences), and the `stack.yml` that `daily-cve-digest` matches CVEs against.
+
+Contributions welcome — see [`CONTRIBUTING.md`](./.github/CONTRIBUTING.md). Security issues go to [`SECURITY.md`](./.github/SECURITY.md), not the issue tracker.
+
+## Prerequisites
+
+| | |
+|---|---|
+| **OS** | **macOS** for the scheduling layer — it uses `launchd` and `~/Library/LaunchAgents`. The skills themselves are platform-neutral; on Linux or Windows everything works except scheduled jobs, which you'd wire to `cron` or Task Scheduler yourself. |
+| **Claude Code** | The harness that reads and executes the skills. |
+| **Python** | 3.11+ (`pyyaml`, `markdown`; `pytest` for the test layer). |
+| **Obsidian vault** | Required — most Category 1 and 2 skills fail loudly without one. It is plain Markdown, so Obsidian itself is optional; `bootstrap-vault.py` creates the tree. |
+| **Gmail app password** | Optional, only for email delivery. |
+| **`evolve`** | Optional, only to run the skill-evaluation layers. |
 
 ---
 
@@ -109,15 +131,24 @@ Two-tier memory: **Tier 1** is the Claude Code harness's auto-memory at `~/.clau
 | `./voices.csv` | AI/product-strategy commentariat roster (seed from @natebjones's Following list); read by `voices-watcher` and `voices-roster-curator` |
 | `./README.md` | This file |
 | `~/Obsidian/Research-Brain/` | The Tier-2 vault (separate from this repo). Start at `_meta/conventions.md`. |
-| `./.claude/skills/` | Skill implementations (74 built across Phase 1 + Phase 2) |
-| `./scripts/` | Scheduling system (`launchd` plist sync + queue-mode wrappers) |
+| `./.claude/skills/` | Skill implementations (76 built across Phase 1 + Phase 2) |
+| `./skills` | **Symlink** to `./.claude/skills/`. `evolve` hardcodes `<root>/skills`; Claude Code reads `.claude/skills/`. Same files — never create a second real tree. |
+| `./vault-template/` | Generic vault scaffold (`_meta/`, `.templates/`) copied into place by `bootstrap-vault.py` |
+| `./scripts/` | Scheduling system (`launchd` plist sync + queue-mode wrappers) + `bootstrap-vault.py` |
+| `./.github/` | CI, Dependabot, CODEOWNERS, and the contributor/security docs |
 | `./BUILD-STEPS.md` | Stepwise build history (~34 numbered steps) |
 | `~/.claude/projects/<this-project>/memory/` | Tier-1 harness auto-memory |
 
 ## Getting started
 
 1. **Clone the repo** somewhere readable from your shell. The skills are project-scoped — Claude Code picks them up automatically when you run inside the repo.
-2. **Set up the Obsidian vault** at `~/Obsidian/Research-Brain/` following `_meta/conventions.md`. The vault is not part of this repo (it's where outputs land); use the schemas in `_meta/schema/*.yml` to scaffold it. Most Category 1/2 skills will fail loudly if the vault structure isn't there.
+
+   Verify the symlink survived checkout — `ls -l skills` must show `skills -> .claude/skills`. On Windows this needs `git config --global core.symlinks true` plus Developer Mode *before* cloning.
+2. **Scaffold the Obsidian vault** at `~/Obsidian/Research-Brain/`:
+   ```bash
+   python3 scripts/bootstrap-vault.py          # --dry-run to preview
+   ```
+   That creates the folder tree and copies the conventions, tag vocabulary, frontmatter schemas, and note templates from [`vault-template/`](./vault-template/). It's idempotent and never overwrites your edits, so re-run it after pulling. The vault holds your knowledge and is deliberately **not** part of this repo — only the generic scaffold is tracked.
 3. **Install the scheduling system** (optional but recommended):
    ```bash
    cd <repo>
@@ -133,7 +164,7 @@ Two-tier memory: **Tier 1** is the Claude Code harness's auto-memory at `~/.clau
 - **Catalog**: approved (~60 skills, 6 categories + Memory layer).
 - **Vault scaffold**: built at `~/Obsidian/Research-Brain/` (conventions, schemas, templates).
 - **Voices roster**: seeded with 38 handles in `voices.csv`.
-- **Skill implementations**: 74 built across Phase 1 + Phase 2. See [`BUILD-STEPS.md`](./BUILD-STEPS.md) for the stepwise build history.
+- **Skill implementations**: 76 built across Phase 1 + Phase 2. See [`BUILD-STEPS.md`](./BUILD-STEPS.md) for the stepwise build history.
 - **Scheduling**: 9 scheduled skills wired to macOS `launchd` via `scripts/schedule-sync.py` (queue mode by default — see [`scripts/README.md`](./scripts/README.md)).
 - **OB1 inspiration**: borrowed Quick Capture templates, Weekly Review structure, two writing rules. Skipped OB1's self-hosted infrastructure.
 
@@ -151,7 +182,10 @@ When considering a new skill, classify it against these five workflow patterns. 
 
 - [Skills catalog](./skills-plan.md)
 - [Prompting guide](./PROMPTING.md) — example prompts by use case
+- [Contributing](./.github/CONTRIBUTING.md) — setup, the testing tiers, and how to add a skill
+- [Security policy](./.github/SECURITY.md) — threat model and private reporting
+- [Testing](./TESTING.md) — the three-layer deterministic-first model
 - [Scheduling system deep detail](./scripts/README.md) — install, claude-headless mode, troubleshooting
-- Vault conventions: `~/Obsidian/Research-Brain/_meta/conventions.md` (lives in your own Obsidian vault, not this repo)
+- Vault conventions: [`vault-template/_meta/conventions.md`](./vault-template/_meta/conventions.md) — the generic copy; your live one lands at `~/Obsidian/Research-Brain/_meta/conventions.md`
 - [OB1 — Open Brain (inspiration, not dependency)](https://github.com/NateBJones-Projects/OB1)
 - [jrcruciani/obsidian-memory-for-ai (vault structure source)](https://github.com/jrcruciani/obsidian-memory-for-ai)

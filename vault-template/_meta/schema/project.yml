@@ -1,0 +1,21 @@
+# projects/{slug}.md — one note per project.
+extends: default
+required:
+  - status
+fields:
+  status:
+    type: string
+    enum: [proposed, active, paused, shipped, abandoned]
+  owner:
+    type: string
+    required: false
+  stakeholders:
+    type: array
+    items: string
+    required: false
+  start_date:
+    type: date
+    required: false
+  target_date:
+    type: date
+    required: false

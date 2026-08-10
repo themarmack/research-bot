@@ -38,6 +38,8 @@ The two never duplicate. If a candidate is factual or research-shaped, it goes t
 
 **Before any vault read or write**, read `~/Obsidian/Research-Brain/_meta/conventions.md` — it sets layout, frontmatter schemas, controlled tag vocabulary, and writing rules. Notes that ignore the conventions don't compose with the rest of the vault.
 
+`vault-template/` in this repo is the **generic scaffold** that `scripts/bootstrap-vault.py` copies into a fresh vault — it exists so someone who isn't the user can bootstrap. The **live vault is authoritative** for the user's own work; the template is authoritative for what a new user gets. When you change a schema, tag, or convention, decide deliberately whether the change belongs in one or both, and never copy live vault content (which is personal data) back into the template.
+
 ## Obsidian-first contract for research
 
 Every on-demand research task MUST query the vault first (via `vault-querier` when it exists; via filesystem grep otherwise) before doing any web research. Fall back to the web only for confirmed gaps. Write findings back to the vault so the next session benefits.

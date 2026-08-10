@@ -1,0 +1,24 @@
+# research/{topic}/YYYY-MM-DD-{slug}.md — research outputs.
+extends: default
+required:
+  - topic
+  - question
+fields:
+  topic:
+    type: string
+    note: top-level subfolder name, e.g. copilot, regulator-watch
+  question:
+    type: string
+    note: the specific question this run answered
+  sources:
+    type: array
+    items: string
+    required: false
+    note: source URLs cited in the body
+  findings_count:
+    type: integer
+    required: false
+  verified_claims:
+    type: integer
+    required: false
+    note: how many claims passed adversarial verification

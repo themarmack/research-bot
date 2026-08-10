@@ -1,0 +1,20 @@
+# digests/{cadence}/YYYY-MM-DD-{skill}.md — scheduled-agent outputs.
+extends: default
+required:
+  - cadence
+  - period_start
+  - period_end
+fields:
+  cadence:
+    type: string
+    enum: [daily, weekly, biweekly, monthly, quarterly]
+  period_start:
+    type: date
+  period_end:
+    type: date
+  items_count:
+    type: integer
+    required: false
+  new_since_last:
+    type: integer
+    required: false

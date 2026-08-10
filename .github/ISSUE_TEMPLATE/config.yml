@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/themarmack/research-bot/security/advisories/new
+    about: >-
+      Do not open a public issue. Report privately via GitHub Security
+      Advisories. See .github/SECURITY.md for what is in scope.
+  - name: Question or idea
+    url: https://github.com/themarmack/research-bot/discussions
+    about: >-
+      Open-ended questions, vault-structure discussion, or "would a skill for X
+      make sense?" — start a discussion rather than an issue.

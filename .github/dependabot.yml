@@ -1,0 +1,85 @@
+# Dependabot configuration — generated 2026-08-10 via `dependabot-config-helper`.
+#
+# Policy basis: the per-ecosystem defaults in `dependabot-strategy`, with two
+# deliberate deviations because this is a PUBLIC, single-maintainer OSS repo
+# rather than a regulated internal service:
+#   * No `reviewers:` routing to @security-team — there is no security team.
+#     The field is also deprecated by GitHub; .github/CODEOWNERS drives review
+#     requests instead, and it already owns /.github/ and /scripts/.
+#   * `open-pull-requests-limit: 3` (the "<5 devs" default), not 5.
+#
+# Retained from policy: security updates grouped separately from version
+# updates, minor+patch grouped while majors stay individual, a release cooldown
+# on pip, and weekly cadence for both ecosystems.
+version: 2
+
+updates:
+  # --- GitHub Actions --------------------------------------------------------
+  # The main reason this file exists. ci.yml pins actions to full commit SHAs
+  # (ATH-003), which is only safe if something bumps them — an unmaintained SHA
+  # pin is a frozen, unpatched dependency. Dependabot reads the trailing
+  # `# v4` comment to know which version line to track.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "github-actions"]
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      actions-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      actions-minor-patch:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      # Majors are intentionally ungrouped — actions/checkout v4 -> v7 changes
+      # the bundled Node runtime and wants to be reviewed on its own.
+
+  # --- Python: runtime deps for scripts/ -------------------------------------
+  - package-ecosystem: pip
+    directory: "/scripts"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "python"]
+    commit-message:
+      prefix: "chore(deps)"
+    # Wait 3 days before proposing a new release. Most malicious-package
+    # takedowns happen well inside that window, so this costs a little latency
+    # and removes the worst of the supply-chain exposure.
+    cooldown:
+      default-days: 3
+    groups:
+      pip-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      pip-minor-patch:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  # --- Python: dev/test deps at the repo root --------------------------------
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "python", "dev-dependencies"]
+    commit-message:
+      prefix: "chore(deps-dev)"
+    cooldown:
+      default-days: 3
+    groups:
+      pip-dev-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      pip-dev-minor-patch:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
