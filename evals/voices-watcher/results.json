@@ -1,0 +1,163 @@
+{
+  "schema": 5,
+  "plugin": "research-bot",
+  "skill": "voices-watcher",
+  "models": {
+    "anthropic/claude-sonnet-4-6": {
+      "triggers": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6",
+        "display": "Claude Sonnet 4.6",
+        "harness": "claude",
+        "tool_version": "0.7.0",
+        "ran_at": "2026-08-22T16:44:12Z",
+        "executed": true,
+        "content_hash": "cad96fcb2bd2714e5015e7962debce0bb8ad5e8eb72efea8c5ddc6de541b84f0",
+        "runs_per_query": 3,
+        "timeout_seconds": 120,
+        "pricing": {
+          "input_per_mtok": 3,
+          "output_per_mtok": 15
+        },
+        "results": [
+          {
+            "query": "Run the voices digest",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 8.5,
+            "spec_hash": "f7c050b751eeecb9f79c8d2ad964b90f075df0b4f30f00e3d53b8fad9b814678"
+          },
+          {
+            "query": "What did my AI and security voices publish today?",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 6.9,
+            "spec_hash": "54ad73e0c89723b52e74e79d1af1e766de1e1ad57d0a9cb991bb78ec28f4a847"
+          },
+          {
+            "query": "Any new videos from the voices on my roster?",
+            "should_trigger": true,
+            "hits": 3,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 11,
+            "spec_hash": "9fa7cd330bc6785a857f4cbc54019ce0140cc0e7f2dbb6cf333ef024abfa05d9"
+          },
+          {
+            "query": "What's new on the YouTube channels I follow?",
+            "should_trigger": true,
+            "hits": 0,
+            "runs": 3,
+            "passed": false,
+            "avg_run_seconds": 9.1,
+            "spec_hash": "d6c2a1cb74a6d1856452044f5ffe4bc6bc08bb04f2f679fe661cbec51495150e"
+          },
+          {
+            "query": "Add Simon Willison to my voices roster",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 10.8,
+            "spec_hash": "c6b47e09738722e9d39cd0ecf75061721d94957763a5c534cae363c8cd551d4b"
+          },
+          {
+            "query": "What new CVEs hit our stack in the last 24 hours?",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 14.8,
+            "spec_hash": "586473c36783f351abc4e60d3ee36466756cfc92804e24abe1c75ecf6525dce0"
+          },
+          {
+            "query": "Summarize this conference talk I just watched and pull out the key ideas",
+            "should_trigger": false,
+            "hits": 0,
+            "runs": 3,
+            "passed": true,
+            "avg_run_seconds": 6.9,
+            "spec_hash": "b9ca2b2d38069872a7c56450ea7138850fe9e30578e526707db74f9dfc78f467"
+          }
+        ],
+        "summary": {
+          "passed": 6,
+          "failed": 1,
+          "total": 7,
+          "pass_rate": 0.857143,
+          "avg_run_seconds": 9.7
+        },
+        "previous": {
+          "ran_at": "2026-08-22T16:42:27Z",
+          "summary": {
+            "passed": 5,
+            "failed": 1,
+            "total": 6,
+            "pass_rate": 0.833333,
+            "avg_run_seconds": 9.7
+          },
+          "results": [
+            {
+              "query": "Run the voices digest",
+              "should_trigger": true,
+              "hits": 3,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 8.4,
+              "spec_hash": "f7c050b751eeecb9f79c8d2ad964b90f075df0b4f30f00e3d53b8fad9b814678"
+            },
+            {
+              "query": "What did my AI and security voices publish today?",
+              "should_trigger": true,
+              "hits": 3,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 7.9,
+              "spec_hash": "54ad73e0c89723b52e74e79d1af1e766de1e1ad57d0a9cb991bb78ec28f4a847"
+            },
+            {
+              "query": "What's new on the YouTube channels I follow?",
+              "should_trigger": true,
+              "hits": 0,
+              "runs": 3,
+              "passed": false,
+              "avg_run_seconds": 16.6,
+              "spec_hash": "d6c2a1cb74a6d1856452044f5ffe4bc6bc08bb04f2f679fe661cbec51495150e"
+            },
+            {
+              "query": "Add Simon Willison to my voices roster",
+              "should_trigger": false,
+              "hits": 0,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 9.2,
+              "spec_hash": "c6b47e09738722e9d39cd0ecf75061721d94957763a5c534cae363c8cd551d4b"
+            },
+            {
+              "query": "What new CVEs hit our stack in the last 24 hours?",
+              "should_trigger": false,
+              "hits": 0,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 9.3,
+              "spec_hash": "586473c36783f351abc4e60d3ee36466756cfc92804e24abe1c75ecf6525dce0"
+            },
+            {
+              "query": "Summarize this conference talk I just watched and pull out the key ideas",
+              "should_trigger": false,
+              "hits": 0,
+              "runs": 3,
+              "passed": true,
+              "avg_run_seconds": 7,
+              "spec_hash": "b9ca2b2d38069872a7c56450ea7138850fe9e30578e526707db74f9dfc78f467"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

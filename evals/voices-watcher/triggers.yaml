@@ -1,0 +1,32 @@
+$schema: "https://raw.githubusercontent.com/bitwise-media-group/evolve/main/schemas/triggers.schema.json"
+skill_name: voices-watcher
+
+# voices-watcher POLLS the curated roster (voices.csv) and reports what those
+# voices published — Substack, blog, podcast, and (since 2026-08-22) YouTube.
+#
+# The negatives guard the three ways this description can over-fire:
+#   - editing the roster  -> voices-roster-curator
+#   - the OTHER daily digest -> daily-cve-digest
+#   - summarizing one video/talk -> conference-talk-distiller
+# That last one is the live risk: adding YouTube to the description invites
+# firing on "summarize this video", which is a different skill entirely.
+triggers:
+  - query: "Run the voices digest"
+    should_trigger: true
+  - query: "What did my AI and security voices publish today?"
+    should_trigger: true
+  # Diagnostic pair. The first is roster-anchored ("my voices"); the second uses
+  # bare YouTube-product vocabulary ("channels I follow"), which most naturally
+  # means the user's real YouTube subscriptions — something this skill cannot
+  # read, since it polls voices.csv, not a YouTube account. Kept as an honest
+  # record of where ad-hoc invocation does and does not reach.
+  - query: "Any new videos from the voices on my roster?"
+    should_trigger: true
+  - query: "What's new on the YouTube channels I follow?"
+    should_trigger: true
+  - query: "Add Simon Willison to my voices roster"
+    should_trigger: false
+  - query: "What new CVEs hit our stack in the last 24 hours?"
+    should_trigger: false
+  - query: "Summarize this conference talk I just watched and pull out the key ideas"
+    should_trigger: false

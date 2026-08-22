@@ -16,10 +16,11 @@ Only the configured `models` appear below; these are excluded from this report:
 
 | Provider | Excluded models |
 | --- | --- |
-| Anthropic | `claude-fable-5`, `claude-haiku-4-5`, `claude-opus-4-8`, `claude-sonnet-5` |
+| Anthropic | `claude-fable-5`, `claude-haiku-4-5`, `claude-opus-4-8`, `claude-opus-5`, `claude-sonnet-5` |
 | OpenAI | all models |
 | Google | all models |
 | Cursor | all models |
+| xAI | all models |
 
 ## research-bot
 
@@ -27,7 +28,7 @@ Only the configured `models` appear below; these are excluded from this report:
 
 | Provider | Model | Passed | Pass rate | Δ rate | Avg run | Input tokens | Est. input cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | 38/39 | 97% | +17% | 13.5s | — | — |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | 44/46 | 96% | +15% | 12.9s | — | — |
 
 ## adr-writer
 
@@ -260,6 +261,52 @@ Only the configured `models` appear below; these are excluded from this report:
 | Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 9.8s | — | — |
+
+## voices-watcher
+
+### Triggers
+
+#### Run the voices digest (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +0% | 8.5s | — | — |
+
+#### What did my AI and security voices publish today? (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | +0% | 6.9s | — | — |
+
+#### Any new videos from the voices on my roster? (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 3/3 | — | 11.0s | — | — |
+
+#### What's new on the YouTube channels I follow? (expected: yes)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | FAIL | 0/3 | +0% | 9.1s | — | — |
+
+#### Add Simon Willison to my voices roster (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 10.8s | — | — |
+
+#### What new CVEs hit our stack in the last 24 hours? (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 14.8s | — | — |
+
+#### Summarize this conference talk I just watched and pull out the key ideas (expected: no)
+
+| Provider | Model | Result | Rate | Δ rate | Avg run | Input tokens | Est. cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Anthropic | Claude Sonnet 4.6 (`claude-sonnet-4-6`) | PASS | 0/3 | +0% | 6.9s | — | — |
 
 ## weekly-intelligence-digest
 

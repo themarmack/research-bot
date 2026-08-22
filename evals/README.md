@@ -45,4 +45,11 @@ Each got a sharpened `Use when …` description confirmed against a discriminati
 - `ghas-config-reviewer/` — **4/5** (0.8). The one miss — "is secret scanning enabled on the **org**?" — is a genuine overlap with `github-org-audit-runner`, which also audits org secret-scanning defaults; disambiguating fully needs an authored suite on *that* skill too. Passes the gate; documented rather than gamed.
 - `stakeholder-update-writer/` — suite authored, but the skill **under-triggers** on its own core prompts (2/5) and three description rewrites didn't move it — a writer-task "the agent just drafts it inline" failure, not a wording gap. `results.json` **not** committed (kept out of the gate); tracked as a follow-up. Description still improved.
 
+### YouTube surface on `voices-watcher` (2026-08-22)
+
+- `voices-watcher/` — Tier 1, **6/7** on Sonnet 4.6 (0.86; gate is 0.5). All three negatives hold at 0.00 — the description is not over-broad, and notably it does **not** over-fire on "summarize this conference talk", which was the live risk of naming YouTube in the description.
+- **The one miss is characterized, not gamed.** "What's new on the YouTube channels I follow?" scores 0.00 across 3 runs, and **two description rewrites did not move it** — including one containing that phrasing near-verbatim. A diagnostic pair settled it: the roster-anchored *"Any new videos from the voices on my roster?"* scores **1.00**, while the bare-YouTube phrasing stays 0.00.
+- **Conclusion**: the skill fires on *roster* vocabulary, not on YouTube-product vocabulary — and that is arguably correct. "The channels I follow" most naturally means the user's real YouTube subscriptions, which `voices-watcher` cannot read; it polls `voices.csv`. The failing case is retained in the suite as an honest record of where ad-hoc invocation does not reach, rather than deleted to lift the score.
+- **Blast radius is bounded**: trigger accuracy affects only the *ad-hoc* invocation path. The 07:30 daily run is launchd-driven and does not depend on trigger matching at all, so the YouTube items land in the digest regardless.
+
 Writing a good suite: include **negatives that should route to a sibling skill** (e.g. an RFC request must not trigger `adr-writer`) — they test that a description isn't over-broad.
