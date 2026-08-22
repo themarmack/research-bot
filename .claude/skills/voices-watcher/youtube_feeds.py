@@ -162,6 +162,33 @@ def parse_feed(xml_text):
     return items
 
 
+def is_short(url):
+    """True if a video URL is a YouTube Short (``/shorts/<id>``).
+
+    Shorts are vertical clips under a minute. On the 2026-08-22 test run 2 of
+    14 surfaced items were Shorts (a 3Blue1Brown puzzle teaser, a DEF CON
+    hallway clip) — neither is research material, and both cost a reader the
+    same scan as a real item.
+    """
+    if not url:
+        return False
+    return "/shorts/" in urlparse(url.strip()).path
+
+
+def partition_shorts(items):
+    """Split parsed feed items into ``(regular, shorts)``, order preserved.
+
+    Returns both halves rather than dropping Shorts outright so the caller can
+    report how many were withheld — silently discarding them would read as
+    "nothing was there", which the "stop and report" rule in
+    ``_meta/conventions.md`` forbids.
+    """
+    regular, shorts = [], []
+    for item in items or []:
+        (shorts if is_short(item.get("url")) else regular).append(item)
+    return regular, shorts
+
+
 def is_org_role(role):
     """True if a ``voices.csv`` role marks an organisation rather than a person.
 

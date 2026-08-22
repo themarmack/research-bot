@@ -214,3 +214,65 @@ def test_is_org_role_true(role):
 @pytest.mark.parametrize("role", ["AI researcher", "AI security research", "", None, "org lead"])
 def test_is_org_role_false(role):
     assert not yt.is_org_role(role)
+
+
+# --- Shorts filtering -------------------------------------------------------
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://www.youtube.com/shorts/rYyJm1tD3d0",
+        "https://www.youtube.com/shorts/-uDOV46yzcI",
+        "https://youtube.com/shorts/abc",
+        "  https://www.youtube.com/shorts/abc  ",
+    ],
+)
+def test_is_short_true(url):
+    assert yt.is_short(url)
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://www.youtube.com/watch?v=eWCqJ2kJMUM",
+        "https://www.youtube.com/watch?v=41GGT31rA8k",
+        "",
+        None,
+    ],
+)
+def test_is_short_false(url):
+    assert not yt.is_short(url)
+
+
+def test_is_short_does_not_match_shorts_in_query_or_title():
+    """Only the PATH marks a Short — a video merely *about* shorts is not one."""
+    assert not yt.is_short("https://www.youtube.com/watch?v=abc&list=my/shorts/mix")
+
+
+def test_partition_shorts_splits_and_preserves_order():
+    items = [
+        {"url": "https://www.youtube.com/watch?v=a", "title": "A"},
+        {"url": "https://www.youtube.com/shorts/b", "title": "B"},
+        {"url": "https://www.youtube.com/watch?v=c", "title": "C"},
+        {"url": "https://www.youtube.com/shorts/d", "title": "D"},
+    ]
+    regular, shorts = yt.partition_shorts(items)
+    assert [i["title"] for i in regular] == ["A", "C"]
+    assert [i["title"] for i in shorts] == ["B", "D"]
+
+
+def test_partition_shorts_loses_nothing():
+    """Every input item lands in exactly one bucket — none silently dropped."""
+    items = [{"url": f"https://www.youtube.com/{'shorts/' if n % 3 else 'watch?v='}{n}"} for n in range(12)]
+    regular, shorts = yt.partition_shorts(items)
+    assert len(regular) + len(shorts) == len(items)
+
+
+def test_partition_shorts_handles_empty_and_none():
+    assert yt.partition_shorts([]) == ([], [])
+    assert yt.partition_shorts(None) == ([], [])
+
+
+def test_partition_shorts_tolerates_missing_url_key():
+    regular, shorts = yt.partition_shorts([{"title": "no url"}])
+    assert len(regular) == 1 and shorts == []

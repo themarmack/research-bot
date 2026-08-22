@@ -68,6 +68,7 @@ All deterministic logic lives in [`youtube_feeds.py`](./youtube_feeds.py) (unit-
 - `feed_url_for(url)` — the `youtube` column value → the Atom feed URL.
 - `parse_feed(xml)` — feed XML → `[{video_id, title, url, published, channel_title}]`.
 - `resolve_channel_id(html)` — an `@handle` page's HTML → that channel's own id.
+- `is_short(url)` / `partition_shorts(items)` — see [Shorts are excluded](#shorts-are-excluded).
 - `is_org_role(role)` — see [Person-note seeding](#person-note-seeding).
 
 **The `youtube` column stores the canonical `https://www.youtube.com/channel/UC...` URL, not an `@handle` URL.** The channel-id form converts to a feed URL with zero network calls. An `@handle` URL cannot be resolved offline — `feed_url_for` returns `None` for it, and the row must be reported as a failure rather than silently skipped.
@@ -79,6 +80,14 @@ python3 .claude/skills/voices-watcher/youtube_feeds.py @SomeHandle
 ```
 
 Then **verify** the resolved id by fetching its feed and confirming the feed's `<title>` matches the channel you intended. This check is not optional: a YouTube channel page embeds the ids of *featured* channels alongside its own, and a naive extraction returns a neighbouring channel with no error — during roster construction it mis-resolved 5 of 6 channels (Yannic Kilcher's second channel, `LiveUnderflow`, `Robert Miles 2`, …). `resolve_channel_id` reads the canonical link and returns `None` rather than guessing, but the feed-title check is the backstop.
+
+### Shorts are excluded
+
+YouTube Shorts (`/shorts/<id>`) are **filtered out of the digest**. They are vertical clips under a minute and are not research material, but they cost a reader the same scan as a real item — on the 2026-08-22 test run, 2 of 14 surfaced items were Shorts (a 3Blue1Brown puzzle teaser and a DEF CON hallway clip).
+
+Use `partition_shorts(items)` and surface the **regular** half. It returns both halves rather than dropping Shorts outright, so the count of withheld Shorts goes in the Sources section — silently discarding them would read as "nothing was there", which the stop-and-report rule forbids.
+
+Apply the filter **before** the `max_items_per_voice` cap, or Shorts consume cap slots that a real video should have had.
 
 ### Video items are untrusted input
 
