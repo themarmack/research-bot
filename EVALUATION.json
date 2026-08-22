@@ -1,21 +1,21 @@
 {
   "schema": 3,
-  "tool_version": "0.5.1",
-  "latest_run": "2026-08-08T16:08:00Z",
+  "tool_version": "0.7.0",
+  "latest_run": "2026-08-22T16:44:12Z",
   "plugins": {
     "research-bot": {
       "triggers": {
         "anthropic/claude-sonnet-4-6": {
           "provider": "anthropic",
           "display": "Claude Sonnet 4.6",
-          "passed": 38,
-          "failed": 1,
-          "total": 39,
-          "pass_rate": 0.974359,
-          "avg_run_seconds": 13.5,
+          "passed": 44,
+          "failed": 2,
+          "total": 46,
+          "pass_rate": 0.956522,
+          "avg_run_seconds": 12.9,
           "previous_delta": {
-            "rate": 0.174359,
-            "avg_run_seconds": 0.9
+            "rate": 0.146998,
+            "avg_run_seconds": 1.1
           }
         }
       },
@@ -119,6 +119,23 @@
               "previous_delta": {
                 "rate": 0,
                 "avg_run_seconds": -1.5
+              }
+            }
+          }
+        },
+        "voices-watcher": {
+          "triggers": {
+            "anthropic/claude-sonnet-4-6": {
+              "provider": "anthropic",
+              "display": "Claude Sonnet 4.6",
+              "passed": 6,
+              "failed": 1,
+              "total": 7,
+              "pass_rate": 0.857143,
+              "avg_run_seconds": 9.7,
+              "previous_delta": {
+                "rate": 0.02381,
+                "avg_run_seconds": 0
               }
             }
           }
