@@ -27,7 +27,7 @@ jobs:
       # Actions are pinned to full commit SHAs — a version tag is mutable and
       # can be repointed at attacker-controlled code. Dependabot tracks these
       # via the trailing version comment. (ATH-003)
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         # Note: the root `skills` symlink -> `.claude/skills` is preserved and
         # resolves on Linux; evolve reads skills through it.
 
