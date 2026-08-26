@@ -1,5 +1,5 @@
 # Python dependencies for scripts in this folder.
-pyyaml>=6.0
+pyyaml>=6.0.3
 
 # Markdown -> HTML rendering for email-sender's render_and_send.py.
 # The skill degrades to plain-text-only if this is absent, so it is not
