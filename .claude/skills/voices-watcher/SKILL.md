@@ -133,7 +133,7 @@ One end-to-end run. Confirm:
 ### YouTube surface (added 2026-08-22)
 
 - Every row added on 2026-08-22 resolves to a feed URL via `feed_url_for` (all store the `channel/UC...` form).
-- **Known exception**: the pre-existing `HarryStebbings` row stores an `@handle` URL (`https://www.youtube.com/@20VC`), which `feed_url_for` returns `None` for. It must surface as a **reported failure** in the Sources section, not a silent skip. Resolved id is `UCf0PBRjhf0rF8fWBIxTuoWA` (feed title `20VC with Harry Stebbings`) — apply it only with the user's confirmation, since `voices.csv` rows are human-curated.
+- All 19 rows with a `youtube` value resolve to a feed URL via `feed_url_for` — **zero `None` results**. The `HarryStebbings` row was migrated from an `@handle` URL to the canonical `channel/UC...` form on 2026-08-22; if a future row is added in `@handle` form, `feed_url_for` returns `None` and it must surface as a **reported failure** in the Sources section, never a silent skip.
 - New videos appear under `### 📺 New videos` with title + link only; no transcript is fetched.
 - Rows with `role` ending in `(org)` (OWASP GenAI, DEF CON, Black Hat, Trail of Bits, Anthropic, MLST) produce **no** `vault/people/` note.
 - A feed that 404s or fails injection-guard appears in the digest's Sources section as a failure, not a silent omission.
