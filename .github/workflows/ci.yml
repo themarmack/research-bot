@@ -43,7 +43,10 @@ jobs:
 
       - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
-          go-version: "1.23"
+          # evolve@v0.5.1 (installed below) requires go >= 1.26.4. Pin explicitly
+          # so the build never relies on implicit GOTOOLCHAIN auto-upgrade — newer
+          # setup-go versions set GOTOOLCHAIN=local, which would break that fallback.
+          go-version: "1.26"
 
       # Version-pinned. `go install` verifies the module against the public
       # checksum database (sum.golang.org) by default, so this pin is already
