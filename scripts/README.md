@@ -42,6 +42,20 @@ When a job fires, `run-scheduled-job.sh` writes a marker at `~/Obsidian/Research
 
 To opt one job into `claude-headless` (auto LLM at scheduled time, uses tokens): add `mode: claude-headless` to that job in `scheduled-jobs.yml`. Requires `ANTHROPIC_API_KEY` in `~/.config/research-bot/env`.
 
+### Marker expiry
+
+Queue markers don't pile up forever: the hourly catch-up agent runs an expiry pass (`_catch_up_helper.py --expire`, invoked by `catch-up-missed-runs.sh` after its normal catch-up work) that deletes any marker whose filename date is **older than its job's cadence window**:
+
+| Cadence | Expiry window |
+|---------|---------------|
+| daily / weekdays-only | 3 days |
+| weekly | 14 days |
+| biweekly | 21 days |
+| monthly | 45 days |
+| quarterly | 120 days |
+
+A marker exactly at the window is kept; one day past it is deleted (each deletion is logged to `catch-up.log`). Markers whose job id isn't in `scheduled-jobs.yml` — or whose filename doesn't parse — are never auto-deleted. Catch-up applies the same window in reverse: a missed run already past its expiry window is not backfilled, so expiry never fights with catch-up.
+
 ### State for "what's installed" — implicit
 
 The set of `~/Library/LaunchAgents/research-bot.*.plist` files IS the install state. Sync reads `scheduled-jobs.yml`, generates desired plists, diffs vs reality, reconciles. Remove a job from yml → next sync removes its plist. Add → next sync creates.

@@ -22,4 +22,8 @@ log "===== catch-up sweep starting ====="
 
 python3 "$SCRIPTS_DIR/_catch_up_helper.py" "$BASE_DIR" 2>&1 | tee -a "$LOG_FILE"
 
+log "----- marker expiry pass -----"
+
+python3 "$SCRIPTS_DIR/_catch_up_helper.py" "$BASE_DIR" --expire 2>&1 | tee -a "$LOG_FILE"
+
 log "===== catch-up sweep finished ====="

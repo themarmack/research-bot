@@ -1,6 +1,6 @@
 {
   "schema": 3,
-  "tool_version": "0.7.0",
+  "tool_version": "0.8.1",
   "latest_run": "2026-08-22T16:44:12Z",
   "plugins": {
     "research-bot": {
