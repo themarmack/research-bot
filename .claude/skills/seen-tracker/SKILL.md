@@ -1,6 +1,6 @@
 ---
 name: seen-tracker
-description: Persistent per-skill dedup primitive. Stores `{key, content_hash, seen_at, source_id, metadata}` JSONL state at `<repo>/.state/<consumer-skill>/seen.jsonl` so scheduled agents and curators know what they've already surfaced across runs. Without this, weekly digests repeat last week's news. Exposes `is_new(item)` and `mark_surfaced(item)` semantics. Default-keyed on `url + content_hash`; supports optional title-embedding cluster keys for semantic dedup later. Replaces feed-watcher's v1 per-source state file.
+description: Persistent per-skill dedup primitive. Stores `{key, content_hash, seen_at, source_id, metadata}` JSONL state at `<repo>/.state/<consumer-skill>/seen.jsonl` so scheduled agents and curators know what they've already surfaced across runs. Without this, weekly digests repeat last week's news. Exposes `is_new(item)` and `mark_surfaced(item)` semantics. Default-keyed on `url + content_hash`; supports optional title-embedding cluster keys for semantic dedup later. Feed-watcher delegates all its dedup state here, keyed by the calling agent. Use whenever a scheduled agent or curator needs to filter candidates to "new since last run" — after feed-watcher fetches and before digest assembly, and again when marking published items surfaced.
 ---
 
 # seen-tracker
@@ -25,12 +25,12 @@ Persistent deduplication state. Every scheduled agent and every curator that nee
 ```
 
 One JSONL file per consumer skill. Examples:
-- `.state/feed-watcher/seen.jsonl`
 - `.state/voices-watcher/seen.jsonl`
+- `.state/daily-cve-digest/seen.jsonl`
 - `.state/weekly-intelligence-digest/seen.jsonl`
 - `.state/memory-curator/seen.jsonl`
 
-`<consumer-skill>` is the name of the calling skill (NOT seen-tracker itself).
+`<consumer-skill>` is the name of the calling skill (NOT seen-tracker itself). When `feed-watcher` polls on behalf of a scheduled agent, the consumer is **that agent** (e.g. `weekly-intelligence-digest`), not `feed-watcher` — each agent's dedup state stays isolated.
 
 ## Record schema (one JSON object per line)
 
@@ -66,7 +66,7 @@ Common helper for scheduled agents — pass the candidate list, get back the thr
 ### `prune(consumer, keep_last_n=1000)`
 
 Cap the state file at the most recent N records (FIFO). Each consumer's reasonable cap depends on volume:
-- `feed-watcher`: 2000 (high-volume across all sources)
+- `daily-cve-digest`: 2000 (high-volume advisory feeds)
 - `voices-watcher`: 1000
 - `weekly-intelligence-digest`: 500
 - Default: 1000
@@ -89,16 +89,13 @@ Single-user single-machine toolkit. No file locking in v1. If two agents write t
 - State file malformed JSONL → skip malformed lines, log to caller, continue. Don't crash.
 - Disk write fails → surface to caller; the agent's run should be reported as partial-success.
 
-## Feed-watcher migration
+## Feed-watcher integration
 
-`feed-watcher` currently writes per-source state at `.state/feed-watcher/{source-id}.jsonl`. Migration on first invocation of seen-tracker:
-1. If `.state/feed-watcher/seen.jsonl` does not exist AND any `{source-id}.jsonl` files exist, merge them into the new flat file with each record gaining a `source_id` field.
-2. Rename old per-source files to `.state/feed-watcher/.legacy/{source-id}.jsonl` (audit trail).
-3. Subsequent runs use the flat file.
+`feed-watcher` holds no dedup state of its own — it delegates to this skill, passing the calling agent's name as `consumer`. (Its v1 per-source files at `.state/feed-watcher/{source-id}.jsonl` were merged into flat per-agent files when seen-tracker shipped; any surviving legacy files live at `.state/feed-watcher/.legacy/` as an audit trail.)
 
 ## Composes with
 
-- [`feed-watcher`](../feed-watcher/SKILL.md) — calls `bulk_filter` on every poll to drop already-seen items.
+- [`feed-watcher`](../feed-watcher/SKILL.md) — calls `bulk_filter` on every poll to drop already-seen items, passing the calling agent's name as `consumer`.
 - [`memory-curator`](../memory-curator/SKILL.md) — calls `is_new` on inbox candidates before promote.
 - Every Category 2 scheduled agent — calls `bulk_filter` after fetching candidates.
 
@@ -110,4 +107,4 @@ Single-user single-machine toolkit. No file locking in v1. If two agents write t
 4. Confirm `.state/feed-watcher/seen.jsonl` exists and contains the record.
 5. Restart the session and re-run step 2 → still returns `false` (state persisted).
 
-Live exercise happens when step 7 (`weekly-intelligence-digest`) first runs.
+Exercised live on every `weekly-intelligence-digest` run.

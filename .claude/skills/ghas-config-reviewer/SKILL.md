@@ -17,7 +17,7 @@ A Category 3 ops tool. The user runs this against a repo (or org) and gets a str
 ## When NOT to use
 
 - Workflow-level review → `actions-workflow-hardener`.
-- Repository-level governance beyond GHAS (CODEOWNERS specifics, ruleset patterns) → `repo-golden-path-scorer` (planned).
+- Repository-level governance beyond GHAS (CODEOWNERS specifics, ruleset patterns) → [`repo-golden-path-scorer`](../repo-golden-path-scorer/SKILL.md).
 - Investigating a specific CodeQL alert → that's CodeQL triage, not configuration review.
 
 ## Baseline (the org's expected state)
@@ -89,7 +89,8 @@ This is the documented expected state for a "fully GHAS-onboarded" repo in the o
    - `gh api repos/{owner}/{repo}/contents/.github/dependabot.yml` for version update config.
    - `gh api orgs/{org}/actions/permissions` for org-level Actions allow-list (when org-scoped).
 3. **Compare** each setting against the baseline above.
-4. **Produce findings** — structured list as below.
+4. **Produce findings** — structured list as below, presented in chat.
+5. **Persist the report** — after presenting findings, write the full findings note via `vault-writer.write_research` to `vault/research/ghas/YYYY-MM-DD-config-review-{repo}.md` (frontmatter per `research.yml`, `topic: ghas`; body = findings grouped by category + summary) so the next session can query it.
 
 If `gh api` access fails (no auth, no permission), **stop and report**: emit a manual checklist the user can run.
 
@@ -115,11 +116,14 @@ If `gh api` access fails (no auth, no permission), **stop and report**: emit a m
 
 Group findings by category (code-scanning, secret-scanning, dependabot, dependency-review, branch-protection, actions-allowlist).
 
+Lands at `vault/research/ghas/YYYY-MM-DD-config-review-{repo}.md` (workflow step 5).
+
 ## Composes with
 
 - The user's `gh` CLI (already authenticated to the org).
 - `vault-querier` — surface related research / prior audits.
-- Related skills: `actions-workflow-hardener` (workflow-level), `codeql-onboarding-helper` (planned), `dependabot-config-helper` (planned).
+- `vault-writer.write_research` — persists the findings note (workflow step 5).
+- Related skills: `actions-workflow-hardener` (workflow-level), [`codeql-onboarding-helper`](../codeql-onboarding-helper/SKILL.md) (CodeQL setup decisions), [`dependabot-config-helper`](../dependabot-config-helper/SKILL.md) (Dependabot config generation).
 
 ## Acceptance test (for step 13 done-criteria)
 

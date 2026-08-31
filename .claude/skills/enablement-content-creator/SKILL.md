@@ -1,6 +1,6 @@
 ---
 name: enablement-content-creator
-description: Generate training / enablement content for the SDLC modernization program — Copilot prompting, secure coding with AI, CodeQL triage, GHAS workflows, AGENTS.md authoring. Produces tiered content (dev / lead / exec) with the same factual backbone but different framing, depth, and call-to-action per audience. Pulls from copilot-faq-answerer canonical answers (recently extended via memory-curator's promoted facts) and objection-response-library steel-manned concerns. Output lands at vault/insights/YYYY-MM-DD-enablement-{topic-slug}.md.
+description: Generate training / enablement content for the SDLC modernization program — Copilot prompting, secure coding with AI, CodeQL triage, GHAS workflows, AGENTS.md authoring. Produces tiered content (dev / lead / exec) with the same factual backbone but different framing, depth, and call-to-action per audience. Pulls from copilot-faq-answerer canonical answers (recently extended via memory-curator's promoted facts) and objection-response-library steel-manned concerns. Output lands at vault/insights/YYYY-MM-DD-enablement-{topic-slug}.md. Use when the user needs to create or refresh training / enablement material — before a rollout training phase, after cited vault facts change past a module's `last_verified`, or when a recurring question merits standalone content.
 ---
 
 # enablement-content-creator
@@ -35,6 +35,7 @@ The training-content factory. Most enablement materials get written once and rot
 3. **Load steel-manned concerns** from `objection-response-library/canonical-objections.md` so the tier content pre-empts objections.
 4. **Draft per tier** using the structure above.
 5. **Cross-reference**: every claim cites a vault fact or research note.
+6. **Write** the module via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-enablement-{topic-slug}.md` — content that only exists in chat can't be regenerated or refreshed later.
 
 ## Output structure
 
@@ -63,6 +64,7 @@ Lands at `vault/insights/YYYY-MM-DD-enablement-{topic-slug}.md`.
 - `copilot-faq-answerer` — canonical-answer source.
 - `objection-response-library` — steel-manned concerns to pre-empt.
 - `vault-querier` — load facts + recent research for currency.
+- `vault-writer.write_insight` — persists the module (workflow step 6).
 - `stakeholder-update-writer` — exec-tier enablement often pairs with stakeholder communication.
 
 ## Acceptance test (for step 33 done-criteria)

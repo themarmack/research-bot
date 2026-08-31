@@ -1,6 +1,6 @@
 ---
 name: github-platform-watch
-description: On-demand Category 1 researcher focused on the GitHub platform (NOT Copilot — that's copilot-deep-dive). Covers Actions, Advanced Security (CodeQL, Dependabot, secret scanning, push protection, security campaigns), Audit Log, Billing, Packages, Issues / Projects, Enterprise EMU/SAML, repository governance. Enforces the Obsidian-first contract: vault-querier first against vault/facts/github/ and vault/research/github/, then web research only for confirmed gaps. Findings land at vault/research/github/YYYY-MM-DD-{slug}.md; verified facts get staged to _inbox/ for memory-curator promotion.
+description: On-demand Category 1 researcher focused on the GitHub platform (NOT Copilot — that's copilot-deep-dive). Covers Actions, Advanced Security (CodeQL, Dependabot, secret scanning, push protection, security campaigns), Audit Log, Billing, Packages, Issues / Projects, Enterprise EMU/SAML, repository governance. Enforces the Obsidian-first contract: vault-querier first against vault/facts/github/ and vault/research/github/, then web research only for confirmed gaps. Findings land at vault/research/github/YYYY-MM-DD-{slug}.md; verified facts get staged to _inbox/ for memory-curator promotion. Use when the user asks to research a GitHub platform (non-Copilot) topic in depth — Actions, GHAS posture, audit log, billing, EMU/SAML, repo governance — producing a fresh, cited research note — as opposed to Copilot questions (copilot-deep-dive), a single GHAS feature deep-dive (ghas-feature-research), or auditing a live repo/org configuration (ghas-config-reviewer, github-org-audit-runner).
 ---
 
 # github-platform-watch
@@ -16,14 +16,33 @@ On-demand deep research on the GitHub platform — Actions, GHAS, Audit Log, Bil
 ## When NOT to use
 
 - Copilot questions → `copilot-deep-dive`.
-- Specific repo audits → `repo-golden-path-scorer` (planned).
-- Workflow hardening for a specific YAML file → `actions-workflow-hardener` (planned).
+- Specific repo audits → [`repo-golden-path-scorer`](../repo-golden-path-scorer/SKILL.md).
+- Workflow hardening for a specific YAML file → [`actions-workflow-hardener`](../actions-workflow-hardener/SKILL.md).
 
-## Obsidian-first workflow
+## Obsidian-first workflow (mandatory)
 
-Identical to `copilot-deep-dive` but with a different scope. See that skill for the full mandatory steps.
-
-Key difference: the **vault subfolder is `github/`**, not `copilot/`. The query first targets `vault/facts/github/**`, `vault/research/github/**`, and recent `vault/digests/**` for GitHub-tagged items.
+1. **Query the vault first** via `vault-querier`:
+   - Full-text search the question's key terms across `vault/facts/github/**`, `vault/research/github/**`, `vault/insights/**`, and recent `vault/digests/**` for GitHub-tagged items (last 90 days).
+   - Backlink check on `[[github]]` and the question's entities (e.g. `[[github-actions]]`, `[[emu]]`).
+2. **Triage findings**:
+   - If the vault answers the question fully → return the existing answer with source citations (vault path + original source URLs from the fact's frontmatter). No new write.
+   - If partial → identify the **gap**. Web research targets only the gap.
+   - If empty → full web research.
+   - A **gap** means the vault has no note ≤90 days old answering the question.
+3. **Web research** (only on confirmed gaps):
+   - Use `source-fetcher` (with `prompt-injection-guard`) on tier-1 sources: GitHub Docs, the GitHub blog changelog, GitHub's public roadmap, official GitHub security advisories.
+   - Extract claims via `claim-extractor`.
+4. **Verify load-bearing claims** via `verify-claim` (3-vote refute):
+   - Any claim destined for `vault/facts/github/` must pass verification.
+   - Claims from GitHub's own docs/changelog are exempt (the vendor IS the authority).
+   - Claims from secondary sources (analyst blogs, practitioner posts) get the full 3-vote treatment.
+5. **Write the research note** via `digest-writer` (which delegates the file write to `vault-writer.write_research`):
+   - Path: `vault/research/github/YYYY-MM-DD-{slug}.md`
+   - Frontmatter per `research.yml` schema: `topic` from the taxonomy below, `question`, `sources`, `findings_count`, `verified_claims`.
+   - Body: TL;DR + Findings (with quoted anchors) + Sources (with credibility-tier badges).
+6. **Stage promotable claims** to `_inbox/github-platform-watch/`:
+   - Any verified fact-typed claim → `_inbox/github-platform-watch/{timestamp}-{slug}.md` with `suggested_surface: facts` and `suggested_path: facts/github/{predicate}.md`.
+   - `memory-curator` decides on its next sweep.
 
 ## Topic taxonomy
 

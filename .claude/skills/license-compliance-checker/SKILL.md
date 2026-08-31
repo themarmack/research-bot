@@ -67,7 +67,8 @@ A package with an Allowed license depending on a Review-required or Denied packa
 2. **Resolve licenses**: each package's declared license (per its registry metadata).
 3. **Categorize**: allowed / review / deny.
 4. **Trace transitives**: for any Review or Deny finding, identify the path from a direct dependency to it.
-5. **Produce findings**: structured list per package + license + verdict + remediation.
+5. **Produce findings**: structured list per package + license + verdict + remediation — presented in chat.
+6. **Persist the scan** — after presenting findings, write the full compliance note via `vault-writer.write_research` to `vault/research/compliance/YYYY-MM-DD-license-compliance-{repo-slug}.md` (frontmatter per `research.yml`, `topic: compliance`) so repo-level license trends stay queryable.
 
 ## Output structure
 
@@ -94,13 +95,14 @@ A package with an Allowed license depending on a Review-required or Denied packa
 [high-profile dependencies for audit visibility]
 ```
 
-Lands at `vault/research/sdlc-best-practice/YYYY-MM-DD-license-compliance-{repo-slug}.md`.
+Lands at `vault/research/compliance/YYYY-MM-DD-license-compliance-{repo-slug}.md` (workflow step 6).
 
 ## Composes with
 
 - `dependabot-config-helper` — Dependabot itself doesn't have a license-deny step; this skill fills the gap.
-- `sbom-reviewer` (step 26) — natural pair; SBOMs include license metadata.
+- [`sbom-reviewer`](../sbom-reviewer/SKILL.md) — natural pair; SBOMs include license metadata.
 - `vault-querier` — load prior license-compliance findings to track repo-level trends.
+- `vault-writer.write_research` — persists the compliance note (workflow step 6).
 
 ## Acceptance test (for step 25 done-criteria)
 

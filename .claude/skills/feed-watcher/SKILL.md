@@ -1,6 +1,6 @@
 ---
 name: feed-watcher
-description: Poll RSS / Atom / JSON-Feed / GitHub-releases sources from the source-registry and return items new since last poll. Persists per-source dedup state under `<repo>/.state/feed-watcher/`. Used by every Category 2 scheduled agent to know what changed since the last run. Composes on source-registry (which sources to poll) and source-fetcher (one-off URL fetch for HTML sources without native feeds). Will migrate to seen-tracker for state once step 6 ships.
+description: Poll RSS / Atom / JSON-Feed / GitHub-releases sources from the source-registry and return items new since last poll. Dedup state is persisted via seen-tracker under `<repo>/.state/<agent_name>/seen.jsonl`, keyed by the calling agent — feed-watcher holds no state of its own. Composes on source-registry (which sources to poll) and source-fetcher (one-off URL fetch for HTML sources without native feeds). Use when a Category 2 scheduled agent starts its run (its first action, to learn what changed since the last run) and when the user wants a one-shot "what's new in the last N days from sources tagged X" lookup.
 ---
 
 # feed-watcher
@@ -25,8 +25,8 @@ Polls a configurable set of sources from `source-registry` and returns the items
    - `type: github-releases`: fetch `https://api.github.com/repos/{owner}/{repo}/releases` via `source-fetcher`. Parse JSON.
    - `type: html`: fetch the index page via `source-fetcher`. Heuristically extract item titles + links from the page (look for `<article>`, `<li class*="post">`, dated headings, etc.). Mark items with a warning that they came from HTML scrape, not a feed.
    - `type: api`: skill-specific; not implemented in v1 — return a warning.
-3. **Compute new items** — for each source, load the prior-run state file at `<repo>/.state/feed-watcher/{source-id}.jsonl`. State format: one JSON object per line, `{item_url, item_id, seen_at}`. Items whose `item_url` (or `item_id` if `item_url` is unstable) is NOT in state are "new."
-4. **Update state** — append each new item to the state file with a `seen_at` timestamp.
+3. **Compute new items** — delegate to `seen-tracker`: call `seen-tracker.bulk_filter(<agent_name>, items)`, where `<agent_name>` is the calling scheduled agent (e.g. `weekly-intelligence-digest`). State lives at `<repo>/.state/<agent_name>/seen.jsonl`; feed-watcher performs no state file I/O of its own. Items in the `new` and `updated` buckets are "new."
+4. **Marking surfaced is the caller's job** — the scheduled agent calls `seen-tracker.mark_surfaced` for every item it actually publishes (runner lifecycle step 10), so an item that fetched but never made a digest is retried next run.
 5. **Return** the new items, grouped by source.
 
 ## Output shape
@@ -64,16 +64,7 @@ Polls a configurable set of sources from `source-registry` and returns the items
 
 ## State management
 
-- State files live at `<repo>/.state/feed-watcher/{source-id}.jsonl`.
-- Cap state file size at the **last 500 items per source** — older entries are pruned (FIFO) to bound the file.
-- **Append-only writes** — never rewrite the file from scratch except for pruning.
-- Concurrency: the toolkit is single-user single-machine; no locking needed for v1.
-
-### Migration to `seen-tracker` (step 6)
-
-Once `seen-tracker` ships, refactor feed-watcher to delegate dedup to it:
-- Replace direct file I/O with `seen-tracker.is_new(item)` / `seen-tracker.mark_surfaced(item)` calls.
-- Keep the same `.state/feed-watcher/` files until migration is verified; then move them under `seen-tracker`'s state root.
+All dedup state is owned by [`seen-tracker`](../seen-tracker/SKILL.md) at `<repo>/.state/<agent_name>/seen.jsonl` — one file per calling agent, so each scheduled agent's "what have I already surfaced?" is isolated from every other agent's. Record schema, pruning caps, append-only semantics, and concurrency posture are defined in seen-tracker's SKILL.md; feed-watcher never touches state files directly.
 
 ## Failure handling (stop and report)
 
@@ -90,7 +81,7 @@ Common failures:
 - [`source-registry`](../source-registry/SKILL.md) — which sources to poll.
 - [`source-fetcher`](../source-fetcher/SKILL.md) — the actual web fetch.
 - [`prompt-injection-guard`](../prompt-injection-guard/SKILL.md) — applied via source-fetcher; suspicious items dropped.
-- Future: `seen-tracker` (step 6) — replaces the local state file.
+- [`seen-tracker`](../seen-tracker/SKILL.md) — cross-run dedup state, keyed by the calling agent.
 
 ## Acceptance test (for step 3 done-criteria)
 

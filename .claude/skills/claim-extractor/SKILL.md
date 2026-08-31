@@ -1,6 +1,6 @@
 ---
 name: claim-extractor
-description: Extract falsifiable claims from a fetched source document, returning a standard `{claim, quoted_anchor, source_url, source_tier, claim_type}` schema per claim. Filters out opinions, marketing fluff, vague generalizations, and unverifiable forward-looking statements. Used by every Category 1 research skill (Obsidian-first contract) before passing claims to verify-claim, and by memory-curator when staging multi-claim documents into _inbox/. Composes on source-fetcher (the input is its content_md) and prompt-injection-guard (already applied upstream).
+description: Extract falsifiable claims from a fetched source document, returning a standard `{claim, quoted_anchor, source_url, source_tier, claim_type}` schema per claim. Filters out opinions, marketing fluff, vague generalizations, and unverifiable forward-looking statements. Used by every Category 1 research skill (Obsidian-first contract) before passing claims to verify-claim, and by memory-curator when staging multi-claim documents into _inbox/. Composes on source-fetcher (the input is its content_md) and prompt-injection-guard (already applied upstream). Use after source-fetcher returns content during any Category 1 research or scheduled digest run, before claims go to verify-claim or get staged for memory-curator.
 ---
 
 # claim-extractor
@@ -72,7 +72,7 @@ Field guidance:
 - **`source_tier`**: copy from input.
 - **`claim_type`**: one of the enum values. Most claims are `fact` (typed claim about an entity) or `event` (something happened on a date). `quantitative` for numeric claims with values. `attribution` for "X said Y." `comparative` for "X is better/larger/cheaper than Y." `roadmap-commitment` for dated forward-looking statements with vendor backing.
 - **`entities`**: lowercase-kebab entity names (e.g., `copilot`, `ffiec`, `johncutlefish`). Used downstream to route facts to `facts/{entity}/{predicate}.md`.
-- **`tags_suggested`**: from the controlled vocabulary in `~/Obsidian/Research-Brain/_meta/tags.md`. Used downstream to set frontmatter `tags:`.
+- **`tags_suggested`**: from the controlled vocabulary in `vault/_meta/tags.md`. Used downstream to set frontmatter `tags:`.
 - **`line_range`**: approximate `[start, end]` line numbers in `content_md` for the quoted anchor — helps a human reviewer locate context.
 - **`confidence_hint`**: a starting confidence (1-3) based on `source_tier` + claim specificity. The actual confidence gets set after `verify-claim`.
 

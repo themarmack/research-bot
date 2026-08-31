@@ -57,12 +57,13 @@ The "demo doesn't crash live" insurance policy. AI-coding demos especially go of
 - ...
 ```
 
-Lands at `vault/insights/YYYY-MM-DD-demo-script-{goal}-{audience}.md`.
+As the final step, write the script via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-demo-script-{goal}-{audience}.md` — the runbook has to survive past the chat so it's in hand at demo time.
 
 ## Composes with
 
 - `copilot-faq-answerer` + `objection-response-library` — the question/objection responses anticipated.
 - `vault-querier` — relevant facts to anchor the demo.
+- `vault-writer.write_insight` — persists the script (final step).
 
 ## Acceptance test (for step 33 done-criteria)
 

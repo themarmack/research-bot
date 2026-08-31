@@ -53,7 +53,7 @@ Return a JSON object:
 
 ## Failure modes — surface, do not swallow
 
-Per the vault's writing standard ("stop and report" — see `~/Obsidian/Research-Brain/_meta/conventions.md`): never silently drop a failed fetch. Every non-`ok` status must be returned and surfaced so the caller can mention the gap. Scheduled agents include failed fetches in their digest's Sources section as `could not fetch: <url> (<status>)`.
+Per the vault's writing standard ("stop and report" — see `vault/_meta/conventions.md`): never silently drop a failed fetch. Every non-`ok` status must be returned and surfaced so the caller can mention the gap. Scheduled agents include failed fetches in their digest's Sources section as `could not fetch: <url> (<status>)`.
 
 ## Security
 
@@ -65,8 +65,8 @@ Per the vault's writing standard ("stop and report" — see `~/Obsidian/Research
 ## Composes with
 
 - [`prompt-injection-guard`](../prompt-injection-guard/SKILL.md) — mandatory post-fetch scan.
-- `source-registry` (later step) — host → source-tier lookup.
-- `feed-watcher` (later step) — supplies URLs to fetch.
+- [`source-registry`](../source-registry/SKILL.md) — host → source-tier lookup.
+- [`feed-watcher`](../feed-watcher/SKILL.md) — supplies URLs to fetch.
 
 ## Acceptance test (for step 1 done-criteria)
 

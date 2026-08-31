@@ -1,6 +1,6 @@
 ---
 name: biweekly-codeql-community-pulse
-description: Biweekly scheduled agent. Surveys the github/codeql repo + community packs for new queries, modified queries, and new packs published in the past 14 days. Relevance-scores each against the org's stack (using daily-cve-digest's stack.yml as the source of in-scope ecosystems) — surface only ecosystem-matching results. Output at vault/digests/biweekly/YYYY-MM-DD-codeql-community-pulse.md. Feeds the codeql-pattern-finder skill — every relevant new community query is a candidate for the org's adoption queue.
+description: Biweekly scheduled agent. Surveys the github/codeql repo + community packs for new queries, modified queries, and new packs published in the past 14 days. Relevance-scores each against the org's stack (using daily-cve-digest's stack.yml as the source of in-scope ecosystems) — surface only ecosystem-matching results. Output at vault/digests/biweekly/YYYY-MM-DD-codeql-community-pulse.md. Feeds the codeql-pattern-finder skill — every relevant new community query is a candidate for the org's adoption queue. Use when the user asks to run the CodeQL community pulse or see what new community queries or packs shipped upstream — and on its biweekly schedule.
 ---
 
 # biweekly-codeql-community-pulse

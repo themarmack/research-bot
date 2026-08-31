@@ -60,10 +60,15 @@ The user already knows checkov / tfsec rule IDs (e.g., `CKV_AWS_20` for S3 ACL, 
 }
 ```
 
+## Persistence (final step, mandatory)
+
+After presenting the finding list in chat, write the full findings note via `vault-writer.write_research` to `vault/research/appsec/YYYY-MM-DD-iac-review-{file-or-repo-slug}.md` (frontmatter per `research.yml`, `topic: appsec`; body = findings list + summary) so portfolio audits and follow-up reviews can query prior runs.
+
 ## Composes with
 
 - Local `checkov` / `tfsec` / `kics` if available — consume their output and add org-specific rules.
 - [`secure-design-reviewer`](../secure-design-reviewer/SKILL.md) — for design-doc-level concerns the IaC reviewer doesn't catch.
+- `vault-writer.write_research` — persists the findings note (final step above).
 
 ## Acceptance test (for step 25 done-criteria)
 

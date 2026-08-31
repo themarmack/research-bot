@@ -1,6 +1,6 @@
 ---
 name: scheduled-agent-runner
-description: Orchestration wrapper for every Category 2 scheduled skill. Standardizes the lifecycle: load last-run state via seen-tracker → fetch via feed-watcher → extract claims via claim-extractor → verify load-bearing ones via verify-claim → format via digest-writer → write via vault-writer → curate findings via memory-curator → emit a one-line summary for the runner log. Lets every scheduled agent (weekly-intelligence-digest, voices-watcher, weekly-review, monthly-copilot-changelog, etc.) be ~30 lines of "what to fetch, how to frame the why-you-care" instead of 200 lines of plumbing.
+description: Orchestration wrapper for every Category 2 scheduled skill. Standardizes the lifecycle: load last-run state via seen-tracker → fetch via feed-watcher → extract claims via claim-extractor → verify load-bearing ones via verify-claim → format via digest-writer → write via vault-writer → curate findings via memory-curator → emit a one-line summary for the runner log. Lets every scheduled agent (weekly-intelligence-digest, voices-watcher, weekly-review, monthly-copilot-changelog, etc.) be ~30 lines of "what to fetch, how to frame the why-you-care" instead of 200 lines of plumbing. Use whenever a Category 2 scheduled skill fires on schedule, when the user asks to run one ad-hoc, or when draining queued run markers in vault/_inbox/scheduled-jobs/ after missed runs.
 ---
 
 # scheduled-agent-runner
@@ -42,7 +42,7 @@ Every scheduled-agent run follows this exact sequence:
 
 Steps 5–6 are optional per agent. A pure "what shipped this week" digest (changelog aggregator) may not need claim-level verification — the source IS the authority. A regulator-watch digest with novel interpretations does need it.
 
-Step 11 (`maybe_email`) is always invoked for any digest surface. It loads the recipient list from `~/Obsidian/Research-Brain/_config/email-distribution.md` and sends the digest to every parsed recipient. If the distribution file is missing or empty, `maybe_email` stop-and-reports and step 12's summary line shows `email_failed=<reason>`. Email failure does NOT roll back the vault write — the note is durable; email is a delivery channel only.
+Step 11 (`maybe_email`) is always invoked for any digest surface. It loads the recipient list from `vault/_config/email-distribution.md` and sends the digest to every parsed recipient. If the distribution file is missing or empty, `maybe_email` stop-and-reports and step 12's summary line shows `email_failed=<reason>`. Email failure does NOT roll back the vault write — the note is durable; email is a delivery channel only.
 
 ## Per-agent config
 
@@ -98,6 +98,27 @@ Per the stop-and-report guardrail, ANY of these surface to the summary line and 
 
 A failed run **still emits a partial summary** — the digest file is written even if 2 of 8 sources failed, or even if email delivery failed entirely. Sources section makes the gaps visible.
 
+## Queue drain
+
+When the machine was asleep or offline at fire time, missed scheduled runs leave **markers** in `vault/_inbox/scheduled-jobs/`, named `YYYY-MM-DD-{job}.md` with `status: queued` in frontmatter. To process the backlog:
+
+1. **Group markers by job** (the `{job}` segment of the filename).
+2. **Per job, take the NEWEST marker within its expiry window** and run the normal lifecycle (steps 1–12) for it.
+3. **After a successful run, delete the processed marker AND all older markers for that job.** The older markers are superseded — seen-tracker dedup means the newest run covers the entire gap, so running them would only produce empty or duplicate digests.
+4. **Markers past their expiry window are deleted without running** — the content window they represent has aged out.
+
+Expiry windows by cadence:
+
+| Cadence | Expiry window |
+|---|---|
+| daily / weekdays | 3 days |
+| weekly | 14 days |
+| biweekly | 21 days |
+| monthly | 45 days |
+| quarterly | 120 days |
+
+Note: a deterministic hourly cleanup (`scripts/_catch_up_helper.py`, run by the catch-up launch agent) also deletes expired markers automatically — the queue drain will rarely encounter expired markers, but applies the same expiry rule defensively when it does.
+
 ## Composes with
 
 Every Phase-1 skill plus the curator:
@@ -129,4 +150,4 @@ Run end-to-end. Confirm:
 - `.state/noop-test-agent/seen.jsonl` is created and populated.
 - Summary line is emitted.
 
-Live exercise happens when step 7 (`weekly-intelligence-digest`) wraps real consumer logic around this runner.
+`weekly-intelligence-digest` wraps real consumer logic around this runner and exercises it live on every scheduled run.

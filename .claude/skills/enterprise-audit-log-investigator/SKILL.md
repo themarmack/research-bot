@@ -78,12 +78,13 @@ gh api enterprises/{enterprise}/audit-log -X GET -f phrase='action:copilot.conte
 
 Per-search result: a table with timestamp, actor, action, target, and a per-event "anomalous?" flag based on the threshold. Plus a summary at top — total events, anomalies, recommended next action.
 
-Output lands at `vault/research/github/YYYY-MM-DD-audit-log-{search-slug}.md`.
+After presenting the table in chat, write the full investigation note via `vault-writer.write_research` to `vault/research/github/YYYY-MM-DD-audit-log-{search-slug}.md` (frontmatter per `research.yml`, `topic: github`) as the explicit final step — investigation evidence must survive the session for incident timelines and audit prep.
 
 ## Composes with
 
 - `gh` CLI (org auth required).
 - `github-org-audit-runner` — sister skill for the static settings view.
+- `vault-writer.write_research` — persists the investigation note (final step of Output).
 - `vault-writer.write_event` — anomalous events get auto-staged to `_inbox/` for memory-curator review.
 - SIEM ingestion (via [[audit-log-export-format]]) — for continuous monitoring; this skill is the ad-hoc tool.
 

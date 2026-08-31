@@ -1,11 +1,13 @@
 ---
 name: digest-writer
-description: Canonical formatter for digests and research reports. Enforces a 5-section structure (TL;DR → What Changed → Why You Care → Detailed Findings → Sources) with the regulated-org lens applied to "Why You Care" and credibility-tier badges on every source. Delegates the actual file write to vault-writer, landing the digest at `~/Obsidian/Research-Brain/digests/{cadence}/YYYY-MM-DD-{skill}.md` (for scheduled agents) or `~/Obsidian/Research-Brain/research/{topic}/YYYY-MM-DD-{slug}.md` (for on-demand research). Every Category 2 scheduled agent and every Category 1 research skill writes through this skill.
+description: Canonical formatter for digests and research reports. Enforces a 5-section structure (TL;DR → What Changed → Why You Care → Detailed Findings → Sources) with the regulated-org lens applied to "Why You Care" and credibility-tier badges on every source. Delegates the actual file write to vault-writer, landing the digest at `vault/digests/{cadence}/YYYY-MM-DD-{skill}.md` (for scheduled agents) or `vault/research/{topic}/YYYY-MM-DD-{slug}.md` (for on-demand research). Every Category 2 scheduled agent and every Category 1 research skill writes through this skill. Use whenever a scheduled agent or research skill is formatting its final output — after claims are extracted and verified, immediately before the vault-writer write.
 ---
 
 # digest-writer
 
-The canonical output formatter for everything that lands in `digests/` or `research/` in the vault. Skills hand it raw findings + metadata; it produces a markdown document with the standard 5-section structure and delegates the file write to `vault-writer`.
+**Path convention**: `vault/` is shorthand for `~/Obsidian/Research-Brain/`; all skills use the `vault/` form.
+
+The canonical output formatter for everything that lands in `vault/digests/` or `vault/research/`. Skills hand it raw findings + metadata; it produces a markdown document with the standard 5-section structure and delegates the file write to `vault-writer`.
 
 ## Why a separate skill
 
@@ -58,6 +60,8 @@ Three reasons it's not just inlined per-skill:
   "previous_digest": "2026-06-13-weekly-intelligence-digest.md"  // optional, for "since last digest" framing
 }
 ```
+
+For `destination: research`, `topic` must come from the controlled research-topic vocabulary in [`vault-conventions`](../vault-conventions/SKILL.md) — a new topic requires a `vault/decisions/` note first.
 
 ## Output document structure
 
@@ -147,4 +151,4 @@ Generate a digest with 2 items, 1 failure, period 2026-06-13 → 2026-06-20, for
 - The failed source appears in Sources marked `**failed**`.
 - The write lands at `vault/digests/weekly/2026-06-20-weekly-intelligence-digest.md`.
 
-Live exercise happens when step 7 runs.
+Exercised live on every `weekly-intelligence-digest` run.

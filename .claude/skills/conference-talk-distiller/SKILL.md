@@ -11,7 +11,7 @@ The talk-recap skill. Most conference talks have rich ideas buried in narrative;
 
 - After watching a recorded talk.
 - After attending a live talk where the user took rough notes.
-- When the `conference-cfp-and-recap-watch` (step 23) digest flags a talk worth distilling.
+- When the `conference-cfp-and-recap-watch` digest flags a talk worth distilling.
 
 ## When NOT to use
 
@@ -53,13 +53,14 @@ For each talk, identify:
 - [[wikilinks]]
 ```
 
-Lands at `vault/insights/YYYY-MM-DD-talk-{slug}.md`.
+As the final step, write the distillation via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-talk-{slug}.md` — the whole point is retaining the substance past the conversation.
 
 ## Composes with
 
 - `conference-cfp-and-recap-watch` — surfaces talks worth distilling.
 - `voices-roster-curator` — when a speaker becomes a voice worth tracking.
 - `vault-querier` — find related vault context.
+- `vault-writer.write_insight` — persists the distillation (final step).
 
 ## Acceptance test
 

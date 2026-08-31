@@ -1,6 +1,6 @@
 ---
 name: source-registry
-description: Curated YAML registry of high-signal sources (vendor changelogs, regulator feeds, security advisories, peer-bank blogs) that any research or scheduled-agent skill should load WHERE to look from. Loads `./registry.yml` from this skill's folder and supports filters by topic tag, credibility tier, source type, or host lookup. Used by feed-watcher (which sources to poll), source-fetcher (host → credibility-tier lookup), and every Category 1 + Category 2 skill (curated source list per topic).
+description: Curated YAML registry of high-signal sources (vendor changelogs, regulator feeds, security advisories, peer-bank blogs) that any research or scheduled-agent skill should load WHERE to look from. Loads `./registry.yml` from this skill's folder and supports filters by topic tag, credibility tier, source type, or host lookup. Used by feed-watcher (which sources to poll), source-fetcher (host → credibility-tier lookup), and every Category 1 + Category 2 skill (curated source list per topic). Use whenever feed-watcher assembles its polling list, source-fetcher needs a host→tier lookup for a fetched URL, or a research skill needs the curated seed sources for its topic.
 ---
 
 # source-registry
@@ -79,7 +79,7 @@ For filter queries, return a list of source entries (full YAML shape above). For
 
 1. `Read` `./registry.yml` in this skill folder.
 2. Parse as YAML.
-3. Validate: every entry has the required fields; `id` is unique; `topic_tags` come from the controlled vocabulary in `~/Obsidian/Research-Brain/_meta/tags.md` (call `vault-conventions` if not cached).
+3. Validate: every entry has the required fields; `id` is unique; `topic_tags` come from the controlled vocabulary in `vault/_meta/tags.md` (call `vault-conventions` if not cached).
 4. Apply the requested filter.
 5. Return.
 

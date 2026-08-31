@@ -18,7 +18,7 @@ On-demand deep research on GitHub Copilot, framed for a regulated organization. 
 - Questions covered by canonical FAQ — answer from there.
 - GitHub platform questions not specifically about Copilot — use [`github-platform-watch`](../github-platform-watch/SKILL.md).
 - GHAS-specific questions (CodeQL, Dependabot, secret scanning) — use a GHAS skill if one exists; otherwise this skill is OK as a fallback.
-- Internal Copilot rollout strategy / metrics — those are `copilot-rollout-playbook` / `copilot-metrics-analyzer` (planned skills).
+- Internal Copilot rollout strategy / metrics — those are [`copilot-rollout-playbook`](../copilot-rollout-playbook/SKILL.md) / [`copilot-metrics-analyzer`](../copilot-metrics-analyzer/SKILL.md).
 
 ## Obsidian-first workflow (mandatory)
 
@@ -29,6 +29,7 @@ On-demand deep research on GitHub Copilot, framed for a regulated organization. 
    - If the vault answers the question fully → return the existing answer with source citations (vault path + original source URLs from the fact's frontmatter). No new write.
    - If partial → identify the **gap**. Web research targets only the gap.
    - If empty → full web research.
+   - A **gap** means the vault has no note ≤90 days old answering the question.
 3. **Web research** (only on confirmed gaps):
    - Use `source-fetcher` (with `prompt-injection-guard`) on tier-1 sources: GitHub docs, the GitHub blog changelog, official Anthropic / Microsoft / OpenAI announcements relevant to model selection.
    - Extract claims via `claim-extractor`.
@@ -36,7 +37,7 @@ On-demand deep research on GitHub Copilot, framed for a regulated organization. 
    - Any claim destined for `vault/facts/copilot/` must pass verification.
    - Claims from tier-1 vendor primary sources are exempt (the vendor IS the authority).
    - Claims from secondary sources (analyst blogs, peer-bank posts) get the full 3-vote treatment.
-5. **Write the research note** via `vault-writer.write_research`:
+5. **Write the research note** via `digest-writer` (which delegates the file write to `vault-writer.write_research`):
    - Path: `vault/research/copilot/YYYY-MM-DD-{slug}.md`
    - Frontmatter per `research.yml` schema: `topic: copilot`, `question`, `sources`, `findings_count`, `verified_claims`.
    - Body: TL;DR + Findings (with quoted anchors) + Sources (with credibility-tier badges).
@@ -65,7 +66,7 @@ Research note at `vault/research/copilot/YYYY-MM-DD-{slug}.md`. If the question 
 - `vault-querier` (Obsidian-first)
 - `source-fetcher` + `prompt-injection-guard` (web)
 - `claim-extractor` + `verify-claim` (load-bearing verification)
-- `vault-writer.write_research` (output)
+- `digest-writer` → `vault-writer.write_research` (output)
 - `_inbox/copilot-deep-dive/` + `memory-curator` (fact promotion)
 - `copilot-faq-answerer` (consumer of promoted facts via `override_facts_predicate`)
 - [`executive-summary-writer`](../executive-summary-writer/SKILL.md) — **only when the user explicitly asks for an exec summary** (never auto-invoked after vault write). Takes the just-written research note's path and produces a 1-page summary tuned to a named audience (CISO, VP Eng, etc.).

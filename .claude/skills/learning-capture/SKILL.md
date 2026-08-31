@@ -29,7 +29,7 @@ The Category 6 PKM skill for "this is worth keeping." Distinct from `quick-captu
 
 ## Output
 
-`vault/insights/YYYY-MM-DD-{slug}.md` OR `vault/facts/{entity}/{predicate}.md`.
+`vault/insights/YYYY-MM-DD-{slug}.md` OR `vault/facts/{entity}/{predicate}.md` — always written via `vault-writer.write_insight` / `write_fact` (workflow step 3); the capture is never left only in chat.
 
 ## Composes with
 

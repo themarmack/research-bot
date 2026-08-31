@@ -1,11 +1,13 @@
 ---
 name: vault-writer
-description: Write notes to the Obsidian vault at ~/Obsidian/Research-Brain/ with the correct folder, filename, and frontmatter schema per surface (fact / event / decision / insight / person / project / research / digest / inbox). Idempotent on key fields — patches existing notes instead of duplicating. Always loads vault-conventions for the canonical schemas; composes with vault-querier for wikilink generation and prompt-injection-guard for any body content sourced from web fetches. Use whenever any skill needs to persist content to the vault; never call Write/Edit on vault files directly.
+description: Write notes to the Obsidian vault (`vault/`) with the correct folder, filename, and frontmatter schema per surface (fact / event / decision / insight / person / project / research / digest / inbox). Idempotent on key fields — patches existing notes instead of duplicating. Always loads vault-conventions for the canonical schemas; composes with vault-querier for wikilink generation and prompt-injection-guard for any body content sourced from web fetches. Use whenever any skill needs to persist content to the vault; never call Write/Edit on vault files directly.
 ---
 
 # vault-writer
 
-The write side of the vault. Every skill that persists to `~/Obsidian/Research-Brain/` goes through this skill, not direct `Write`/`Edit` calls. Ensures: correct folder routing, valid frontmatter per schema, idempotency, consistent wikilink generation, and prompt-injection-guard on untrusted body content.
+**Path convention**: `vault/` is shorthand for `~/Obsidian/Research-Brain/`; all skills use the `vault/` form.
+
+The write side of the vault. Every skill that persists to `vault/` goes through this skill, not direct `Write`/`Edit` calls. Ensures: correct folder routing, valid frontmatter per schema, idempotency, consistent wikilink generation, and prompt-injection-guard on untrusted body content.
 
 ## When to use
 
@@ -52,6 +54,7 @@ Each helper takes a structured input, validates against the schema, computes the
 ### `write_research(topic, question, body, sources, findings_count, verified_claims, …)`
 - Path: `research/{topic}/{date}-{slug}.md`
 - Schema: `research.yml`
+- `topic` must come from the controlled research-topic vocabulary in [`vault-conventions`](../vault-conventions/SKILL.md); a new topic requires a `vault/decisions/` note first — reject writes to unknown topics (stop and report).
 - **Idempotency**: same-day same-slug → suffix `-2`, `-3`, …
 
 ### `write_digest(skill, cadence, period_start, period_end, body, …)`

@@ -1,6 +1,6 @@
 ---
 name: regulated-finance-framer
-description: Reusable prompt-fragment skill consolidating the regulated-org framing rules that every Category 1 research skill and Category 5 comms skill currently bakes into its own SKILL.md. Any topic skill that needs the compliance-relevant lens can include this fragment via a single reference rather than re-implementing the framing. When the org's posture, regulatory environment, or control catalog evolves, edit this skill once and every downstream skill inherits. Use as an `import` from any skill that wants the standard compliance framing applied to its output.
+description: Reusable prompt-fragment skill consolidating the regulated-org framing rules that every Category 1 research skill and Category 5 comms skill currently bakes into its own SKILL.md. Any topic skill that needs the compliance-relevant lens can include this fragment via a single reference rather than re-implementing the framing. When the org's posture, regulatory environment, or control catalog evolves, edit this skill once and every downstream skill inherits. Use as an `import` from any skill that wants the standard compliance framing applied to its output — when authoring or updating a Category 1 research or Category 5 comms skill, or before framing any research, synthesis, or communication output with the regulated-org lens.
 ---
 
 # regulated-finance-framer

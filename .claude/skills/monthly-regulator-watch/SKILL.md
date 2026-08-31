@@ -1,6 +1,6 @@
 ---
 name: monthly-regulator-watch
-description: Monthly scheduled agent. Aggregates the past 30 days from US (and optionally EU/UK) financial regulators — OCC, FRB, FDIC, FFIEC, SEC, FINRA, CFPB, NYDFS, FCA, ECB — for guidance, comment periods, and enforcement actions touching software risk, AI/ML, third-party risk, or cyber. Runs on the 1st of each month. Output at vault/digests/monthly/YYYY-MM-DD-monthly-regulator-watch.md. Different from weekly-intelligence-digest: deeper regulator-only scope, with explicit comment-period tracking and enforcement-action analysis.
+description: Monthly scheduled agent. Aggregates the past 30 days from US (and optionally EU/UK) financial regulators — OCC, FRB, FDIC, FFIEC, SEC, FINRA, CFPB, NYDFS, FCA, ECB — for guidance, comment periods, and enforcement actions touching software risk, AI/ML, third-party risk, or cyber. Runs on the 1st of each month. Output at vault/digests/monthly/YYYY-MM-DD-monthly-regulator-watch.md. Different from weekly-intelligence-digest: deeper regulator-only scope, with explicit comment-period tracking and enforcement-action analysis. Use when the user asks to run the regulator watch or see what regulators said in the past month — and on its 1st-of-month schedule.
 ---
 
 # monthly-regulator-watch

@@ -1,6 +1,6 @@
 ---
 name: sbom-reviewer
-description: Parse a CycloneDX or SPDX SBOM and flag supply-chain concerns BEYOND what CVE matching catches — unsigned releases, abandoned packages (no commits in 12+ months), single-maintainer critical dependencies, known-malicious authors / typo-squat patterns, license conflicts, SBOM completeness (declared vs actual depth). Produces a structured finding list with severity and remediation. Composes with daily-cve-digest (which handles the CVE side) and license-compliance-checker (which handles the licensing side); this skill covers the structural risk surface.
+description: Parse a CycloneDX or SPDX SBOM and flag supply-chain concerns BEYOND what CVE matching catches — unsigned releases, abandoned packages (no commits in 12+ months), single-maintainer critical dependencies, known-malicious authors / typo-squat patterns, license conflicts, SBOM completeness (declared vs actual depth). Produces a structured finding list with severity and remediation. Composes with daily-cve-digest (which handles the CVE side) and license-compliance-checker (which handles the licensing side); this skill covers the structural risk surface. Use whenever the user is reviewing an SBOM — a newly published one, a vendor-provided one, or a portfolio sample — before adopting the artifact or after a supply-chain incident.
 ---
 
 # sbom-reviewer
@@ -74,7 +74,8 @@ The supply-chain risk dimension that **isn't** CVE matching. CVE flagging is wel
 2. **For each component**: run the 5 check categories.
 3. **Cross-reference** against `daily-cve-digest/stack.yml` to identify which components are critical-library tier (severity boost).
 4. **Produce findings**: per-component, per-check.
-5. **Summary**: posture score (% of components passing), top concerns by severity.
+5. **Summary**: posture score (% of components passing), top concerns by severity — presented in chat.
+6. **Persist the review** — after presenting findings, write the full review note via `vault-writer.write_research` to `vault/research/supply-chain/YYYY-MM-DD-sbom-{service-slug}.md` (frontmatter per `research.yml`, `topic: supply-chain`) so future reviews and incident re-scans can query it.
 
 ## Output structure
 
@@ -99,11 +100,12 @@ The supply-chain risk dimension that **isn't** CVE matching. CVE flagging is wel
 {linked vault notes, stack.yml}
 ```
 
-Lands at `vault/research/supply-chain/YYYY-MM-DD-sbom-{service-slug}.md`.
+Lands at `vault/research/supply-chain/YYYY-MM-DD-sbom-{service-slug}.md` (workflow step 6).
 
 ## Composes with
 
 - [`daily-cve-digest`](../daily-cve-digest/SKILL.md) — `stack.yml` is the critical-library reference.
+- `vault-writer.write_research` — persists the review note (workflow step 6).
 - [`license-compliance-checker`](../license-compliance-checker/SKILL.md) — license dimension.
 - [[2026-06-20-actions-hardening-post-shai-hulud]] — supply-chain context.
 

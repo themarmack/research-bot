@@ -18,7 +18,7 @@ The single biggest reach multiplier for an SDLC program lead across a at-scale-d
 
 - Single-audience direct response (email back to one person) — write that directly.
 - Verbatim transcripts / meeting minutes — different document type.
-- Decision proposals — use `decision-memo-writer` (planned skill) or `quick-capture` for ADRs.
+- Decision proposals — use `decision-memo-writer`, or `quick-capture` for ADRs.
 
 ## Three tiers
 
@@ -86,7 +86,7 @@ The single biggest reach multiplier for an SDLC program lead across a at-scale-d
 4. **Per-cluster, draft the 3 tiers** — exec / eng-lead / IC. Each tier sees the same underlying fact but with different framing, depth, and call-to-action.
 5. **Apply the regulated-org lens** to exec tier — every item ties to SR 11-7 / FFIEC / OCC / SOX / NYDFS where applicable.
 6. **Apply the practical-dev lens** to IC tier — explicit "what to do" and "what NOT to do".
-7. **Write** to `vault/insights/YYYY-MM-DD-stakeholder-update-{slug}.md` as a single file with the three tiers as `##` sections.
+7. **Write** via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-stakeholder-update-{slug}.md` as a single file with the three tiers as `##` sections.
 
 ## Output structure (one file, three tiers)
 
@@ -108,9 +108,10 @@ Each tier is a self-contained, sendable message — the user can copy / paste th
 ## Composes with
 
 - `vault-querier` — pulls recent vault activity for context.
+- `vault-writer.write_insight` — persists the update (workflow step 7).
 - `weekly-review` — sometimes the user starts a stakeholder update right after reading the weekly review.
 - `copilot-faq-answerer` and `objection-response-library` — IC-tier "Common questions" content.
-- `decision-memo-writer` (planned) — when a tier-1 exec ask is "we need a decision memo on X."
+- `decision-memo-writer` — when a tier-1 exec ask is "we need a decision memo on X."
 
 ## Acceptance test (for step 15 done-criteria)
 

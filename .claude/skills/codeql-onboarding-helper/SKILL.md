@@ -57,7 +57,7 @@ For each repo:
 
 ## Output
 
-An onboarding plan note at `vault/research/github/YYYY-MM-DD-codeql-onboarding-{repo-slug}.md`. Structure:
+An onboarding plan note at `vault/research/codeql/YYYY-MM-DD-codeql-onboarding-{repo-slug}.md`. Present the plan in chat for the user (it goes to the repo owner), then — as the explicit final step — write the full plan via `vault-writer.write_research` to that path (frontmatter per `research.yml`, `topic: codeql`) so the next session can query it. Structure:
 
 1. **Repo context** — language(s), stack, risk profile, current state.
 2. **Setup-type decision** — default vs advanced, with rationale.
@@ -73,6 +73,7 @@ An onboarding plan note at `vault/research/github/YYYY-MM-DD-codeql-onboarding-{
 - [`ghas-config-reviewer`](../ghas-config-reviewer/SKILL.md) — code-scanning baseline check item.
 - [`actions-workflow-hardener`](../actions-workflow-hardener/SKILL.md) — when the CodeQL workflow itself needs review.
 - [`codeql-pattern-finder`](../codeql-pattern-finder/SKILL.md) — for custom-pack rollout.
+- `vault-writer.write_research` — persists the onboarding plan (final step of Output).
 
 ## Acceptance test (for step 19 done-criteria)
 

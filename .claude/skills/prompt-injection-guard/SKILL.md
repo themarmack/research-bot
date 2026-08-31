@@ -52,7 +52,7 @@ Plain markdown or text. Optional context: `source_url`, `source_tier`, `fetched_
 
 ## Action — quarantine, don't delete
 
-For each finding, wrap the offending block in a markdown blockquote with a `> ⚠️ quarantined: <reason>` prefix. **Do not delete content.** Per the "stop and report" guardrail in `~/Obsidian/Research-Brain/_meta/conventions.md`, we surface findings rather than silently swallowing them. The downstream caller decides whether to skip, summarize-from-outside, or escalate.
+For each finding, wrap the offending block in a markdown blockquote with a `> ⚠️ quarantined: <reason>` prefix. **Do not delete content.** Per the "stop and report" guardrail in `vault/_meta/conventions.md`, we surface findings rather than silently swallowing them. The downstream caller decides whether to skip, summarize-from-outside, or escalate.
 
 Example quarantine:
 
@@ -75,7 +75,7 @@ A skill must possess **at most two** of these three properties: (a) processes un
 ## Composes with
 
 - [`source-fetcher`](../source-fetcher/SKILL.md) — calls this on every fetch.
-- `memory-curator` (later step) — calls this on `_inbox/` content before promoting to durable folders.
+- [`memory-curator`](../memory-curator/SKILL.md) — calls this on `_inbox/` content before promoting to durable folders.
 
 ## Acceptance test (for step 1 done-criteria)
 

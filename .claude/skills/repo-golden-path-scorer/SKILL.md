@@ -48,6 +48,7 @@ A Category 3 ops tool. The org's "golden path" is the set of repo-level standard
    - `gh api repos/{owner}/{repo}/contents/AGENTS.md` (and `.github/AGENTS.md`)
 3. **Score** each item; produce category subtotals + total.
 4. **Prioritized remediation**: every item missing → one remediation line, ordered by point-value (highest first).
+5. **Persist the scorecard** — after presenting it in chat, write the full scorecard note via `vault-writer.write_research` to `vault/research/github/YYYY-MM-DD-golden-path-{repo-slug}.md` (frontmatter per `research.yml`, `topic: github`) so before/after comparisons and org-wide sweeps can query prior scores.
 
 ## Output
 
@@ -69,11 +70,12 @@ A Category 3 ops tool. The org's "golden path" is the set of repo-level standard
 3. ...
 ```
 
-Lands at `vault/research/github/YYYY-MM-DD-golden-path-{repo-slug}.md`.
+Lands at `vault/research/github/YYYY-MM-DD-golden-path-{repo-slug}.md` (workflow step 5).
 
 ## Composes with
 
 - `gh api` for live inspection.
+- `vault-writer.write_research` — persists the scorecard (workflow step 5).
 - `ghas-config-reviewer` — overlapping coverage; this is the broader scorecard.
 - `dependabot-config-helper` — input to the Dependabot section.
 

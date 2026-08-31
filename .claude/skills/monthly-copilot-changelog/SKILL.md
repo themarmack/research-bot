@@ -1,6 +1,6 @@
 ---
 name: monthly-copilot-changelog
-description: Monthly scheduled agent. Aggregates the past 30 days of Copilot and GHAS changelog entries into a single digest with the **policy implications** lens — for each change, what (if anything) does the org's policy / canonical FAQ / TPRM file need to update? Run on the 1st of each month; outputs to vault/digests/monthly/YYYY-MM-DD-monthly-copilot-changelog.md. Different from weekly-intelligence-digest: that's a "what changed in the world" brief across many sources; this is a focused, policy-actionable monthly review of Copilot/GHAS specifically.
+description: Monthly scheduled agent. Aggregates the past 30 days of Copilot and GHAS changelog entries into a single digest with the **policy implications** lens — for each change, what (if anything) does the org's policy / canonical FAQ / TPRM file need to update? Run on the 1st of each month; outputs to vault/digests/monthly/YYYY-MM-DD-monthly-copilot-changelog.md. Different from weekly-intelligence-digest: that's a "what changed in the world" brief across many sources; this is a focused, policy-actionable monthly review of Copilot/GHAS specifically. Use when the user asks to run the monthly Copilot/GHAS changelog review or check the policy implications of the past month's Copilot changes — and on its 1st-of-month schedule.
 ---
 
 # monthly-copilot-changelog

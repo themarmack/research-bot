@@ -52,7 +52,7 @@ The pre-meeting deep-breath tool. Most stakeholder meetings could go better with
 - [ ] {one-liner reminder of key data point}
 ```
 
-Lands at `vault/insights/YYYY-MM-DD-meeting-prep-{slug}.md`.
+As the final step, write the brief via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-meeting-prep-{slug}.md` — persisted briefs make the post-meeting debrief and the next prep cheaper.
 
 ## Composes with
 
@@ -60,6 +60,7 @@ Lands at `vault/insights/YYYY-MM-DD-meeting-prep-{slug}.md`.
 - `objection-response-library` — anticipate concerns.
 - `copilot-faq-answerer` — anticipate technical questions.
 - `people-notes` in `vault/people/` — load known concerns of named participants.
+- `vault-writer.write_insight` — persists the brief (final step).
 
 ## Acceptance test (for step 33 done-criteria)
 

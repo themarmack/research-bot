@@ -20,7 +20,7 @@ The skill's checks come directly from the 7 hardening practices documented in [[
 
 - Pure correctness review (does the workflow work) — that's not this skill's scope.
 - Performance optimization — separate concern.
-- Repo-level governance (CODEOWNERS, branch protection) — that's `repo-golden-path-scorer` (planned).
+- Repo-level governance (CODEOWNERS, branch protection) — that's [`repo-golden-path-scorer`](../repo-golden-path-scorer/SKILL.md).
 - Org-wide GHAS settings — that's `ghas-config-reviewer`.
 
 ## Checks
@@ -99,10 +99,15 @@ Self-hosted runners + public-repo PR triggers = attacker-controlled code running
 
 If zero findings, return the empty list and a `clean: true` flag — don't pad with low-confidence noise.
 
+## Persistence (final step, mandatory)
+
+After presenting the finding list in chat, write the full findings note via `vault-writer.write_research` to `vault/research/github/YYYY-MM-DD-workflow-hardening-{workflow-slug}.md` (frontmatter per `research.yml`, `topic: github`; body = findings list + summary block) so the next session can query prior workflow audits instead of re-reviewing from scratch.
+
 ## Composes with
 
 - [[2026-06-20-actions-hardening-post-shai-hulud]] — the source of truth for the check rationales.
 - `vault-querier` — caller may want to surface related findings from prior workflow audits.
+- `vault-writer.write_research` — persists the findings note (final step above).
 
 ## Acceptance test (for step 13 done-criteria)
 
