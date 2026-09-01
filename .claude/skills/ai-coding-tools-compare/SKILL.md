@@ -39,14 +39,29 @@ The "should we be using X instead of Copilot?" answer with structure. Most compa
 | **Agentic features** | Multi-step actions? With what guardrails? |
 | **Ecosystem coverage** | IDEs supported (VS Code, JetBrains, Vim/Neovim, CLI) |
 
-## Workflow
+## Workflow (Obsidian-first, mandatory)
 
-1. **Identify tools to compare** (default: Copilot + top alternatives; subset for use-case-specific comparison).
-2. **For each tool, fill the rubric**: cite primary sources (vendor docs, official changelog) for each axis.
-3. **For each axis, score**: PASS / PARTIAL / FAIL against the org's bar.
-4. **Cross-reference vault facts** for Copilot baseline (the org's known position).
-5. **Identify gaps**: where would switching help vs hurt for specific use cases.
-6. **Recommendation** with explicit time-bound — "this comparison valid through {date}; re-evaluate at {trigger}."
+1. **Query the vault first** via `vault-querier`:
+   - Full-text search the tools' names across `vault/research/ai-coding-tools/**` (prior comparisons), `vault/facts/copilot/**` (the org's known Copilot baseline), `vault/research/vendor/**` (per-vendor evaluations), `vault/research/frontier-model/**` (model-routing facts), and recent `vault/digests/**` (last 90 days — `quarterly-ai-coding-landscape` output lands there).
+   - Backlink check on each tool's entity (e.g. `[[cursor]]`, `[[copilot]]`).
+2. **Triage findings**:
+   - If a current comparison already covers the asked tools and axes → return it with source citations (vault path + original source URLs). No new write.
+   - If partial → identify the **gap** (which tools / axes are missing or stale). Web research targets only those cells.
+   - If empty → full comparison.
+   - A **gap** means the vault has no note ≤90 days old answering the question.
+3. **Identify tools to compare** (default: Copilot + top alternatives; subset for use-case-specific comparison).
+4. **For each tool, fill the rubric** — vault facts first; for confirmed gaps, use `source-fetcher` (with `prompt-injection-guard`) on primary sources (vendor docs, official changelog) per axis, extracting claims via `claim-extractor`.
+5. **Verify load-bearing claims** via `verify-claim` (3-vote refute) — a vendor's claims about its own product are tier-1; competitive claims and third-party characterizations get the full 3-vote treatment before affecting a score.
+6. **For each axis, score**: PASS / PARTIAL / FAIL against the org's bar.
+7. **Identify gaps**: where would switching help vs hurt for specific use cases.
+8. **Recommendation** with explicit time-bound — "this comparison valid through {date}; re-evaluate at {trigger}."
+9. **Write the comparison note** via `digest-writer` (which delegates the file write to `vault-writer.write_research`):
+   - Path: `vault/research/ai-coding-tools/YYYY-MM-DD-comparison-{slug}.md`
+   - Frontmatter per `research.yml` schema: `topic: ai-coding-tools`, `question`, `sources`, `findings_count`, `verified_claims`.
+   - Body: the output structure below, with credibility-tier badges on every source.
+10. **Stage promotable claims** to `_inbox/ai-coding-tools-compare/`:
+    - Any verified fact-typed claim (e.g. a vendor's certification or training-data policy) → `_inbox/ai-coding-tools-compare/{timestamp}-{slug}.md` with `suggested_surface: facts` and `suggested_path: facts/{vendor-entity}/{predicate}.md`.
+    - `memory-curator` decides on its next sweep.
 
 ## Output structure
 
@@ -78,7 +93,7 @@ Lands at `vault/research/ai-coding-tools/YYYY-MM-DD-comparison-{slug}.md`.
 ## Composes with
 
 - `vault-querier` — load Copilot baseline facts.
-- `vendor-security-eval` (planned step 30) — deeper single-vendor evaluation.
+- `vendor-security-eval` — deeper single-vendor evaluation.
 - `frontier-model-watch` — model-side, not tool-side, dimension.
 - `stakeholder-update-writer` — exec-tier output naturally pulls from this.
 

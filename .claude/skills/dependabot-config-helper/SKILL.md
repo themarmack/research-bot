@@ -58,16 +58,18 @@ These defaults come from the strategy research; they're not generic GitHub guida
    b. Diff against org defaults.
    c. Output the findings list (each with current / expected / severity / remediation).
    d. Produce a recommended-changes diff.
+3. **Persist the reasoning note** (both modes) — after presenting the config or diff in chat, write the sibling audit note via `vault-writer.write_research` to `vault/research/dependabot/YYYY-MM-DD-dependabot-config-{repo-slug}.md` (frontmatter per `research.yml`, `topic: dependabot`) so the generation/review reasoning is queryable next session.
 
 ## Output
 
-A complete `.github/dependabot.yml` ready to commit, with header comments explaining the policy basis. Plus a sibling note at `vault/research/github/YYYY-MM-DD-dependabot-config-{repo-slug}.md` documenting the generation reasoning for audit.
+A complete `.github/dependabot.yml` ready to commit, with header comments explaining the policy basis. Plus a sibling note at `vault/research/dependabot/YYYY-MM-DD-dependabot-config-{repo-slug}.md` documenting the generation reasoning for audit (written in workflow step 3).
 
 ## Composes with
 
 - [`dependabot-strategy`](../dependabot-strategy/SKILL.md) — defaults source.
 - `ghas-config-reviewer` — the Dependabot section of the GHAS baseline is informed by this skill's output.
-- `repo-golden-path-scorer` (planned) — golden-path scoring includes presence + currency of `dependabot.yml`.
+- [`repo-golden-path-scorer`](../repo-golden-path-scorer/SKILL.md) — golden-path scoring includes presence + currency of `dependabot.yml`.
+- `vault-writer.write_research` — persists the reasoning note (workflow step 3).
 
 ## Acceptance test (for step 18 done-criteria)
 

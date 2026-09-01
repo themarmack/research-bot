@@ -1,6 +1,6 @@
 ---
 name: weekly-self-review
-description: End-of-week personal-reflection skill, distinct from weekly-review (which surveys the vault's writes). This is about the **user's** week — what they worked on, what energized vs drained, what they want to focus on next week, what's nagging at them. Outputs a private reflection note that doesn't aim for objectivity. Use on Friday afternoon or Sunday evening for personal end-of-week reflection.
+description: End-of-week personal-reflection skill, distinct from weekly-review (which surveys the vault's writes). This is about the **user's** week — what they worked on, what energized vs drained, what they want to focus on next week, what's nagging at them. Outputs a private reflection note that doesn't aim for objectivity. Use when the user asks for a personal end-of-week reflection or self-review — typically Friday afternoon or Sunday evening — NOT when they ask for the weekly review of vault activity, which routes to `weekly-review` (the scheduled vault retrospective).
 ---
 
 # weekly-self-review
@@ -44,7 +44,7 @@ The skill walks the user through 5 standard prompts:
 - Trend vs prior weeks: {↑ / ↓ / →}
 ```
 
-Lands at `vault/insights/YYYY-MM-DD-self-review.md` (the slug `self-review` keeps these distinct from `weekly-review`).
+As the final step, write the note via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-self-review.md` (the slug `self-review` keeps these distinct from `weekly-review`). The reflection is for the user's future self — it only pays off if it lands in the vault.
 
 ## Acceptance test
 

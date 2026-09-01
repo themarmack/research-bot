@@ -74,7 +74,8 @@ The skill that catches what CodeQL misses — the org-specific layer on top of c
 1. **Identify the code snippet** (file path + range, or pasted snippet).
 2. **Walk each check category** against the snippet.
 3. **Cite the internal standard section** per finding (numbered citations to the org's actual secure-coding standard document).
-4. **Produce findings** with severity + remediation + standard reference.
+4. **Produce findings** with severity + remediation + standard reference — presented in chat.
+5. **Persist the check** — after presenting findings, write the full findings note via `vault-writer.write_research` to `vault/research/appsec/YYYY-MM-DD-secure-coding-check-{file-or-module-slug}.md` (frontmatter per `research.yml`, `topic: appsec`) so recurring violations across checks become queryable trend data.
 
 ## Output structure
 
@@ -92,10 +93,13 @@ The skill that catches what CodeQL misses — the org-specific layer on top of c
 {linked vault notes, standard sections}
 ```
 
+Lands at `vault/research/appsec/YYYY-MM-DD-secure-coding-check-{file-or-module-slug}.md` (workflow step 5).
+
 ## Composes with
 
 - [`codeql-pattern-finder`](../codeql-pattern-finder/SKILL.md) — when a check would benefit from being encoded as a CodeQL query for at-scan-time enforcement.
 - [`secure-design-reviewer`](../secure-design-reviewer/SKILL.md) — at the design level rather than implementation.
+- `vault-writer.write_research` — persists the findings note (workflow step 5).
 
 ## Acceptance test (for step 27 done-criteria)
 

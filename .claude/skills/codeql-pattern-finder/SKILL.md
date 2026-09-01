@@ -27,7 +27,7 @@ The query-discovery and query-authoring side of the CodeQL pair. Most org-specif
 3. **Search community packs** at `codeql-packs/*` (e.g., `codeql-packs/log4j-vuln-pack`) for ecosystem-specific patterns.
 4. **If found**: document the existing query, how to invoke it (suite selection or custom pack include), and any tuning needed (additional sinks/sources for the org's specific data flow).
 5. **If not found**: sketch a custom query. Use CodeQL's data-flow library for taint analysis cases; use simple predicate queries for syntactic matches.
-6. **Output a research note** + a deployment plan via `codeql-onboarding-helper`.
+6. **Write the research note** via `vault-writer.write_research` to `vault/research/codeql/YYYY-MM-DD-codeql-pattern-{slug}.md` (frontmatter per `research.yml`, `topic: codeql`), then hand the "to deploy" section to `codeql-onboarding-helper` for rollout.
 
 ## Custom-query sketch structure
 
@@ -57,13 +57,13 @@ For syntactic-match queries (e.g., "any call to `LegacyAuth.signWith(...)`"), th
 
 ## Output
 
-`vault/research/github/YYYY-MM-DD-codeql-pattern-{slug}.md` — research note with the chosen query (or sketch), references to the source query in the standard pack (if it exists), and a "to deploy" section.
+`vault/research/codeql/YYYY-MM-DD-codeql-pattern-{slug}.md` — research note with the chosen query (or sketch), references to the source query in the standard pack (if it exists), and a "to deploy" section. Written via `vault-writer.write_research` (workflow step 6) — the query is presented in chat, but the note is always persisted so future pattern-finder runs can build on it.
 
 ## Composes with
 
 - [`codeql-onboarding-helper`](../codeql-onboarding-helper/SKILL.md) — the deploy mechanism for queries discovered or authored here.
 - `vault-querier` — find prior pattern-finder runs to avoid duplicate work.
-- `ghas-feature-research` (planned) — when GitHub adds new CodeQL features (e.g., autofix, AI-assisted query generation) that change the discovery process.
+- [`ghas-feature-research`](../ghas-feature-research/SKILL.md) — when GitHub adds new CodeQL features (e.g., autofix, AI-assisted query generation) that change the discovery process.
 
 ## Acceptance test (for step 19 done-criteria)
 

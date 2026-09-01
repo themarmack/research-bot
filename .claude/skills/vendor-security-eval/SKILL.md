@@ -20,6 +20,30 @@ The pre-TPRM-intake evaluation skill. Most dev / AI vendor decisions get stalled
 - The formal TPRM process itself — this skill produces input, doesn't replace.
 - Vendor selection without a specific candidate identified.
 
+## Obsidian-first workflow (mandatory)
+
+1. **Query the vault first** via `vault-querier`:
+   - Full-text search the vendor's name across `vault/research/vendor/**` (prior evaluations — e.g. [[2026-06-20-eval-cursor]]), `vault/research/ai-coding-tools/**` (comparison notes carry per-vendor rubric rows), `vault/facts/{vendor-entity}/**`, and recent `vault/digests/**` (last 90 days — vendor posture changes often surface there first).
+   - Backlink check on the vendor's entity (e.g. `[[cursor]]`, `[[anthropic]]`).
+2. **Triage findings**:
+   - If a current evaluation already exists → return it with source citations (vault path + original source URLs). No new write.
+   - If partial (e.g. some rubric sections covered, or the posture has materially changed since) → identify the **gap**. Web research targets only the gap sections.
+   - If empty → full evaluation.
+   - A **gap** means the vault has no note ≤90 days old answering the question.
+3. **Web research** (only on confirmed gaps):
+   - Use `source-fetcher` (with `prompt-injection-guard`) on tier-1 sources: the vendor's trust center / security docs / subprocessor list, SOC 2 and ISO certificate registries, SEC EDGAR (8-K breach disclosures), CISA KEV catalog.
+   - Extract claims via `claim-extractor`.
+4. **Verify load-bearing claims** via `verify-claim` (3-vote refute):
+   - A vendor's certifications and contractual terms are tier-1 from the vendor's own trust pages; breach-history claims, "in practice" posture claims, and anything sourced from commentary get the full 3-vote treatment before landing in the scorecard.
+5. **Work the 6-section rubric below**, filling each section from vault facts first, verified web claims second.
+6. **Write the evaluation note** via `digest-writer` (which delegates the file write to `vault-writer.write_research`):
+   - Path: `vault/research/vendor/YYYY-MM-DD-eval-{vendor-slug}.md`
+   - Frontmatter per `research.yml` schema: `topic: vendor`, `question`, `sources`, `findings_count`, `verified_claims`.
+   - Body: the output structure below, with credibility-tier badges on every source.
+7. **Stage promotable claims** to `_inbox/vendor-security-eval/`:
+   - Any verified fact-typed claim (e.g. "vendor X holds SOC 2 Type 2 through {date}") → `_inbox/vendor-security-eval/{timestamp}-{slug}.md` with `suggested_surface: facts` and `suggested_path: facts/{vendor-entity}/{predicate}.md`.
+   - `memory-curator` decides on its next sweep.
+
 ## Evaluation rubric
 
 ### 1. Data flow
@@ -88,7 +112,7 @@ Lands at `vault/research/vendor/YYYY-MM-DD-eval-{vendor-slug}.md`.
 - `ai-coding-tools-compare` — broad-comparison side.
 - `compliance-framework-lookup` — specific control questions.
 - `ai-tooling-data-flow-reviewer` — for AI-vendor data-flow diagram.
-- `vault-writer.write_research` — output.
+- `digest-writer` → `vault-writer.write_research` — output.
 
 ## Acceptance test (for step 30 done-criteria)
 

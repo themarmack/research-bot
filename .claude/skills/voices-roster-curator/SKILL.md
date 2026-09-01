@@ -29,8 +29,9 @@ For one row, find missing surfaces. Workflow:
 2. Build search queries from `name` + `bio_snippet` + known surfaces (e.g., "{name} site:substack.com", "{name} youtube channel", "{name} podcast").
 3. WebSearch + WebFetch via `source-fetcher` to validate candidates (URL resolves, page mentions the person).
 4. Each found URL gets confirmation via the `prompt-injection-guard`-cleaned page body containing the person's name AND a published item within 12 months.
-5. Update the row's surface columns.
+5. Update the row's surface columns — fill empty (or non-URL) cells in place only; never reorder or rewrite rows the run didn't touch.
 6. Log the enrichment in the `notes` column with a date: `enriched 2026-06-20: +substack +podcast`.
+7. Update the matching `vault/people/{handle}.md` note via `vault-writer` with the newly found surfaces (load `vault-conventions` first). If no people note exists for the voice, flag it in the run summary rather than creating one unprompted.
 
 ### `refresh()` — sweep mode
 
@@ -59,7 +60,7 @@ If multiple candidates resolve, pick the **highest-signal** one (most recently a
 
 ## CSV writing
 
-Important: edit `voices.csv` carefully — it's human-readable and human-edited. Preserve column order. Use proper CSV quoting (commas in bios, etc.). Never rewrite rows the skill didn't touch this run.
+Important: edit `voices.csv` carefully — it's human-readable and human-edited. Preserve column order. Use proper CSV quoting (commas in bios, etc.). Append new rows at the bottom and fill empty cells in place — never reorder rows, and never rewrite rows the skill didn't touch this run.
 
 ## Stop and report
 
@@ -91,7 +92,8 @@ Updates:
 
 - `source-fetcher` + `prompt-injection-guard` (URL validation).
 - WebSearch (candidate discovery).
-- Future: `seen-tracker` (for periodic refresh dedup — avoid re-searching the same handle daily).
+- `vault-conventions` + `vault-writer` — keep `vault/people/{handle}.md` notes in sync with enriched surfaces.
+- `seen-tracker` — periodic-refresh dedup (avoid re-searching the same handle daily).
 
 ## Acceptance test (for step 14 done-criteria)
 

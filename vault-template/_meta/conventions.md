@@ -1,7 +1,7 @@
 ---
 title: Vault Conventions
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-08-28
 tags: [meta]
 source_skill: human
 confidence: 3
@@ -32,6 +32,10 @@ If you are an AI agent, load this file first (via the `vault-conventions` skill)
 | `digests/{cadence}/YYYY-MM-DD-{skill}.md` | Outputs from scheduled-agent skills | curated |
 
 **Note on `_config/`**: holds operational config for skills that distribute vault content outside the vault (e.g. `email-sender` reads `_config/email-distribution.md` — a plain-Markdown bullet list of recipients, Obsidian-native and deliberately not YAML). `vault-querier` skips it, `vault-writer` never writes here, and `memory-curator` ignores it. See `_config/README.md` for the contract.
+
+**Note on `research/{topic}/`**: `{topic}` comes from a controlled vocabulary, exactly like tags — `ai-coding-tools`, `ai-governance`, `appsec`, `codeql`, `compliance`, `container-security`, `copilot`, `dependabot`, `frontier-model`, `ghas`, `github`, `incident`, `peer-bank`, `regulator`, `sdlc-best-practice`, `sources`, `supply-chain`, `vendor`. Adding a topic is a convention change — propose via a note in `decisions/`, then add here. Skills write to their own topic folder; don't dump into a catch-all with filename prefixes.
+
+**Path shorthand**: skill docs refer to this vault as bare `vault/` (so `vault/research/copilot/...` ≡ `~/Obsidian/Research-Brain/research/copilot/...`). The expansion is defined once, in `vault-conventions` / `digest-writer` / `vault-writer`; other skills just use the shorthand.
 
 ## Default frontmatter
 

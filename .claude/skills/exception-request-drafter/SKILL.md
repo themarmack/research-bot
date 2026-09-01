@@ -1,6 +1,6 @@
 ---
 name: exception-request-drafter
-description: Draft a control-exception request that GRC / security architecture / model risk will actually accept. Covers any exception type — IaC guardrail override, secrets-rotation deferral, network-egress exception, license-deny-list adoption, AI tool config exception. Produces a structured document with: stated control + requested deviation, steel-manned risk being undertaken, compensating controls, expiry / renewal trigger, owner + sponsor, citations to underlying controls. Generalizes the `copilot-exception-handler` pattern from step 17 to all control exceptions. Use whenever a team needs to deviate from a documented control with documentation auditors will accept.
+description: Draft a control-exception request that GRC / security architecture / model risk will actually accept. Covers any exception type — IaC guardrail override, secrets-rotation deferral, network-egress exception, license-deny-list adoption, AI tool config exception. Produces a structured document with: stated control + requested deviation, steel-manned risk being undertaken, compensating controls, expiry / renewal trigger, owner + sponsor, citations to underlying controls. Generalizes the `copilot-exception-handler` pattern to all control exceptions. Use whenever a team needs to deviate from a documented control with documentation auditors will accept.
 ---
 
 # exception-request-drafter
@@ -17,7 +17,7 @@ The exception-document factory. Most exception requests get rejected not because
 ## When NOT to use
 
 - Copilot-specific exceptions → `copilot-exception-handler` (which calls this skill internally).
-- Policy proposals (new controls, not deviations) → `rfc-writer` (planned step 32).
+- Policy proposals (new controls, not deviations) → `rfc-writer`.
 - Audit findings response → that's a different artifact.
 
 ## Required inputs

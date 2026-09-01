@@ -26,6 +26,7 @@ The qualitative-analysis skill. Closed-form survey data is easy to analyze; open
 3. **For each theme**: label, count, 2-3 verbatim representative quotes (with respondent context).
 4. **Surface outliers**: responses that don't cluster — sometimes the most informative.
 5. **Cross-reference vault**: do any themes connect to known objections, decisions, or open questions?
+6. **Persist the analysis** — after presenting it in chat, write the full analysis via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-survey-analysis-{slug}.md` so themes stay queryable across survey cycles.
 
 ## Output structure
 
@@ -46,7 +47,7 @@ The qualitative-analysis skill. Closed-form survey data is easy to analyze; open
 - {quote} — {why it's worth noting}
 ```
 
-Lands at `vault/insights/YYYY-MM-DD-survey-analysis-{slug}.md`.
+Lands at `vault/insights/YYYY-MM-DD-survey-analysis-{slug}.md`, written via `vault-writer.write_insight` (workflow step 6).
 
 ## Acceptance test
 

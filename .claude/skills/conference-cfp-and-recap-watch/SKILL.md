@@ -1,6 +1,6 @@
 ---
 name: conference-cfp-and-recap-watch
-description: Monthly scheduled agent that tracks upcoming CFPs and post-event recaps for the conferences that matter to a regulated-org SDLC lead — QCon, KubeCon, GitHub Universe, RSA, BSides, OWASP Global AppSec, FS-ISAC, Open Source Summit, DevOps Enterprise Summit. Surfaces (a) CFPs opening in the next 90 days with compliance-relevant tracks, (b) talks from recent events worth viewing. Output at vault/digests/monthly/YYYY-MM-DD-conference-watch.md. Useful for: deciding which conferences to send people to, finding talks to share in stakeholder updates, planning the org's own speaker pipeline.
+description: Monthly scheduled agent that tracks upcoming CFPs and post-event recaps for the conferences that matter to a regulated-org SDLC lead — QCon, KubeCon, GitHub Universe, RSA, BSides, OWASP Global AppSec, FS-ISAC, Open Source Summit, DevOps Enterprise Summit. Surfaces (a) CFPs opening in the next 90 days with compliance-relevant tracks, (b) talks from recent events worth viewing. Output at vault/digests/monthly/YYYY-MM-DD-conference-watch.md. Useful for: deciding which conferences to send people to, finding talks to share in stakeholder updates, planning the org's own speaker pipeline. Use when the user asks to run the conference watch or check open CFPs and recent conference recaps — and on its 15th-of-month schedule.
 ---
 
 # conference-cfp-and-recap-watch
@@ -75,9 +75,9 @@ Lands at `vault/digests/monthly/YYYY-MM-DD-conference-watch.md`.
 ## Composes with
 
 Standard Phase-1 foundation. Feeds:
-- `peer-bank-tech-intel` (planned Cat 1 research) — speaker presence is intel.
-- `learning-capture` (planned Cat 6 PKM) — captured talks become insights.
-- `enablement-content-creator` (planned Cat 5) — talk content seeds internal training material.
+- [`peer-bank-tech-intel`](../peer-bank-tech-intel/SKILL.md) — speaker presence is intel.
+- [`learning-capture`](../learning-capture/SKILL.md) — captured talks become insights.
+- [`enablement-content-creator`](../enablement-content-creator/SKILL.md) — talk content seeds internal training material.
 
 ## Acceptance test (for step 23 done-criteria)
 

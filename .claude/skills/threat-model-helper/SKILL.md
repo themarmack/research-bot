@@ -18,7 +18,7 @@ The org's first-pass threat-modeling tool. Most services in a regulated organiza
 
 - Code-level vulnerability hunting → `codeql-pattern-finder` or `iac-security-reviewer`.
 - Single-control review → `secure-design-reviewer` for architecture doc; `actions-workflow-hardener` for workflows.
-- Compliance gap analysis → `compliance-framework-lookup` (planned).
+- Compliance gap analysis → [`compliance-framework-lookup`](../compliance-framework-lookup/SKILL.md).
 
 ## Compliance-relevant threat catalog (pre-loaded)
 
@@ -59,6 +59,7 @@ Plus **org-specific threat families** layered on STRIDE:
 3. For HIGH and MEDIUM threats, produce a concrete attack scenario + recommended control mapped to the org's control catalog (or external standard if internal catalog isn't named in the input).
 4. Highlight the **top 5 threats by likelihood × impact** at the top.
 5. Note **out-of-scope but adjacent threats** (e.g., the service doesn't touch X but neighbor service does).
+6. **Persist the threat model** — after presenting it in chat, write the full note via `vault-writer.write_research` to `vault/research/appsec/YYYY-MM-DD-threat-model-{service-slug}.md` (frontmatter per `research.yml`, `topic: appsec`) so `secure-design-reviewer` and future re-threat-model passes can query it.
 
 ## Output structure
 
@@ -85,13 +86,14 @@ Plus **org-specific threat families** layered on STRIDE:
 {linked vault notes, frameworks referenced}
 ```
 
-Lands at `vault/research/sdlc-best-practice/YYYY-MM-DD-threat-model-{service-slug}.md` (or topic depending on service domain).
+Lands at `vault/research/appsec/YYYY-MM-DD-threat-model-{service-slug}.md` (workflow step 6).
 
 ## Composes with
 
 - [`secure-design-reviewer`](../secure-design-reviewer/SKILL.md) — natural pair; threat model identifies risks, design review checks if architecture mitigates them.
-- [`ai-tooling-data-flow-reviewer`](../ai-tooling-data-flow-reviewer/SKILL.md) (planned step 27) — for AI-integration-specific data-flow concerns.
+- [`ai-tooling-data-flow-reviewer`](../ai-tooling-data-flow-reviewer/SKILL.md) — for AI-integration-specific data-flow concerns.
 - `vault-querier` — pull related vault notes (existing facts about AI tool data handling, supply-chain attack patterns).
+- `vault-writer.write_research` — persists the threat model (workflow step 6).
 
 ## Acceptance test (for step 24 done-criteria)
 

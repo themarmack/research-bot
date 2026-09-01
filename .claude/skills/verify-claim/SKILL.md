@@ -1,6 +1,6 @@
 ---
 name: verify-claim
-description: Adversarially verify a single load-bearing claim by spawning N independent refuters (default 3) and killing the claim at ≥2/3 refute. Returns `{verdict, vote_breakdown, evidence}`. Reusable everywhere a claim needs scrutiny — Category 1 research synthesis, memory-curator before promoting to facts/, weekly-intelligence-digest before publishing a "what changed" item. Lifted from the built-in deep-research skill's verification pattern. Composes on claim-extractor (its input shape).
+description: Adversarially verify a single load-bearing claim by spawning N independent refuters (default 3) and killing the claim at ≥2/3 refute. Returns `{verdict, vote_breakdown, evidence}`. Reusable everywhere a claim needs scrutiny — Category 1 research synthesis, memory-curator before promoting to facts/, weekly-intelligence-digest before publishing a "what changed" item. Lifted from the built-in deep-research skill's verification pattern. Composes on claim-extractor (its input shape). Use after claim-extractor during any Category 1 research or scheduled digest run, before a load-bearing claim is published in a digest or promoted to vault/facts/.
 ---
 
 # verify-claim

@@ -55,8 +55,8 @@ The skill loads these from `vault/facts/copilot/` so plans reflect the org's cur
 ### Phase 3 — Pilot (4-6 weeks)
 - 20-30% of the team enrolled.
 - Success criteria (defined per-team but typically): >70% weekly active users, acceptance rate within ±10 of org baseline, zero secret-scanning push-protection bypasses by Copilot-generated content.
-- Weekly check-in on pilot metrics via the planned `copilot-metrics-analyzer` skill output.
-- Exception process tested: at least one exception request submitted via [[exception-request-drafter]] (planned skill) and resolved through the proper governance path.
+- Weekly check-in on pilot metrics via [`copilot-metrics-analyzer`](../copilot-metrics-analyzer/SKILL.md) output.
+- Exception process tested: at least one exception request submitted via [`exception-request-drafter`](../exception-request-drafter/SKILL.md) and resolved through the proper governance path.
 
 ### Phase 4 — Expansion (4-8 weeks)
 - Remaining team enrolled in cohorts (no big-bang).
@@ -81,11 +81,12 @@ A single markdown file the user shares with the team lead. Sections:
 5. **Open questions** — anything that needs the team lead's input.
 6. **Sources** — facts + decisions referenced.
 
-Land at `vault/research/copilot/YYYY-MM-DD-rollout-{team-slug}.md` (research-style; user can also copy into a team doc).
+As the final step, write the plan via `vault-writer.write_research` to `vault/research/copilot/YYYY-MM-DD-rollout-{team-slug}.md` (research-style; user can also copy into a team doc). The plan must land in the vault — Phase 3 and Phase 5 check-ins refer back to it.
 
 ## Composes with
 
 - `vault-querier` — load facts.
+- `vault-writer.write_research` — persists the rollout plan (final step).
 - `copilot-faq-answerer` — embeds policy answers inline.
 - `objection-response-library` — pre-empts known resistance.
 - `copilot-metrics-analyzer` — Phase 3 and 5 cycles call this.

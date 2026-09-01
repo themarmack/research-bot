@@ -1,6 +1,6 @@
 ---
 name: vault-querier
-description: Read-side query interface for the Obsidian vault at ~/Obsidian/Research-Brain/. Supports lookups by tag, by frontmatter field, by [[wikilink]] (forward + backlinks), and full-text. Returns `{path, frontmatter, excerpt, links}` per match. Uses filesystem Glob + Grep + Read — no MCP, no daemon. Call this **first** for every on-demand research task (Obsidian-first contract) and any time a vault-writing skill needs to find related notes to link to.
+description: Read-side query interface for the Obsidian vault (`vault/`). Supports lookups by tag, by frontmatter field, by [[wikilink]] (forward + backlinks), and full-text. Returns `{path, frontmatter, excerpt, links}` per match. Uses filesystem Glob + Grep + Read — no MCP, no daemon. Call this **first** for every on-demand research task (Obsidian-first contract) and any time a vault-writing skill needs to find related notes to link to. Use before any web research in a Category 1 task, and whenever vault-writer or memory-curator needs to find existing or related notes.
 ---
 
 # vault-querier
@@ -35,7 +35,7 @@ query.type = "tag"
 query.tag  = "#copilot"
 ```
 
-Implementation: `Grep` for `tags: \[.*#copilot.*\]` and `tags:.*\n.*#copilot` (handles flow and block YAML) across `~/Obsidian/Research-Brain/**/*.md`. Skip `.templates/`, `_inbox/.dropped/`, and any `_views/` matches (derived).
+Implementation: `Grep` for `tags: \[.*#copilot.*\]` and `tags:.*\n.*#copilot` (handles flow and block YAML) across `vault/**/*.md`. Skip `.templates/`, `_inbox/.dropped/`, and any `_views/` matches (derived).
 
 ### 2. By frontmatter field
 
@@ -93,7 +93,7 @@ For every query type, return a list of matches:
 ```json
 [
   {
-    "path": "~/Obsidian/Research-Brain/decisions/2026-06-20-adopt-obsidian-and-ob1-patterns.md",
+    "path": "vault/decisions/2026-06-20-adopt-obsidian-and-ob1-patterns.md",
     "title": "Adopt Obsidian Vault + OB1-Inspired Patterns for Tier-2 Memory",
     "folder": "decisions",
     "frontmatter": {

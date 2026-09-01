@@ -1,6 +1,6 @@
 ---
 name: weekly-review
-description: OB1-borrowed weekly review skill. Scans the vault's writes from the past 7 days (across digests/, research/, events/, decisions/, facts/, insights/, _inbox/, people/, projects/) and produces an end-of-week synthesis at vault/digests/weekly/YYYY-MM-DD-weekly-review.md with the OB1 structure (Week at a Glance / Themes / Open Loops / Connections / Gaps / Focus). Unlike weekly-intelligence-digest, the source is the vault itself, not external feeds. Runs on Sunday PM by default (configurable).
+description: OB1-borrowed weekly review skill. Scans the vault's writes from the past 7 days (across digests/, research/, events/, decisions/, facts/, insights/, _inbox/, people/, projects/) and produces an end-of-week synthesis at vault/digests/weekly/YYYY-MM-DD-weekly-review.md with the OB1 structure (Week at a Glance / Themes / Open Loops / Connections / Gaps / Focus). Unlike weekly-intelligence-digest, the source is the vault itself, not external feeds. Runs on Sunday PM by default (configurable). Use when the user asks to run the weekly review or synthesize what the vault accumulated this week — and on its Sunday-evening schedule.
 ---
 
 # weekly-review

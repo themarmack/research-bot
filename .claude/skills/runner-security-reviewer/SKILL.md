@@ -9,7 +9,7 @@ A Category 3 ops tool. Self-hosted GitHub Actions runners are simultaneously a h
 
 ## When to use
 
-- Designing a new runner group for a regulated workload (e.g., the `hardened-codeql` group from step 19).
+- Designing a new runner group for a regulated workload (e.g., a dedicated `hardened-codeql` group for CodeQL advanced-setup builds, per [`codeql-onboarding-helper`](../codeql-onboarding-helper/SKILL.md)).
 - Quarterly GHAS posture audit.
 - Post-incident review.
 - Vendor / contractor review when a third party will host runners on the org's behalf.
@@ -51,7 +51,8 @@ A Category 3 ops tool. Self-hosted GitHub Actions runners are simultaneously a h
    - `gh api orgs/{org}/actions/runner-groups/{id}/runners` — registered runners.
    - Runner host config (cloud or on-prem inventory).
 3. **Compare** each item against the baseline.
-4. **Produce findings**.
+4. **Produce findings** — presented in chat.
+5. **Persist the report** — after presenting findings, write the full posture note via `vault-writer.write_research` to `vault/research/github/YYYY-MM-DD-runner-security-{group-slug}.md` (frontmatter per `research.yml`, `topic: github`) so quarterly audits can diff against the prior run.
 
 ## Output
 
@@ -64,11 +65,12 @@ A Category 3 ops tool. Self-hosted GitHub Actions runners are simultaneously a h
 }
 ```
 
-Lands at `vault/research/github/YYYY-MM-DD-runner-security-{group-slug}.md`.
+Lands at `vault/research/github/YYYY-MM-DD-runner-security-{group-slug}.md` (workflow step 5).
 
 ## Composes with
 
 - `gh api` for the GitHub-side metadata.
+- `vault-writer.write_research` — persists the posture report (workflow step 5).
 - `github-org-audit-runner` — sister skill for the org-level Actions settings.
 - `actions-workflow-hardener` — when a finding traces to a workflow misconfiguration rather than a runner-pool one.
 - [[2026-06-20-actions-hardening-post-shai-hulud]] — the rationale source.

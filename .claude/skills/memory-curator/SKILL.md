@@ -1,6 +1,6 @@
 ---
 name: memory-curator
-description: Decide whether an inbox item or candidate finding should be promoted to a durable vault folder, patched onto an existing note, or dropped. Applies the rules from ~/Obsidian/Research-Brain/_meta/inbox-rules.md (novelty, falsifiability, future utility, surprise, sourcing). Runs on _inbox/{agent-id}/ items to sweep them or can be called ad-hoc by a skill before a direct vault-writer call. Composes with vault-querier for novelty checks and vault-writer for the actual promote/patch writes. Default-drops unsourced agent claims; never silently drops content with substance — uncertain items get tagged #needs-review.
+description: Decide whether an inbox item or candidate finding should be promoted to a durable vault folder, patched onto an existing note, or dropped. Applies the rules from vault/_meta/inbox-rules.md (novelty, falsifiability, future utility, surprise, sourcing). Runs on _inbox/{agent-id}/ items to sweep them or can be called ad-hoc by a skill before a direct vault-writer call. Composes with vault-querier for novelty checks and vault-writer for the actual promote/patch writes. Default-drops unsourced agent claims; never silently drops content with substance — uncertain items get tagged #needs-review. Use after any scheduled digest run to sweep _inbox/ (runner lifecycle step 9), and before promoting any web-sourced finding to a durable vault surface.
 ---
 
 # memory-curator

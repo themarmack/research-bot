@@ -1,6 +1,6 @@
 ---
 name: email-sender
-description: Send, or preview and show, email delivery of a vault note (digest or research) to your distribution list. Delivery is deterministic — Markdown rendered to styled HTML with the raw `.md` attached, via a committed `render_and_send.py` (no AI call). Scheduled digests auto-send to everyone on the list; research notes prompt `[y/n]` first. A `show_list` action loads and prints the distribution list — who would receive the next send — without sending anything. Recipients come from a plain-Markdown list at `~/Obsidian/Research-Brain/_config/email-distribution.md`. Use when the user asks to email, send, forward, or distribute a digest or research note to their list, OR to show, list, view, preview, check, or validate their email distribution list (who's on it, who would get the next digest) — and immediately after `vault-writer.write_digest` or `vault-writer.write_research` succeeds. Not for composing an ad-hoc personal email or answering a generic SMTP question.
+description: Send, or preview and show, email delivery of a vault note (digest or research) to your distribution list. Delivery is deterministic — Markdown rendered to styled HTML with the raw `.md` attached, via a committed `render_and_send.py` (no AI call). Scheduled digests auto-send to everyone on the list; research notes prompt `[y/n]` first. A `show_list` action loads and prints the distribution list — who would receive the next send — without sending anything. Recipients come from a plain-Markdown list at `vault/_config/email-distribution.md`. Use when the user asks to email, send, forward, or distribute a digest or research note to their list, OR to show, list, view, preview, check, or validate their email distribution list (who's on it, who would get the next digest) — and immediately after `vault-writer.write_digest` or `vault-writer.write_research` succeeds. Not for composing an ad-hoc personal email or answering a generic SMTP question.
 ---
 
 # email-sender
@@ -30,7 +30,7 @@ Two pieces of config:
    ```
    Requires 2-Step Verification enabled on the account. Generate at https://myaccount.google.com/apppasswords ("Mail" → "Other / research-bot"). Use the helper script: `scripts/set-gmail-credentials.sh "you@gmail.com" "xxxx xxxx xxxx xxxx"` (note the leading space to keep the command out of shell history).
 
-2. **Distribution list** at `~/Obsidian/Research-Brain/_config/email-distribution.md`. Copy [`email-distribution.example.md`](./email-distribution.example.md) to that path on first use and edit.
+2. **Distribution list** at `vault/_config/email-distribution.md`. Copy [`email-distribution.example.md`](./email-distribution.example.md) to that path on first use and edit.
 
 If either is missing, the skill stops and reports — never silently drops.
 
@@ -41,7 +41,7 @@ If either is missing, the skill stops and reports — never silently drops.
 The primary action. Steps:
 
 1. Resolve `note_path` to an absolute path; confirm the file exists.
-2. Load and parse `~/Obsidian/Research-Brain/_config/email-distribution.md` (see [Parsing](#parsing)).
+2. Load and parse `vault/_config/email-distribution.md` (see [Parsing](#parsing)).
 3. Confirm `~/.config/research-bot/env` carries `GMAIL_SEND_ADDRESS` and `GMAIL_APP_PASSWORD` (the script re-reads them, but check here so a missing credential surfaces as a clean stop-and-report referencing the setup helper).
 4. Derive the **Subject**: `subject_override` if given, else derive from the note (see [Subject derivation](#subject-derivation)).
 5. Per-recipient validation: drop any address that doesn't match `^[^\s@]+@[^\s@]+\.[^\s@]+$` (record it for the `skipped` list). A single bad entry doesn't lose the rest.
@@ -117,7 +117,7 @@ Validation:
 
 Each surfaces a structured error to the caller (and to the runner summary line for scheduled jobs):
 
-1. **Distribution list missing** → `"email-distribution.md not found at ~/Obsidian/Research-Brain/_config/email-distribution.md. Copy .claude/skills/email-sender/email-distribution.example.md to that path and edit."`
+1. **Distribution list missing** → `"email-distribution.md not found at vault/_config/email-distribution.md. Copy .claude/skills/email-sender/email-distribution.example.md to that path and edit."`
 2. **`## Recipients` heading missing** → `"email-distribution.md exists but has no '## Recipients' heading. The skill only extracts addresses from bullets under that exact heading (case-insensitive). Add a '## Recipients' section and list recipients as bullets under it."`
 3. **`## Recipients` section is empty** → `"'## Recipients' section parsed to zero recipients. Add at least one '- you@example.com' bullet under that heading."`
 4. **`GMAIL_APP_PASSWORD` missing** → `"GMAIL_APP_PASSWORD not set in ~/.config/research-bot/env. Run 'scripts/set-gmail-credentials.sh \"you@gmail.com\" \"xxxx xxxx xxxx xxxx\"' to set."`

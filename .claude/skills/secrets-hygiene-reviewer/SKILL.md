@@ -72,7 +72,8 @@ The secrets surface that **isn't** at-commit-time. GHAS secret scanning catches 
 2. **Walk each check category** against the scope.
 3. **Per finding**: cite specific evidence (line / file / image layer).
 4. **Produce findings list**: structured per usual ops-skill shape.
-5. **Summary**: counts per severity + by category.
+5. **Summary**: counts per severity + by category — presented in chat.
+6. **Persist the review** — after presenting findings, write the full review note via `vault-writer.write_research` to `vault/research/appsec/YYYY-MM-DD-secrets-hygiene-{scope-slug}.md` (frontmatter per `research.yml`, `topic: appsec`) so the next portfolio audit can query prior reviews.
 
 ## Output structure
 
@@ -91,11 +92,12 @@ The secrets surface that **isn't** at-commit-time. GHAS secret scanning catches 
 - vault notes referenced: {list}
 ```
 
-Lands at `vault/research/sdlc-best-practice/YYYY-MM-DD-secrets-hygiene-{scope-slug}.md`.
+Lands at `vault/research/appsec/YYYY-MM-DD-secrets-hygiene-{scope-slug}.md` (workflow step 6).
 
 ## Composes with
 
 - [`ghas-config-reviewer`](../ghas-config-reviewer/SKILL.md) — at-commit scan coverage; this skill picks up where that one ends.
+- `vault-writer.write_research` — persists the review note (workflow step 6).
 - [`secure-design-reviewer`](../secure-design-reviewer/SKILL.md) — key management category overlaps.
 - [`actions-workflow-hardener`](../actions-workflow-hardener/SKILL.md) — ATH-005 (long-lived cloud creds) overlaps.
 

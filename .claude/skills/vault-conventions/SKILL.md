@@ -1,11 +1,13 @@
 ---
 name: vault-conventions
-description: Load the Obsidian vault's conventions, folder schemas, and controlled tag vocabulary into a compact structured summary so that any skill which reads or writes the vault follows the rules. Returns folders, frontmatter schemas (all 9), tag vocabulary, and inbox-promotion rules in one bundle. Call this first before any vault read or write. Caches within a session — re-call only if vault `_meta/` has changed.
+description: Load the Obsidian vault's conventions, folder schemas, and controlled tag vocabulary into a compact structured summary so that any skill which reads or writes the vault follows the rules. Returns folders, frontmatter schemas (all 9), tag vocabulary, research-topic vocabulary, and inbox-promotion rules in one bundle. Call this first before any vault read or write. Caches within a session — re-call only if vault `_meta/` has changed. Use before the first vault read or write in any session — every vault-touching skill (vault-querier, vault-writer, memory-curator, digest-writer, every Category 1 researcher and Category 2 scheduled agent) calls this first.
 ---
 
 # vault-conventions
 
-The bootstrap skill for vault-aware work. Loads `~/Obsidian/Research-Brain/_meta/` and returns a structured summary so that downstream skills (`vault-querier`, `vault-writer`, `memory-curator`, every Category 1 researcher) all follow the same conventions consistently.
+**Path convention**: `vault/` is shorthand for `~/Obsidian/Research-Brain/`; all skills use the `vault/` form.
+
+The bootstrap skill for vault-aware work. Loads `vault/_meta/` and returns a structured summary so that downstream skills (`vault-querier`, `vault-writer`, `memory-curator`, every Category 1 researcher) all follow the same conventions consistently.
 
 ## When to use
 
@@ -22,10 +24,10 @@ The bootstrap skill for vault-aware work. Loads `~/Obsidian/Research-Brain/_meta
 
 Read all of:
 
-- `~/Obsidian/Research-Brain/_meta/conventions.md` — canonical layout, default frontmatter, writing rules.
-- `~/Obsidian/Research-Brain/_meta/tags.md` — controlled tag vocabulary.
-- `~/Obsidian/Research-Brain/_meta/inbox-rules.md` — promote / patch / drop heuristics.
-- `~/Obsidian/Research-Brain/_meta/schema/*.yml` — all 9 folder schemas (`default`, `fact`, `event`, `decision`, `insight`, `person`, `project`, `research`, `digest`).
+- `vault/_meta/conventions.md` — canonical layout, default frontmatter, writing rules.
+- `vault/_meta/tags.md` — controlled tag vocabulary.
+- `vault/_meta/inbox-rules.md` — promote / patch / drop heuristics.
+- `vault/_meta/schema/*.yml` — all 9 folder schemas (`default`, `fact`, `event`, `decision`, `insight`, `person`, `project`, `research`, `digest`).
 
 ## Output shape
 
@@ -55,6 +57,7 @@ Read all of:
     "research": { ... },
     "digest": { ... }
   },
+  "research_topics": ["ai-coding-tools", "ai-governance", "appsec", "codeql", "compliance", "container-security", "copilot", "dependabot", "frontier-model", "ghas", "github", "incident", "peer-bank", "regulator", "sdlc-best-practice", "sources", "supply-chain", "vendor"],
   "tags": {
     "domain": ["#sdlc", "#copilot", "#github", "#codeql", "#dependabot", "#ghas", "#ai-coding-tools", "#frontier-model", "#supply-chain", "#peer-bank", "#vendor"],
     "regulatory": ["#regulator", "#compliance-framework", "#ai-governance"],
@@ -77,6 +80,17 @@ Read all of:
 }
 ```
 
+## Controlled topic vocabulary — `vault/research/{topic}/`
+
+The `{topic}` segment of `vault/research/{topic}/YYYY-MM-DD-{slug}.md` comes from a controlled vocabulary, authorized in [[2026-08-28-topic-vocabulary-and-vault-path-convention]]:
+
+`ai-coding-tools`, `ai-governance`, `appsec`, `codeql`, `compliance`, `container-security`, `copilot`, `dependabot`, `frontier-model`, `ghas`, `github`, `incident`, `peer-bank`, `regulator`, `sdlc-best-practice`, `sources`, `supply-chain`, `vendor`
+
+Rules:
+
+- Every research write MUST use an existing topic from this list — no ad-hoc topic folders.
+- Adding a new topic is allowed, but requires a `vault/decisions/` note first (per the curated-artifacts rule); update this list in the same change.
+
 ## Caching rule
 
 Within a session, after the first call, store the summary in working context. Only re-read `_meta/` if:
@@ -87,8 +101,8 @@ Within a session, after the first call, store the summary in working context. On
 ## Composes with
 
 - Called by [`vault-querier`](../vault-querier/SKILL.md) on first invocation.
-- Called by `vault-writer` (later step) before any write to apply the right schema.
-- Called by `memory-curator` (later step) before applying promote/patch/drop logic.
+- Called by [`vault-writer`](../vault-writer/SKILL.md) before any write to apply the right schema.
+- Called by [`memory-curator`](../memory-curator/SKILL.md) before applying promote/patch/drop logic.
 
 ## Acceptance test (for step 2 done-criteria)
 

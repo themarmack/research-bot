@@ -17,7 +17,7 @@ The skill that answers "if we wire AI tool X into system Y, where does our regul
 ## When NOT to use
 
 - Generic data-flow review without AI angle → `secure-design-reviewer`.
-- AI tool selection / vendor evaluation → `vendor-security-eval` (planned step 30).
+- AI tool selection / vendor evaluation → [`vendor-security-eval`](../vendor-security-eval/SKILL.md).
 - Specific Copilot policy question → `copilot-faq-answerer`.
 
 ## Workflow
@@ -27,7 +27,8 @@ The skill that answers "if we wire AI tool X into system Y, where does our regul
 3. **Per-hop classification**: at each hop, what data classification crosses? Does it cross a trust boundary? What's the control at that hop?
 4. **Cross-reference vault facts**: check Copilot data-residency posture, content exclusion config, audit log path, IP indemnity scope — does the org's existing posture cover this flow's claims?
 5. **Find the gaps**: hops where the org's posture doesn't cover the flow.
-6. **Produce a structured output**.
+6. **Produce a structured output** — presented in chat.
+7. **Persist the review** — after presenting the report, write the full review note via `vault-writer.write_research` to `vault/research/ai-governance/YYYY-MM-DD-ai-dataflow-{integration-slug}.md` (frontmatter per `research.yml`, `topic: ai-governance`) so pre-CAB reviews and posture re-checks can query it.
 
 ## Output structure
 
@@ -53,13 +54,14 @@ The skill that answers "if we wire AI tool X into system Y, where does our regul
 {advance / advance-with-remediation / reject}
 ```
 
-Lands at `vault/research/sdlc-best-practice/YYYY-MM-DD-ai-dataflow-{integration-slug}.md`.
+Lands at `vault/research/ai-governance/YYYY-MM-DD-ai-dataflow-{integration-slug}.md` (workflow step 7).
 
 ## Composes with
 
 - [`threat-model-helper`](../threat-model-helper/SKILL.md) — natural pair (threat model = what can go wrong; this skill = where the data goes).
 - [`secure-design-reviewer`](../secure-design-reviewer/SKILL.md) — AI tool exposure category.
 - `vault-querier` — load Copilot facts ([[data-residency-regions]], [[data-residency-surcharge]], etc.).
+- `vault-writer.write_research` — persists the review note (workflow step 7).
 
 ## Acceptance test (for step 27 done-criteria)
 

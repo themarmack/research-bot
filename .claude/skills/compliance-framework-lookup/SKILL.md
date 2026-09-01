@@ -34,9 +34,28 @@ The cross-framework triangulation tool. Bank policy typically claims alignment w
 - **FFIEC IT Handbook** — supervisory baseline
 - **NYDFS Part 500** — NY cyber regulation
 
-## Obsidian-first workflow
+## Obsidian-first workflow (mandatory)
 
-Same Phase-1 pattern. Output topic: `compliance-framework`. Vault facts under `vault/facts/{framework-entity}/`.
+1. **Query the vault first** via `vault-querier`:
+   - Full-text search the control question's key terms across `vault/research/compliance/**`, `vault/facts/{framework-entity}/**` (e.g. `nist-800-53`, `pci-dss`, `sox-itgc`, `iso-27001`), `vault/research/regulator/**` (regulator notes often cite the same controls), and recent `vault/digests/**` (last 90 days).
+   - Backlink check on each in-scope framework's entity (e.g. `[[sox-itgc]]`, `[[nist-800-218]]`).
+2. **Triage findings**:
+   - If the vault already holds the cross-framework mapping for this question → return it with source citations (vault path + original source URLs). No new write.
+   - If partial (some frameworks mapped, others not) → identify the **gap**. Web research targets only the unmapped frameworks.
+   - If empty → full web research.
+   - A **gap** means the vault has no note ≤90 days old answering the question.
+3. **Web research** (only on confirmed gaps):
+   - Use `source-fetcher` (with `prompt-injection-guard`) on tier-1 sources: csrc.nist.gov (800-53, 800-218), PCI SSC document library, iso.org summaries, CIS Controls / Benchmarks pages, FFIEC IT Handbook, NYDFS Part 500 text.
+   - Extract claims via `claim-extractor`.
+4. **Verify load-bearing claims** via `verify-claim` (3-vote refute):
+   - Framework text is tier-1 (no verification); any third-party crosswalk or interpretation of how control IDs map gets the full 3-vote treatment before it lands in the mapping table.
+5. **Write the research note** via `digest-writer` (which delegates the file write to `vault-writer.write_research`):
+   - Path: `vault/research/compliance/YYYY-MM-DD-{question-slug}.md`
+   - Frontmatter per `research.yml` schema: `topic: compliance-framework`, `question`, `sources`, `findings_count`, `verified_claims`.
+   - Body: the output structure below, with credibility-tier badges on every source.
+6. **Stage promotable claims** to `_inbox/compliance-framework-lookup/`:
+   - Any verified fact-typed claim (e.g. a stable control-ID mapping) → `_inbox/compliance-framework-lookup/{timestamp}-{slug}.md` with `suggested_surface: facts` and `suggested_path: facts/{framework-entity}/{predicate}.md`.
+   - `memory-curator` decides on its next sweep.
 
 ## Output structure
 

@@ -95,8 +95,9 @@ Per category. Severities apply if the current state diverges.
    - `gh api orgs/{org}/security-and-analysis` — secret/code scanning defaults
    - `gh api enterprises/{enterprise}/audit-log` — streaming endpoint
 3. **Compare** each setting against the baseline.
-4. **Produce findings** — structured list per category.
+4. **Produce findings** — structured list per category, presented in chat.
 5. **If auth fails**: emit the manual checklist (below) for a human admin to walk through in the UI.
+6. **Persist the posture report** — after presenting findings (live or manual-fallback), write the full report via `vault-writer.write_research` to `vault/research/github/YYYY-MM-DD-org-audit-{org-slug}.md` (frontmatter per `research.yml`, `topic: github`) so quarterly reviews can diff against the prior run.
 
 ## Manual-checklist fallback
 
@@ -138,11 +139,14 @@ Example items:
 }
 ```
 
+Lands at `vault/research/github/YYYY-MM-DD-org-audit-{org-slug}.md` (workflow step 6).
+
 ## Composes with
 
 - `gh` CLI (user-authenticated).
 - `ghas-config-reviewer` — sister skill at the repo level.
 - `vault-querier` — facts for Copilot-specific baseline items.
+- `vault-writer.write_research` — persists the posture report (workflow step 6).
 
 ## Acceptance test (for step 17 done-criteria)
 

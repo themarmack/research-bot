@@ -38,9 +38,13 @@ digest_template_overrides:
 
 ## How it differs from `weekly-intelligence-digest`
 
-This skill **does not use `source-registry`**. The voices roster is human-curated outside the registry because it's a long, slowly-changing list of people (not vendor/regulator surfaces). Edits to who's watched happen by editing `voices.csv` (or via `voices-roster-curator` once it ships in step 14), not by editing the registry.
+This skill **does not use `source-registry`**. The voices roster is human-curated outside the registry because it's a long, slowly-changing list of people (not vendor/regulator surfaces). Edits to who's watched happen by editing `voices.csv` (or via [`voices-roster-curator`](../voices-roster-curator/SKILL.md)), not by editing the registry.
 
 `scheduled-agent-runner`'s lifecycle still applies — the runner accepts a `source_filter.custom: voices.csv` and routes to the voices loader instead of the registry loader.
+
+## Historical note — the one hand-wired scheduled agent
+
+This SKILL.md predates `scheduled-agent-runner`'s declarative config and wires the foundation skills (seen-tracker, source-fetcher, prompt-injection-guard, digest-writer, vault-writer) individually by hand throughout the sections below. It is the **only** Category 2 agent that does this — every other scheduled agent is config + framing on top of the runner. Do **not** copy this pattern when writing a new scheduled agent; declare a runner config instead.
 
 ## Per-row polling logic
 

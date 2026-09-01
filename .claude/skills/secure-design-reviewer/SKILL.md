@@ -17,7 +17,7 @@ The control-side reviewer that complements [`threat-model-helper`](../threat-mod
 
 - Code-level review → CodeQL.
 - Workflow security → `actions-workflow-hardener`.
-- AI-specific data-flow analysis → `ai-tooling-data-flow-reviewer` (planned).
+- AI-specific data-flow analysis → [`ai-tooling-data-flow-reviewer`](../ai-tooling-data-flow-reviewer/SKILL.md).
 - Generic threat modeling → `threat-model-helper`.
 
 ## Control categories
@@ -82,7 +82,8 @@ The skill checks each design doc against 7 categories. Each category has a check
 2. **Per category**: walk the checklist; identify covered + missing items.
 3. **Cross-reference threat model** (if one exists for the service): for each threat identified, confirm the design has a mitigation control.
 4. **Produce findings**: each missing or weak control becomes a finding with `current_state`, `expected_state`, severity, remediation, control-catalog reference.
-5. **Summary**: counts per category, total findings, top-5 priority by severity.
+5. **Summary**: counts per category, total findings, top-5 priority by severity — presented in chat.
+6. **Persist the review** — after presenting findings, write the full review note via `vault-writer.write_research` to `vault/research/appsec/YYYY-MM-DD-design-review-{service-slug}.md` (frontmatter per `research.yml`, `topic: appsec`) so retrofit passes and audit prep can query it.
 
 ## Output structure
 
@@ -109,13 +110,14 @@ The skill checks each design doc against 7 categories. Each category has a check
 {vault notes, frameworks}
 ```
 
-Lands at `vault/research/sdlc-best-practice/YYYY-MM-DD-design-review-{service-slug}.md`.
+Lands at `vault/research/appsec/YYYY-MM-DD-design-review-{service-slug}.md` (workflow step 6).
 
 ## Composes with
 
 - [`threat-model-helper`](../threat-model-helper/SKILL.md) — natural pair.
 - `vault-querier` — facts about Copilot data handling and similar AI-tool facts.
-- `ai-tooling-data-flow-reviewer` (planned step 27) — the AI dimension.
+- [`ai-tooling-data-flow-reviewer`](../ai-tooling-data-flow-reviewer/SKILL.md) — the AI dimension.
+- `vault-writer.write_research` — persists the review note (workflow step 6).
 
 ## Acceptance test (for step 24 done-criteria)
 

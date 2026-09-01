@@ -51,11 +51,12 @@ The leadership-facing decision artifact. RFCs are for engineers; ADRs are for po
 - {vault notes — research, facts, prior decisions}
 ```
 
-Lands at `vault/insights/YYYY-MM-DD-decision-memo-{slug}.md` (it informs a decision; the decision itself becomes a separate `decisions/` ADR).
+As the final step, write the memo via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-decision-memo-{slug}.md` (it informs a decision; the decision itself becomes a separate `decisions/` ADR).
 
 ## Composes with
 
 - `vault-querier` — pull supporting facts / research.
+- `vault-writer.write_insight` — persists the memo (final step).
 - `stakeholder-update-writer` — exec-tier outputs sometimes need decision-memo backup.
 - `adr-writer` — once the decision is made, the ADR captures it.
 

@@ -1,6 +1,6 @@
 ---
 name: quarterly-ai-coding-landscape
-description: Quarterly scheduled agent that produces a long-form (~2000-3500 word) landscape report on AI coding tools (Copilot + Cursor + Windsurf + Cody + JetBrains AI + Amazon Q Developer + emerging), suitable for forwarding to leadership (CIO / CTO / eng VP). Synthesizes the quarter's vault accumulation: weekly intelligence digests, voices intelligence, frontier-model research, regulator posture, and the org's own rollout state. Runs at the start of each quarter; lands at vault/digests/quarterly/YYYY-MM-DD-ai-coding-landscape-Q{N}-{YYYY}.md.
+description: Quarterly scheduled agent that produces a long-form (~2000-3500 word) landscape report on AI coding tools (Copilot + Cursor + Windsurf + Cody + JetBrains AI + Amazon Q Developer + emerging), suitable for forwarding to leadership (CIO / CTO / eng VP). Synthesizes the quarter's vault accumulation: weekly intelligence digests, voices intelligence, frontier-model research, regulator posture, and the org's own rollout state. Runs at the start of each quarter; lands at vault/digests/quarterly/YYYY-MM-DD-ai-coding-landscape-Q{N}-{YYYY}.md. Use when the user asks for the quarterly AI coding landscape report or a leadership-facing synthesis of the quarter — and on its start-of-quarter schedule.
 ---
 
 # quarterly-ai-coding-landscape
@@ -83,7 +83,7 @@ Reads from the vault — does NOT do new fetches. The quarter's accumulated week
 
 Output feeds:
 - `stakeholder-update-writer` — exec tier quarterly cycle
-- `decision-memo-writer` (planned) — strategic recommendations sometimes need supporting decision memos
+- [`decision-memo-writer`](../decision-memo-writer/SKILL.md) — strategic recommendations sometimes need supporting decision memos
 
 ## Acceptance test (for step 23 done-criteria)
 

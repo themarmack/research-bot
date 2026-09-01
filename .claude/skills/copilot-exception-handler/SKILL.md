@@ -53,6 +53,7 @@ For each exception type, the skill has a pre-decided posture:
    - **Not justified**: write the citation-backed denial.
 5. **Draft the document** in the format below.
 6. **Schedule a renewal trigger** — exceptions sunset; the document records when to re-review.
+7. **Write the decision note** via `vault-writer.write_decision` to `vault/decisions/YYYY-MM-DD-copilot-exception-{slug}.md` — accepted or denied, the exception document persists as a `decisions/` note, not just a chat reply.
 
 ## Output document structure
 

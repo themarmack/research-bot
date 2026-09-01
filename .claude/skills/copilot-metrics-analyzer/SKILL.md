@@ -1,6 +1,6 @@
 ---
 name: copilot-metrics-analyzer
-description: Take raw Copilot Usage Metrics API output (per-user, daily granularity, including the new `ai_credits_used` field) and produce structured findings — top cost/usage anomalies, per-dev chargeback math with the 10% data-residency surcharge applied, and actionable recommendations. Uses facts from `vault/facts/copilot/` (usage-metrics-ai-credits-per-user, data-residency-surcharge) so cost math reflects the org's actual configuration, not generic per-seat assumptions. Use weekly for monitoring or ad-hoc for cost-attribution conversations with finance.
+description: Take raw Copilot Usage Metrics API output (per-user, daily granularity, including the new `ai_credits_used` field) and produce structured findings — top cost/usage anomalies, per-dev chargeback math with the 10% data-residency surcharge applied, and actionable recommendations. Uses facts from `vault/facts/copilot/` (usage-metrics-ai-credits-per-user, data-residency-surcharge) so cost math reflects the org's actual configuration, not generic per-seat assumptions. Use when the user has raw Copilot usage-metrics output to analyze — during weekly cost monitoring, before a cost-attribution conversation with finance, or when hunting dormant licenses.
 ---
 
 # copilot-metrics-analyzer
@@ -110,11 +110,12 @@ Concrete action items:
 - Users analyzed: N
 ```
 
-Output lands at `vault/research/copilot/YYYY-MM-DD-metrics-{period-slug}.md`.
+As the final step, write the analysis via `vault-writer.write_research` to `vault/research/copilot/YYYY-MM-DD-metrics-{period-slug}.md` (frontmatter per the `research.yml` schema, `topic: copilot`). The findings must land in the vault, not just the conversation — finance will ask for last month's numbers.
 
 ## Composes with
 
 - `vault-querier` — load facts (data-residency-surcharge, usage-metrics structure).
+- `vault-writer.write_research` — persists the analysis note (final step).
 - `copilot-rollout-playbook` — Phase 3 / Phase 5 cycles invoke this.
 - `stakeholder-update-writer` — input to exec-tier cost summaries.
 

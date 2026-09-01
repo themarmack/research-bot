@@ -46,11 +46,19 @@ For each incoming objection:
 
 If no canonical match: stop and report. Suggest invoking `copilot-deep-dive` to research, draft a proposed canonical entry, and once user-approved add to the library.
 
+## Persisting new objections
+
+When a net-new objection has been researched and steel-manned, persist it — a response that only lives in chat doesn't compound:
+
+1. **Append the approved entry to `./canonical-objections.md`** in this skill folder, with all 5 anatomy parts and at least one source URL. This is the final step of every new-objection flow, not an optional follow-up.
+2. **For significant new objections** — a new audience, a new risk class, or one likely to recur — also write a short note via `vault-writer.write_insight` to `vault/insights/YYYY-MM-DD-objection-{slug}.md` recording when the objection surfaced, who raised it, and how the org answered.
+
 ## Composes with
 
 - `vault-querier` — newer facts may override canonical responses.
 - `copilot-faq-answerer` — overlapping content; objection library wraps FAQ entries with the steel-man + limits structure.
 - `stakeholder-update-writer` — IC-tier FAQ section often pulls from here.
+- `vault-writer.write_insight` — records significant new objections in the vault.
 
 ## Acceptance test (for step 15 done-criteria)
 
